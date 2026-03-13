@@ -170,29 +170,20 @@ proteina.toFixed(1) +
 }
 
 /* IMC */
-
 function calcularIMC(){
-
 let altura = document.getElementById("altura").value;
 let peso = document.getElementById("pesoIMC").value;
-
 if(!altura || !peso){
 document.getElementById("resultadoIMC").innerHTML =
 "Por favor ingresa altura y peso";
 return;
 }
- 
-
-/* detectar si está en cm o metros */
-
+ /* detectar si está en cm o metros */
 if(altura > 3){
 altura = altura / 100;
 }
-
 let imc = peso / (altura * altura);
-
 let categoria = "";
-
 if(imc < 18.5){
 categoria = "Bajo peso";
 }
@@ -205,15 +196,13 @@ categoria = "Sobrepeso";
 else{
 categoria = "Obesidad";
 }
-
 document.getElementById("resultadoIMC").innerHTML =
 "Tu IMC es <b>" + imc.toFixed(2) + "</b><br>" +
 "Clasificación: <b>" + categoria + "</b>";
-
 }
+</script>
 
-
- <a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="youtube-float">
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="youtube-float">
 Suscríbete
 </a>
 
