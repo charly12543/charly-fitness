@@ -48,6 +48,36 @@ transition:0.3s;
 color:#22c55e;
 }
 
+#proteina,
+#imc,
+#transformacion,
+#videos{
+scroll-margin-top:100px;
+}
+html{
+scroll-behavior:smooth;
+}
+
+/* NAVBAR GLASS */
+.navbar{
+position:fixed;
+top:0;
+width:100%;
+padding:16px 40px;
+display:flex;
+justify-content:center;
+z-index:1000;
+
+background:rgba(2,6,23,0.6);
+backdrop-filter: blur(10px);
+transition:0.3s;
+}
+
+.navbar.scrolled{
+background:#020617;
+box-shadow:0 5px 20px rgba(0,0,0,0.5);
+}
+
 
 /* BODY */
 
@@ -68,24 +98,13 @@ justify-content:center;
 align-items:center;
 text-align:center;
 padding:20px;
-background:linear-gradient(135deg,#0f172a,#1e293b);
-}
 
-.hero h1{
-font-size:3rem;
-margin-bottom:20px;
-font-weight:700;
-}
+background:
+linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+url("imagenes/fondo-fitness.jpg");
 
-.hero p{
-font-size:1.2rem;
-max-width:600px;
-margin-bottom:30px;
-color:#cbd5f5;
-}
-
-.hero{
-margin-top:80px;
+background-size:cover;
+background-position:center;
 }
 
 
@@ -271,5 +290,34 @@ font-size:2.2rem;
 font-size:1rem;
 
 }
+
+/* YOUTUBE */
+.youtube-float{
+
+position:fixed;
+bottom:25px;
+right:25px;
+
+background:#ef4444;
+color:white;
+
+padding:15px 20px;
+border-radius:30px;
+
+font-weight:bold;
+text-decoration:none;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+
+transition:0.3s;
+
+}
+
+.youtube-float:hover{
+
+transform:scale(1.08);
+
+}
+  
 
 }
