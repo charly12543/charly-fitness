@@ -94,6 +94,10 @@ y sigue mi transformación física.
 <button onclick="calcularIMC()">Calcular IMC</button>
 
 <div class="resultado" id="resultadoIMC"></div>
+<p style="font-size:14px;opacity:0.7;">
+Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tener valores altos sin tener sobrepeso.
+</p>
+
 
 </div>
 
@@ -177,17 +181,26 @@ proteina.toFixed(1) +
 /* IMC */
 
 function calcularIMC(){
-
 let altura = document.getElementById("altura").value / 100;
 let peso = document.getElementById("pesoIMC").value;
-
 let imc = peso / (altura * altura);
-
-document.getElementById("resultadoIMC").innerHTML =
-"Tu IMC es <b>" + imc.toFixed(2) + "</b>";
-
+let categoria = "";
+if(imc < 18.5){
+categoria = "Bajo peso";
 }
-
+else if(imc < 25){
+categoria = "Peso normal";
+}
+else if(imc < 30){
+categoria = "Sobrepeso";
+}
+else{
+categoria = "Obesidad";
+}
+document.getElementById("resultadoIMC").innerHTML =
+"Tu IMC es <b>" + imc.toFixed(2) + "</b><br>" +
+"Clasificación: <b>" + categoria + "</b>";
+}
 </script>
 
  <!-- NAVBAR --> 
