@@ -96,16 +96,16 @@ y sigue mi transformación física.
 
 <!-- TRANSFORMACION -->
 
-<section>
+<section id="transformacion">
 
 <h2>Mi transformación</h2>
 
 <div class="galeria">
 
-<img src="imagenes/antes.jpg">
-<img src="imagenes/despues.jpg">
-<img src="imagenes/progreso1.jpg">
-<img src="imagenes/progreso2.jpg">
+<img src="imagenes/antes.jpg" alt="Transformación antes">
+<img src="imagenes/antes.jpg" alt="Transformación antes">
+<img src="imagenes/antes.jpg" alt="Transformación antes">
+<img src="imagenes/antes.jpg" alt="Transformación antes">
 
 </div>
 
@@ -116,19 +116,14 @@ y sigue mi transformación física.
 <section id="videos">
 
 <h2>Mis videos fitness</h2>
-
 <div class="videos">
 
 <iframe src="https://www.youtube.com/embed/VIDEO1"></iframe>
-
-<iframe src="https://www.youtube.com/embed/VIDEO2"></iframe>
-
-<iframe src="https://www.youtube.com/embed/VIDEO3"></iframe>
+<iframe src="https://www.youtube.com/embed/VIDEO2" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/VIDEO3" allowfullscreen></iframe>
 
 </div>
-
 </section>
-
 <footer>
 
 <p>© 2026 Fitness Lab</p>
@@ -147,13 +142,17 @@ y sigue mi transformación física.
 
 <script>
 
+ /* SCROLL */
 function scrollToSection(id){
-
-document.getElementById(id).scrollIntoView({
-behavior:'smooth'
+const element = document.getElementById(id);
+const navbarHeight = document.querySelector(".navbar").offsetHeight;
+const elementPosition = element.offsetTop - navbarHeight - 20;
+window.scrollTo({
+top: elementPosition,
+behavior: "smooth"
 });
-
 }
+
 
 /* PROTEINA */
 
@@ -202,7 +201,7 @@ navbar.classList.remove("scrolled");
 });
 </script>
 
- <a href="https://www.youtube.com/" target="_blank" class="youtube-float">
+ <a href="https://www.youtube.com/@TU_CANAL" target="_blank" class="youtube-float">
 Suscríbete
 </a>
 
