@@ -7,14 +7,6 @@ box-sizing:border-box;
 }
 
 /* NAVBAR */
-.navbar{
-position:fixed;
-top:0;
-width:100%;
-background:#020617;
-padding:20px 40px;
-z-index:1000;
-}
 
 .nav-container{
 display:flex;
@@ -23,10 +15,11 @@ align-items:center;
 }
 
 .logo img{
-height:70px;
+height:60px;
 width:auto;
 transition:0.3s;
 }
+
 
 .logo img:hover{
 transform:scale(1.05);
@@ -59,13 +52,13 @@ scroll-behavior:smooth;
 }
 
 /* NAVBAR GLASS */
+/* NAVBAR GLASS */
+
 .navbar{
 position:fixed;
 top:0;
 width:100%;
 padding:16px 40px;
-display:flex;
-justify-content:center;
 z-index:1000;
 
 background:rgba(2,6,23,0.6);
@@ -76,6 +69,14 @@ transition:0.3s;
 .navbar.scrolled{
 background:#020617;
 box-shadow:0 5px 20px rgba(0,0,0,0.5);
+}
+
+.nav-container{
+display:flex;
+justify-content:space-between;
+align-items:center;
+max-width:1200px;
+margin:auto;
 }
 
 
@@ -107,6 +108,9 @@ background-size:cover;
 background-position:center;
 }
 
+.hero{
+margin-top:90px;
+}
 
 /* BOTONES */
 
@@ -277,8 +281,6 @@ text-decoration:underline;
 
 /* RESPONSIVE */
 
-@media (max-width:768px){
-
 .hero h1{
 
 font-size:2.2rem;
@@ -291,33 +293,25 @@ font-size:1rem;
 
 }
 
-/* YOUTUBE */
-.youtube-float{
+/* YOUTUBE FLOAT */
 
+.youtube-float{
 position:fixed;
 bottom:25px;
 right:25px;
-
 background:#ef4444;
 color:white;
-
 padding:15px 20px;
 border-radius:30px;
-
 font-weight:bold;
 text-decoration:none;
-
 box-shadow:0 10px 25px rgba(0,0,0,0.4);
-
 transition:0.3s;
-
 }
-
 .youtube-float:hover{
-
 transform:scale(1.08);
-
 }
+
   
 
 }
