@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fitness Lab | Calculadora de Proteína y Transformación</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<h1>Transforma tu cuerpo</h1>
+
+<p>
+Aprende nutrición fitness, calcula tu proteína diaria
+y sigue mi transformación física.
+</p>
+
+<button onclick="scrollToSection('proteina')">Calcular proteína</button>
+
+<button onclick="scrollToSection('videos')">Ver mis videos</button>
+
+</section>
+
+<!-- CALCULADORA PROTEINA -->
+
+<section id="proteina">
+
+<h2>Calculadora de proteína</h2>
+
+<div class="calculadora">
+
+<input type="number" id="peso" placeholder="Tu peso en kg">
+
+<select id="actividad">
+
+<option value="1.6">Actividad moderada</option>
+<option value="2">Entrenamiento intenso</option>
+<option value="2.2">Atleta avanzado</option>
+
+</select>
+
+<button onclick="calcularProteina()">Calcular</button>
+
+<div class="resultado" id="resultadoProteina"></div>
+
+</div>
+
+</section>
+
+<!-- CALCULADORA IMC -->
+
+<section>
+
+<h2>Calculadora de IMC</h2>
+
+<div class="calculadora">
+
+<input type="number" id="altura" placeholder="Altura en cm">
+
+<input type="number" id="pesoIMC" placeholder="Peso en kg">
+
+<button onclick="calcularIMC()">Calcular IMC</button>
+
+<div class="resultado" id="resultadoIMC"></div>
+
+</div>
+
+</section>
+
+<!-- TRANSFORMACION -->
+
+<section>
+
+<h2>Mi transformación</h2>
+
+<div class="galeria">
+
+<img src="imagenes/antes.jpg">
+<img src="imagenes/despues.jpg">
+<img src="imagenes/progreso1.jpg">
+<img src="imagenes/progreso2.jpg">
+
+</div>
+
+</section>
+
+<!-- VIDEOS -->
+
+<section id="videos">
+
+<h2>Mis videos fitness</h2>
+
+<div class="videos">
+
+<iframe src="https://www.youtube.com/embed/VIDEO1"></iframe>
+
+<iframe src="https://www.youtube.com/embed/VIDEO2"></iframe>
+
+<iframe src="https://www.youtube.com/embed/VIDEO3"></iframe>
+
+</div>
+
+</section>
+
+<footer>
+
+<p>© 2026 Fitness Lab</p>
+
+<div class="redes">
+
+<a href="#">YouTube</a>
+
+<a href="#">Instagram</a>
+
+<a href="#">TikTok</a>
+
+</div>
+
+</footer>
+
+<script>
+
+function scrollToSection(id){
+
+document.getElementById(id).scrollIntoView({
+behavior:'smooth'
+});
+
+}
+
+/* PROTEINA */
+
+function calcularProteina(){
+
+let peso = document.getElementById("peso").value;
+let factor = document.getElementById("actividad").value;
+
+let proteina = peso * factor;
+
+document.getElementById("resultadoProteina").innerHTML =
+"Debes consumir aproximadamente <b>" +
+proteina.toFixed(1) +
+" g de proteína al día</b>";
+
+}
+
+/* IMC */
+
+function calcularIMC(){
+
+let altura = document.getElementById("altura").value / 100;
+let peso = document.getElementById("pesoIMC").value;
+
+let imc = peso / (altura * altura);
+
+document.getElementById("resultadoIMC").innerHTML =
+"Tu IMC es <b>" + imc.toFixed(2) + "</b>";
+
+}
+
+</script>
+
+</body>
+</html>
