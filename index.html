@@ -26,6 +26,7 @@
 <li><a href="#inicio">Inicio</a></li>
 <li><a href="#proteina">Proteína</a></li>
 <li><a href="#imc">IMC</a></li>
+<li><a href="#macros">Macros</a></li>
 <li><a href="#transformacion">Transformación</a></li>
 <li><a href="#calorias">Cal-Diaria</a></li>
 <li><a href="#videos">Videos</a></li>
@@ -97,6 +98,26 @@ Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tene
 </div>
 </section>
 
+ <!-- MACROS CALCULADORA -->
+<section id="macros">
+<h2>Calculadora de macros por comida</h2>
+<div class="calculadora">
+<input type="number" id="pesoMacros" placeholder="Peso corporal (kg)">
+<select id="objetivo">
+<option value="definicion">Definición</option>
+<option value="mantenimiento">Mantenimiento</option>
+<option value="volumen">Volumen</option>
+</select>
+<select id="comidas">
+<option value="3">3 comidas</option>
+<option value="4">4 comidas</option>
+<option value="5">5 comidas</option>
+</select>
+<button onclick="calcularMacros()">Calcular macros</button>
+<div class="resultado" id="resultadoMacros"></div>
+</div>
+</section>
+ 
 <!-- TRANSFORMACION -->
 <section id="transformacion">
 <h2>Mi transformación</h2>
@@ -253,6 +274,71 @@ Math.round(calorias) +
 }
 </script>
 
+<!-- MACROS CALCULADORA --> 
+<script> 
+function calcularMacros(){
+let peso = document.getElementById("pesoMacros").value;
+let objetivo = document.getElementById("objetivo").value;
+let comidas = document.getElementById("comidas").value;
+if(!peso){
+document.getElementById("resultadoMacros").innerHTML =
+"Ingresa tu peso corporal";
+return;
+}
+/* proteína por kg */
+let proteinaKg;
+if(objetivo === "definicion"){
+proteinaKg = 2.2;
+}
+else if(objetivo === "volumen"){
+proteinaKg = 2;
+}
+else{
+proteinaKg = 1.8;
+}
+let proteinaTotal = peso * proteinaKg;
+/* carbohidratos */
+let carbosTotal;
+if(objetivo === "definicion"){
+carbosTotal = peso * 2;
+}
+else if(objetivo === "volumen"){
+carbosTotal = peso * 4;
+}
+else{
+carbosTotal = peso * 3;
+}
+/* grasas */
+let grasasTotal = peso * 0.8;
+/* macros por comida */
+let proteinaComida = proteinaTotal / comidas;
+let carbosComida = carbosTotal / comidas;
+let grasasComida = grasasTotal / comidas;
+document.getElementById("resultadoMacros").innerHTML =
+"<b>Macros diarios</b><br>" +
+"Proteína: " + Math.round(proteinaTotal) + " g<br>" +
+"Carbohidratos: " + Math.round(carbosTotal) + " g<br>" +
+"Grasas: " + Math.round(grasasTotal) + " g<br><br>" +
+"<b>Por comida</b><br>" +
+"Proteína: " + Math.round(proteinaComida) + " g<br>" +
+"Carbohidratos: " + Math.round(carbosComida) + " g<br>" +
+"Grasas: " + Math.round(grasasComida) + " g<br><br>" +
+"<b>Opciones de proteína (~40g)</b><br>" +
+"🍗 150g pollo<br>" +
+"🐟 180g pescado<br>" +
+"🥩 200g carne magra<br>" +
+"🥚 6 claras + 1 huevo<br><br>" +
+"<b>Opciones de carbohidratos (~50g)</b><br>" +
+"🍚 1 taza arroz<br>" +
+"🍠 150g camote<br>" +
+"🥔 200g papa<br>" +
+"🍌 1 plátano macho<br><br>" +
+"<b>Opciones de grasas (~15g)</b><br>" +
+"🥑 ½ aguacate<br>" +
+"🌰 30g nueces<br>" +
+"🫒 1 cucharada aceite de oliva";
+}
+</script> 
 
 </body>
 </html>
