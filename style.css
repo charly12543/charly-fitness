@@ -1,412 +1,334 @@
 /* RESET */
-
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+/* VARIABLES GOLD'S GYM */
+:root{
+  --bg-dark: #0b0b0b;
+  --card-bg: #1c1c1c;
+  --text-light: #ffffff;
+  --gold: #d4af37;
+  --gold-bright: #f5d76e;
+  --gray-dark: #1c1c1c;
 }
 
 /* NAVBAR */
-
 .nav-container{
-display:flex;
-justify-content:space-between;
-align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  max-width:1200px;
+  margin:auto;
 }
 
 .logo img{
-height:60px;
-width:auto;
-transition:0.3s;
+  height:60px;
+  width:auto;
+  transition:0.3s;
 }
 
-
 .logo img:hover{
-transform:scale(1.05);
+  transform:scale(1.05);
 }
 
 .nav-links{
-display:flex;
-list-style:none;
-gap:30px;
+  display:flex;
+  list-style:none;
+  gap:30px;
 }
 
 .nav-links a{
-color:white;
-text-decoration:none;
-font-weight:500;
-transition:0.3s;
+  color:var(--text-light);
+  text-decoration:none;
+  font-weight:500;
+  transition:0.3s;
 }
 .nav-links a:hover{
-color:#22c55e;
-}
-
-#proteina,
-#imc,
-#transformacion,
-#videos{
-scroll-margin-top:100px;
-}
-html{
-scroll-behavior:smooth;
+  color:var(--gold-bright);
 }
 
 /* NAVBAR GLASS */
-
 .navbar{
-position:fixed;
-top:0;
-width:100%;
-padding:16px 40px;
-z-index:1000;
-
-background:rgba(2,6,23,0.6);
-backdrop-filter: blur(10px);
-transition:0.3s;
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:16px 40px;
+  z-index:1000;
+  background:rgba(11,11,11,0.8);
+  backdrop-filter: blur(10px);
+  transition:0.3s;
 }
-
 .navbar.scrolled{
-background:#020617;
-box-shadow:0 5px 20px rgba(0,0,0,0.5);
+  background:var(--bg-dark);
+  box-shadow:0 5px 20px rgba(0,0,0,0.5);
 }
-
-.nav-container{
-display:flex;
-justify-content:space-between;
-align-items:center;
-max-width:1200px;
-margin:auto;
-}
-
 
 /* BODY */
-
 body{
-font-family:'Poppins',sans-serif;
-background:#0f172a;
-color:#f1f5f9;
-line-height:1.6;
+  font-family:'Poppins',sans-serif;
+  background:var(--bg-dark);
+  color:var(--text-light);
+  line-height:1.6;
 }
 
 /* HERO */
-
 .hero{
-height:90vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-padding:20px;
-
-background:
-linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
-url("imagenes/fondo-fitness.jpg");
-
-background-size:cover;
-background-position:center;
+  height:90vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+  background:
+    linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+    url("imagenes/fondo-fitness.jpg");
+  background-size:cover;
+  background-position:center;
+  margin-top:90px;
 }
 
-.hero{
-margin-top:90px;
+.hero h1{
+  font-size:2.4rem;
+  color:var(--gold);
 }
+
+.hero p{
+  font-size:1rem;
+  color:#ccc;
+}
+
 .hero-sub{
-margin-top:10px;
-font-size:1rem;
-color:#94a3b8;
+  margin-top:10px;
+  font-size:1rem;
+  color:#94a3b8;
 }
+
 .btn-outline{
-padding:12px 26px;
-border:2px solid #22c55e;
-border-radius:30px;
-color:white;
-text-decoration:none;
-margin:10px;
-transition:0.3s;
+  padding:12px 26px;
+  border:2px solid var(--gold);
+  border-radius:30px;
+  color:var(--text-light);
+  text-decoration:none;
+  margin:10px;
+  transition:0.3s;
 }
 .btn-outline:hover{
-background:#22c55e;
+  background:var(--gold);
+  color:var(--bg-dark);
 }
 
-
-/* BOTONES */
-
+/* BOTONES HERO */
 .hero button{
-
-padding:14px 28px;
-margin:10px;
-border:none;
-border-radius:30px;
-background:#22c55e;
-color:white;
-font-size:16px;
-cursor:pointer;
-transition:0.3s;
+  padding:14px 28px;
+  margin:10px;
+  border:none;
+  border-radius:30px;
+  background:var(--gold);
+  color:var(--bg-dark);
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
 }
-
 .hero button:hover{
-
-transform:scale(1.05);
-background:#16a34a;
-
+  transform:scale(1.05);
+  background:var(--gold-bright);
 }
 
 /* SECTIONS */
-
 section{
-
-padding:80px 20px;
-max-width:1000px;
-margin:auto;
-
+  padding:80px 20px;
+  max-width:1000px;
+  margin:auto;
 }
 
 h2{
-
-text-align:center;
-margin-bottom:40px;
-font-size:2rem;
-
+  text-align:center;
+  margin-bottom:40px;
+  font-size:2rem;
+  color:var(--gold);
 }
 
 /* CALCULADORAS */
-
 .calculadora{
-
-background:#1e293b;
-padding:40px;
-border-radius:15px;
-margin-bottom:40px;
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
-
+  background:var(--card-bg);
+  padding:40px;
+  border-radius:15px;
+  margin-bottom:40px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
 }
 
 .calculadora input,
 .calculadora select{
-
-width:100%;
-padding:12px;
-margin:10px 0;
-border-radius:8px;
-border:none;
-font-size:15px;
-
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:8px;
+  border:none;
+  font-size:15px;
 }
 
 .calculadora button{
-
-background:#22c55e;
-border:none;
-padding:12px;
-border-radius:8px;
-width:100%;
-font-size:16px;
-cursor:pointer;
-transition:.3s;
-
+  background:var(--gold);
+  border:none;
+  padding:12px;
+  border-radius:8px;
+  width:100%;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
 }
-
 .calculadora button:hover{
-
-background:#16a34a;
-
+  background:var(--gold-bright);
 }
 
+/* RESULTADOS */
 .resultado{
-
-margin-top:20px;
-font-size:1.2rem;
-text-align:center;
-color:#4ade80;
-
+  margin-top:20px;
+  font-size:1.2rem;
+  text-align:center;
+  color:var(--gold-bright);
+  font-weight:600;
 }
 
 /* GALERIA */
-
 .galeria{
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+  margin-top:30px;
 }
 
 .galeria img{
-
-width:100%;
-border-radius:12px;
-transition:.3s;
-
+  width:100%;
+  height:350px;
+  object-fit:cover;
+  border-radius:12px;
+  transition:0.3s;
 }
 
 .galeria img:hover{
-
-transform:scale(1.05);
-
+  transform:scale(1.05);
+  box-shadow:0 0 20px var(--gold);
 }
 
 /* VIDEOS */
-
 .videos{
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:20px;
-
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:20px;
 }
-
 iframe{
-
-width:100%;
-height:200px;
-border-radius:10px;
-border:none;
-
+  width:100%;
+  height:200px;
+  border-radius:10px;
+  border:none;
 }
 
 /* FOOTER */
-
 footer{
-
-text-align:center;
-padding:40px;
-background:#020617;
-margin-top:40px;
-
+  text-align:center;
+  padding:40px;
+  background:var(--bg-dark);
+  margin-top:40px;
 }
 
 .redes{
-
-margin-top:10px;
-
+  margin-top:10px;
 }
-
 .redes a{
-
-margin:0 10px;
-color:#22c55e;
-text-decoration:none;
-font-weight:600;
-
+  margin:0 10px;
+  color:var(--gold);
+  text-decoration:none;
+  font-weight:600;
 }
-
 .redes a:hover{
-
-text-decoration:underline;
-
+  text-decoration:underline;
 }
 
 /* HERRAMIENTAS FITNESS */
 .tools-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:25px;
-margin-top:40px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:25px;
+  margin-top:40px;
 }
 .tool-card{
-background:#1e293b;
-padding:30px;
-border-radius:15px;
-text-align:center;
-transition:all 0.35s ease;
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
-position:relative;
+  background:var(--card-bg);
+  padding:30px;
+  border-radius:15px;
+  text-align:center;
+  transition:all 0.35s ease;
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+  position:relative;
 }
 .tool-card:hover{
-transform:translateY(-5px);
+  transform:translateY(-10px);
+  box-shadow:
+    0 20px 40px rgba(0,0,0,0.6),
+    0 0 15px var(--gold);
 }
 .tool-card h3{
-margin-bottom:10px;
+  margin-bottom:10px;
+  color:var(--gold);
 }
 .tool-card p{
-font-size:14px;
-margin-bottom:20px;
-opacity:0.8;
+  font-size:14px;
+  margin-bottom:20px;
+  opacity:0.8;
+  color:#ccc;
 }
 .tool-card a{
-background:#22c55e;
-color:white;
-padding:10px 18px;
-border-radius:20px;
-text-decoration:none;
-font-size:14px;
-transition:0.3s;
+  background:var(--gold);
+  color:var(--bg-dark);
+  padding:10px 18px;
+  border-radius:20px;
+  text-decoration:none;
+  font-size:14px;
+  transition:0.3s;
 }
-.tool-card:hover{
-transform:translateY(-10px);
-box-shadow:
-0 20px 40px rgba(0,0,0,0.6),
-0 0 15px #22c55e;
+.tool-card a:hover{
+  background:var(--gold-bright);
+  color:var(--bg-dark);
 }
-/* ICONOS HERRAMIENTAS */
 
+/* ICONOS HERRAMIENTAS */
 .tool-icon{
-font-size:40px;
-color:#22c55e;
-margin-bottom:15px;
-transition:all 0.35s ease;
+  font-size:40px;
+  color:var(--gold);
+  margin-bottom:15px;
+  transition:all 0.35s ease;
 }
 .tool-card:hover .tool-icon{
-transform:scale(1.2);
-text-shadow:0 0 15px #22c55e;
+  transform:scale(1.2);
+  text-shadow:0 0 15px var(--gold);
 }
 
 /* YOUTUBE FLOAT */
-
 .youtube-float{
-position:fixed;
-bottom:25px;
-right:25px;
-background:#ef4444;
-color:white;
-padding:15px 20px;
-border-radius:30px;
-font-weight:bold;
-text-decoration:none;
-box-shadow:0 10px 25px rgba(0,0,0,0.4);
-transition:0.3s;
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:#ef4444;
+  color:white;
+  padding:15px 20px;
+  border-radius:30px;
+  font-weight:bold;
+  text-decoration:none;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+  transition:0.3s;
 }
 .youtube-float:hover{
-transform:scale(1.08);
+  transform:scale(1.08);
 }
-
-/* GALERIA TRANSFORMACION */
-.galeria{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-margin-top:30px;
-}
-.galeria img{
-width:100%;
-height:350px;
-object-fit:cover;
-border-radius:10px;
-transition:transform 0.3s;
-}
-.galeria img:hover{
-transform:scale(1.05);
-}
-
-
-
-
-
 
 /* RESPONSIVE */
-
-.hero h1{
-
-font-size:2.2rem;
-
-}
-
-.hero p{
-
-font-size:1rem;
-
-}
-
-
-
+@media(max-width:768px){
+  .hero h1{ font-size:2rem; }
+  .hero p{ font-size:0.9rem; }
+  .calculadora{ padding:30px; }
+  .tool-card{ padding:20px; }
 }
