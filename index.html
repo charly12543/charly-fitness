@@ -258,11 +258,11 @@ Suscríbete
 
 <script>
 function calcularCalorias(){
-let peso = document.getElementById("pesoCal").value;
-let altura = document.getElementById("alturaCal").value;
-let edad = document.getElementById("edadCal").value;
+let peso = parseFloat(document.getElementById("pesoCal").value);
+let altura = parseFloat(document.getElementById("alturaCal").value);
+let edad = parseFloat(document.getElementById("edadCal").value);
 let sexo = document.getElementById("sexoCal").value;
-let actividad = document.getElementById("actividadCal").value;
+let actividad = parseFloat(document.getElementById("actividadCal").value);
 if(!peso || !altura || !edad){
 document.getElementById("resultadoCalorias").innerHTML =
 "Por favor completa todos los campos";
@@ -275,13 +275,23 @@ bmr = (10 * peso) + (6.25 * altura) - (5 * edad) + 5;
 bmr = (10 * peso) + (6.25 * altura) - (5 * edad) - 161;
 }
 let calorias = bmr * actividad;
+/* CALCULAR MACROS */
+let proteina = peso * 2;
+let caloriasProteina = proteina * 4;
+let grasa = (calorias * 0.25) / 9;
+let caloriasGrasa = grasa * 9;
+let carbos = (calorias - caloriasProteina - caloriasGrasa) / 4;
+/* RESULTADO */
 document.getElementById("resultadoCalorias").innerHTML =
-"Tu gasto calórico diario aproximado es <b>" +
-Math.round(calorias) +
-" kcal</b>";
+"🔥 Calorías diarias: <b>" + calorias.toFixed(0) + " kcal</b><br><br>" +
+"Macros recomendados:<br><br>" +
+"🥩 Proteína: <b>" + proteina.toFixed(0) + " g</b><br>" +
+"🍚 Carbohidratos: <b>" + carbos.toFixed(0) + " g</b><br>" +
+"🥑 Grasas: <b>" + grasa.toFixed(0) + " g</b>";
 }
 </script>
 
+ 
 <!-- MACROS CALCULADORA --> 
 <script> 
 function calcularMacros(){
