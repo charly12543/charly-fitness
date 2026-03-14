@@ -130,37 +130,38 @@
 </section>
 
 <!-- CALCULADORA CALORIAS PRO -->
+<!-- CALCULADORA CALORÍAS DIARIAS PRO -->
 <section id="calorias">
-<h2>Calculadora de calorías diarias PRO</h2>
-<div class="calculadora">
-  <input type="number" id="pesoCal" placeholder="Peso (kg)">
-  <input type="number" id="alturaCal" placeholder="Altura (1.82 o 182)">
-  <input type="number" id="edadCal" placeholder="Edad">
-  <select id="sexoCal">
-    <option value="hombre">Hombre</option>
-    <option value="mujer">Mujer</option>
-  </select>
-  <select id="actividadCal">
-    <option value="1.2">Sedentario</option>
-    <option value="1.375">Ejercicio ligero</option>
-    <option value="1.55">Entrenamiento moderado</option>
-    <option value="1.725">Entrenamiento intenso</option>
-    <option value="1.9">Atleta avanzado</option>
-  </select>
-  <select id="objetivoCal">
-    <option value="definicion">Definición</option>
-    <option value="mantenimiento">Mantenimiento</option>
-    <option value="volumen">Volumen</option>
-  </select>
-  <select id="comidasCal">
-    <option value="3">3 comidas</option>
-    <option value="4" selected>4 comidas</option>
-    <option value="5">5 comidas</option>
-    <option value="6">6 comidas</option>
-  </select>
-  <button onclick="caloriasPRO()">Calcular calorías PRO</button>
-  <div class="resultado" id="resultadoCalorias"></div>
-</div>
+  <h2>Calculadora de calorías diarias PRO</h2>
+  <div class="calculadora">
+    <input type="number" id="pesoCal" placeholder="Peso (kg)">
+    <input type="number" id="alturaCal" placeholder="Altura (cm)">
+    <input type="number" id="edadCal" placeholder="Edad">
+    <select id="sexoCal">
+      <option value="hombre">Hombre</option>
+      <option value="mujer">Mujer</option>
+    </select>
+    <select id="actividadCal">
+      <option value="1.2">Sedentario</option>
+      <option value="1.375">Ejercicio ligero</option>
+      <option value="1.55">Entrenamiento moderado</option>
+      <option value="1.725">Entrenamiento intenso</option>
+      <option value="1.9">Atleta avanzado</option>
+    </select>
+    <select id="objetivoCal">
+      <option value="definicion">Definición</option>
+      <option value="mantenimiento">Mantenimiento</option>
+      <option value="volumen">Volumen</option>
+    </select>
+    <select id="comidasCal">
+      <option value="3">3 comidas</option>
+      <option value="4" selected>4 comidas</option>
+      <option value="5">5 comidas</option>
+      <option value="6">6 comidas</option>
+    </select>
+    <button onclick="caloriasPRO()">Calcular calorías PRO</button>
+    <div class="resultado" id="resultadoCalorias"></div>
+  </div>
 </section>
 
 <!-- VIDEOS -->
@@ -263,27 +264,71 @@ function calcularMacros(){
 }
 
 // CALORIAS PRO
-function caloriasPRO(){
+function caloriasPRO() {
   let peso = parseFloat(document.getElementById("pesoCal").value);
   let altura = parseFloat(document.getElementById("alturaCal").value);
   let edad = parseFloat(document.getElementById("edadCal").value);
   let sexo = document.getElementById("sexoCal").value;
   let actividad = parseFloat(document.getElementById("actividadCal").value);
   let objetivo = document.getElementById("objetivoCal").value;
+  let comidas = parseInt(document.getElementById("comidasCal").value);
 
   if(!peso || !altura || !edad){
-    document.getElementById("resultadoCalorias").innerHTML = "Por favor completa todos los campos";
+    document.getElementById("resultadoCalorias").innerHTML = "Por favor completa todos los campos.";
     return;
   }
 
-  if(altura>3) altura/=100; // cm a m
-  let bmr = sexo==="hombre" ? 10*peso + 6.25*altura*100 - 5*edad + 5
-                             : 10*peso + 6.25*altura*100 - 5*edad -161;
-  let calorias = bmr * actividad;
-  if(objetivo==="definicion") calorias-=400;
-  if(objetivo==="volumen") calorias+=300;
+  // Altura en metros
+  if(altura > 3){ altura = altura / 100; }
 
-  document.getElementById("resultadoCalorias").innerHTML = `<b>Calorías diarias aproximadas: ${Math.round(calorias)} kcal</b>`;
+  // BMR (Mifflin-St Jeor)
+  let bmr;
+  if(sexo === "hombre"){
+    bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
+  } else {
+    bmr = 10*peso + 6.25*(altura*100) - 5*edad - 161;
+  }
+
+  let caloriasTotales = bmr * actividad;
+
+  // Ajuste según objetivo
+  if(objetivo === "definicion"){ caloriasTotales -= 400; }
+  if(objetivo === "volumen"){ caloriasTotales += 300; }
+
+  // Macros
+  let proteina = peso * 2; // g
+  let grasa = (caloriasTotales * 0.25) / 9;
+  let carbos = (caloriasTotales - (proteina*4 + grasa*9)) / 4;
+
+  // Por comida
+  let proteinaComida = proteina / comidas;
+  let carbosComida = carbos / comidas;
+  let grasaComida = grasa / comidas;
+
+  // Equivalentes de proteína
+  const protPollo100 = 31;
+  const protAtunLata = 25;
+  const protClara = 3.6;
+  const protHuevo = 6;
+  let polloGr = (proteina / protPollo100) * 100;
+  let latasAtun = proteina / protAtunLata;
+  let proteinaRestante = proteina - protHuevo;
+  let claras = proteinaRestante / protClara;
+
+  document.getElementById("resultadoCalorias").innerHTML =
+  `<b>Calorías totales diarias:</b> ${caloriasTotales.toFixed(0)} kcal<br><br>
+   <b>Macros diarios:</b><br>
+   🥩 Proteína: ${proteina.toFixed(0)} g<br>
+   🍚 Carbohidratos: ${carbos.toFixed(0)} g<br>
+   🥑 Grasas: ${grasa.toFixed(0)} g<br><br>
+   <b>Macros por comida (${comidas} comidas):</b><br>
+   🥩 Proteína: ${proteinaComida.toFixed(0)} g<br>
+   🍚 Carbos: ${carbosComida.toFixed(0)} g<br>
+   🥑 Grasas: ${grasaComida.toFixed(0)} g<br><br>
+   <b>Equivalentes de proteína (~${proteina.toFixed(0)} g):</b><br>
+   • ${polloGr.toFixed(0)} g pechuga de pollo<br>
+   • ${latasAtun.toFixed(1)} lata de atún<br>
+   • ${claras.toFixed(0)} claras + 1 huevo`;
 }
 </script>
 
