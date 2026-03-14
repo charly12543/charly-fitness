@@ -23,68 +23,74 @@
 <img src="imagenes/logoGitHub.png" alt="CB Fitness Logo">
 </div>
 <ul class="nav-links">
+<ul class="nav-links">
 <li><a href="#inicio">Inicio</a></li>
-<li><a href="#proteina">Proteína</a></li>
-<li><a href="#imc">IMC</a></li>
-<li><a href="#macros">Macros</a></li>
+<li><a href="#herramientas">Herramientas</a></li>
 <li><a href="#transformacion">Transformación</a></li>
-<li><a href="#calorias">Cal-Diaria</a></li>
 <li><a href="#videos">Videos</a></li>
-
- 
 </ul>
 </div>
 </nav>
 
 <!-- HERO -->
-
 <section class="hero" id="inicio">
-
 <h1>Transforma tu cuerpo</h1>
-
 <p>
-Aprende nutrición fitness, calcula tu proteína diaria
-y sigue mi transformación física.
+Transforma tu físico con ciencia y disciplina
+Calcula tus macros, aprende nutrición
+y sigue mi transformación real.
 </p>
 <p class="hero-sub">
  • Aprende nutrición • Calcula tus macros
 </p>
-
 <button onclick="scrollToSection('proteina')">Calcular proteína</button>
 <button onclick="scrollToSection('videos')">Ver mis videos</button>
-
 <a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="btn-outline">Mi canal YouTube</a>
-
 </section>
 
+<!-- HERRAMIENTAS --> 
+<section id="herramientas">
+<h2>Herramientas Fitness</h2>
+<div class="tools-grid">
+<div class="tool-card">
+<h3>Calculadora de proteína</h3>
+<p>Calcula tu proteína diaria según tu peso corporal.</p>
+<a href="#proteina">Usar</a>
+</div>
+<div class="tool-card">
+<h3>Calculadora IMC</h3>
+<p>Descubre tu índice de masa corporal.</p>
+<a href="#imc">Usar</a>
+</div>
+<div class="tool-card">
+<h3>Calorías diarias</h3>
+<p>Calcula tu gasto energético diario.</p>
+<a href="#calorias">Usar</a>
+</div>
+<div class="tool-card">
+<h3>Macros por comida</h3>
+<p>Distribuye proteína, carbohidratos y grasas.</p>
+<a href="#macros">Usar</a>
+</div>
+</div>
+</section>
+ 
 <!-- CALCULADORA PROTEINA -->
-
 <section id="proteina">
-
 <h2>Calculadora de proteína</h2>
-
 <div class="calculadora">
-
 <input type="number" id="peso" placeholder="Tu peso en kg">
-
 <select id="actividad">
-
 <option value="1.6">Actividad moderada</option>
 <option value="2">Entrenamiento intenso</option>
 <option value="2.2">Atleta avanzado</option>
-
 </select>
-
 <button onclick="calcularProteina()">Calcular</button>
-
 <div class="resultado" id="resultadoProteina"></div>
-
 </div>
-
 </section>
 
 <!-- CALCULADORA IMC -->
-
 <section id="imc">
 <h2>Calculadora de IMC</h2>
 <div class="calculadora">
@@ -123,8 +129,8 @@ Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tene
 <h2>Mi transformación</h2>
 <div class="galeria">
 <img src="imagenes/foto1.jpg" alt="Transformación antes">
-<img src="imagenes/foto2.jpg" alt="Transformación antes">
-<img src="imagenes/foto3.jpg" alt="Transformación antes">
+<img src="imagenes/foto2.jpg" alt="Transformación despues">
+<img src="imagenes/foto3.jpg" alt="Progreso">
 </div>
 </section>
  
