@@ -9,7 +9,6 @@
 <meta name="description" content="Calculadora de proteína, IMC y fitness. Aprende nutrición y transforma tu cuerpo con Charly Fitness.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
 </head>
-
 <body>
 
 <!-- NAVBAR --> 
@@ -18,11 +17,9 @@
     <div class="logo">
       <img src="imagenes/logoGitHub.png" alt="CB Fitness Logo">
     </div>
-
     <span class="menu-toggle" onclick="toggleMenu()">
       <i class="fa-solid fa-bars"></i>
     </span>
-
     <ul class="nav-links">
       <li><a href="#inicio">Inicio</a></li>
       <li><a href="#transformacion">Transformación</a></li> 
@@ -35,14 +32,8 @@
 <!-- HERO -->
 <section class="hero" id="inicio">
   <h1>Transforma tu cuerpo</h1>
-  <p>
-    Transforma tu físico con ciencia y disciplina<br>
-    Calcula tus macros, aprende nutrición<br>
-    y sigue mi transformación real.
-  </p>
-  <p class="hero-sub">
-    • Aprende nutrición • Calcula tus macros
-  </p>
+  <p>Transforma tu físico con ciencia y disciplina. Calcula tus macros, aprende nutrición y sigue mi transformación real.</p>
+  <p class="hero-sub">• Aprende nutrición • Calcula tus macros</p>
   <button onclick="scrollToSection('proteina')">Calcular proteína</button>
   <button onclick="scrollToSection('videos')">Ver mis videos</button>
   <a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="btn-outline">Mi canal YouTube</a>
@@ -60,153 +51,143 @@
 
 <!-- HERRAMIENTAS --> 
 <section id="herramientas">
-  <h2>Herramientas Fitness</h2>
-  <div class="tools-grid">
-    <div class="tool-card">
-      <i class="fa-solid fa-drumstick-bite tool-icon"></i>
-      <h3>Proteína</h3>
-      <p>Calcula tu proteína diaria según tu peso corporal.</p>
-      <a href="#proteina">Usar calculadora</a>
-    </div>
-    <div class="tool-card">
-      <i class="fa-solid fa-chart-line tool-icon"></i>
-      <h3>IMC</h3>
-      <p>Descubre tu índice de masa corporal.</p>
-      <a href="#imc">Usar calculadora</a>
-    </div>
-    <div class="tool-card">
-      <i class="fa-solid fa-fire tool-icon"></i>
-      <h3>Calorías</h3>
-      <p>Calcula tu gasto energético diario.</p>
-      <a href="#calorias">Usar calculadora</a>
-    </div>
-    <div class="tool-card">
-      <i class="fa-solid fa-bowl-rice tool-icon"></i>
-      <h3>Macros</h3>
-      <p>Distribuye proteína, carbohidratos y grasas por comida.</p>
-      <a href="#macros">Usar calculadora</a>
-    </div>
+<h2>Herramientas Fitness</h2>
+<div class="tools-grid">
+  <div class="tool-card">
+    <i class="fa-solid fa-drumstick-bite tool-icon"></i>
+    <h3>Proteína</h3>
+    <p>Calcula tu proteína diaria según tu peso corporal.</p>
+    <a href="#proteina">Usar calculadora</a>
   </div>
+  <div class="tool-card">
+    <i class="fa-solid fa-chart-line tool-icon"></i>
+    <h3>IMC</h3>
+    <p>Descubre tu índice de masa corporal.</p>
+    <a href="#imc">Usar calculadora</a>
+  </div>
+  <div class="tool-card">
+    <i class="fa-solid fa-fire tool-icon"></i>
+    <h3>Calorías</h3>
+    <p>Calcula tu gasto energético diario.</p>
+    <a href="#calorias">Usar calculadora</a>
+  </div>
+  <div class="tool-card">
+    <i class="fa-solid fa-bowl-rice tool-icon"></i>
+    <h3>Macros</h3>
+    <p>Distribuye proteína, carbohidratos y grasas por comida.</p>
+    <a href="#macros">Usar calculadora</a>
+  </div>
+</div>
 </section>
 
 <!-- CALCULADORA PROTEINA -->
 <section id="proteina">
-  <h2>Calculadora de proteína</h2>
-  <div class="calculadora">
-    <input type="number" id="peso" placeholder="Tu peso en kg">
-    <select id="actividad">
-      <option value="1.6">Actividad moderada</option>
-      <option value="2">Entrenamiento intenso</option>
-      <option value="2.2">Atleta avanzado</option>
-    </select>
-    <button onclick="calcularProteina()">Calcular</button>
-    <div class="resultado" id="resultadoProteina"></div>
-  </div>
+<h2>Calculadora de proteína</h2>
+<div class="calculadora">
+<input type="number" id="peso" placeholder="Tu peso en kg">
+<select id="actividad">
+  <option value="1.6">Actividad moderada</option>
+  <option value="2">Entrenamiento intenso</option>
+  <option value="2.2">Atleta avanzado</option>
+</select>
+<button onclick="calcularProteina()">Calcular</button>
+<div class="resultado" id="resultadoProteina"></div>
+</div>
 </section>
 
 <!-- CALCULADORA IMC -->
 <section id="imc">
-  <h2>Calculadora de IMC</h2>
-  <div class="calculadora">
-    <input type="number" step="0.01" id="altura" placeholder="Altura en cm (1.80 o 180)">
-    <input type="number" id="pesoIMC" placeholder="Peso en kg">
-    <button onclick="calcularIMC()">Calcular IMC</button>
-    <div class="resultado" id="resultadoIMC"></div>
-    <p style="font-size:14px;opacity:0.7;">
-      Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tener valores altos sin tener sobrepeso.
-    </p>
-  </div>
+<h2>Calculadora de IMC</h2>
+<div class="calculadora">
+<input type="number" step="0.01" id="altura" placeholder="Altura en cm (1.80 o 180)">
+<input type="number" id="pesoIMC" placeholder="Peso en kg">
+<button onclick="calcularIMC()">Calcular IMC</button>
+<div class="resultado" id="resultadoIMC"></div>
+<p style="font-size:14px;opacity:0.7;">Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tener valores altos sin tener sobrepeso.</p>
+</div>
 </section>
 
 <!-- CALCULADORA MACROS -->
 <section id="macros">
-  <h2>Calculadora de macros por comida</h2>
-  <div class="calculadora">
-    <input type="number" id="pesoMacros" placeholder="Peso corporal (kg)">
-    <select id="objetivo">
-      <option value="definicion">Definición</option>
-      <option value="mantenimiento">Mantenimiento</option>
-      <option value="volumen">Volumen</option>
-    </select>
-    <label>Comidas al día</label>
-    <select id="comidasMacros">
-      <option value="3">3 comidas</option>
-      <option value="4" selected>4 comidas</option>
-      <option value="5">5 comidas</option>
-      <option value="6">6 comidas</option>
-    </select>
-    <button onclick="calcularMacros()">Calcular macros</button>
-    <div class="resultado" id="resultadoMacros"></div>
-  </div>
+<h2>Calculadora de macros por comida</h2>
+<div class="calculadora">
+<input type="number" id="pesoMacros" placeholder="Peso corporal (kg)">
+<select id="objetivo">
+  <option value="definicion">Definición</option>
+  <option value="mantenimiento">Mantenimiento</option>
+  <option value="volumen">Volumen</option>
+</select>
+<label>Comidas al día</label>
+<select id="comidasMacros">
+  <option value="3">3 comidas</option>
+  <option value="4" selected>4 comidas</option>
+  <option value="5">5 comidas</option>
+  <option value="6">6 comidas</option>
+</select>
+<button onclick="calcularMacros()">Calcular macros</button>
+<div class="resultado" id="resultadoMacros"></div>
+</div>
 </section>
 
 <!-- CALCULADORA CALORIAS PRO -->
 <section id="calorias">
-  <h2>Calculadora de calorías diarias PRO</h2>
-  <div class="calculadora">
-    <input type="number" id="pesoCal" placeholder="Peso (kg)">
-    <input type="number" id="alturaCal" placeholder="Altura (1.82 o 182)">
-    <input type="number" id="edadCal" placeholder="Edad">
-    <select id="sexoCal">
-      <option value="hombre">Hombre</option>
-      <option value="mujer">Mujer</option>
-    </select>
-    <select id="actividadCal">
-      <option value="1.2">Sedentario</option>
-      <option value="1.375">Ejercicio ligero</option>
-      <option value="1.55">Entrenamiento moderado</option>
-      <option value="1.725">Entrenamiento intenso</option>
-      <option value="1.9">Atleta avanzado</option>
-    </select>
-    <select id="objetivoCal">
-      <option value="definicion">Definición</option>
-      <option value="mantenimiento">Mantenimiento</option>
-      <option value="volumen">Volumen</option>
-    </select>
-    <select id="comidasCal">
-      <option value="3">3 comidas</option>
-      <option value="4" selected>4 comidas</option>
-      <option value="5">5 comidas</option>
-      <option value="6">6 comidas</option>
-    </select>
-    <button onclick="caloriasPRO()">Calcular calorías PRO</button>
-    <div class="resultado" id="resultadoCalorias"></div>
-  </div>
+<h2>Calculadora de calorías diarias PRO</h2>
+<div class="calculadora">
+  <input type="number" id="pesoCal" placeholder="Peso (kg)">
+  <input type="number" id="alturaCal" placeholder="Altura (1.82 o 182)">
+  <input type="number" id="edadCal" placeholder="Edad">
+  <select id="sexoCal">
+    <option value="hombre">Hombre</option>
+    <option value="mujer">Mujer</option>
+  </select>
+  <select id="actividadCal">
+    <option value="1.2">Sedentario</option>
+    <option value="1.375">Ejercicio ligero</option>
+    <option value="1.55">Entrenamiento moderado</option>
+    <option value="1.725">Entrenamiento intenso</option>
+    <option value="1.9">Atleta avanzado</option>
+  </select>
+  <select id="objetivoCal">
+    <option value="definicion">Definición</option>
+    <option value="mantenimiento">Mantenimiento</option>
+    <option value="volumen">Volumen</option>
+  </select>
+  <select id="comidasCal">
+    <option value="3">3 comidas</option>
+    <option value="4" selected>4 comidas</option>
+    <option value="5">5 comidas</option>
+    <option value="6">6 comidas</option>
+  </select>
+  <button onclick="caloriasPRO()">Calcular calorías PRO</button>
+  <div class="resultado" id="resultadoCalorias"></div>
+</div>
 </section>
 
 <!-- VIDEOS -->
 <section id="videos">
-  <h2>Mis videos fitness</h2>
-  <div class="videos">
-    <iframe src="https://www.youtube.com/embed/pvsgVVlw88g" allowfullscreen></iframe>
-    <iframe src="https://www.youtube.com/embed/xTadB9eAtgk" allowfullscreen></iframe>
-    <iframe src="https://www.youtube.com/embed/GyCqZSFOa4s" allowfullscreen></iframe>
-  </div>
+<h2>Mis videos fitness</h2>
+<div class="videos">
+<iframe src="https://www.youtube.com/embed/pvsgVVlw88g" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/xTadB9eAtgk" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/GyCqZSFOa4s" allowfullscreen></iframe>
+</div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2026 Fitness Lab</p>
-  <div class="redes">
-    <a href="https://www.youtube.com/@ACUARIO12543/shorts">YouTube</a>
-    <a href="#">Instagram</a>
-    <a href="#">TikTok</a>
-  </div>
+<p>© 2026 Fitness Lab</p>
+<div class="redes">
+<a href="https://www.youtube.com/@ACUARIO12543/shorts">YouTube</a>
+<a href="#">Instagram</a>
+<a href="#">TikTok</a>
+</div>
 </footer>
 
-<!-- FLOAT YOUTUBE -->
-<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="youtube-float">
-  Suscríbete
-</a>
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="youtube-float">Suscríbete</a>
 
 <!-- SCRIPTS -->
 <script>
-/* NAVBAR RESPONSIVE */
-function toggleMenu(){
-  document.querySelector(".nav-links").classList.toggle("active");
-}
-
-/* SCROLL SUAVE */
+// SCROLL
 function scrollToSection(id){
   const element = document.getElementById(id);
   const navbarHeight = document.querySelector(".navbar").offsetHeight;
@@ -214,17 +195,25 @@ function scrollToSection(id){
   window.scrollTo({ top: elementPosition, behavior: "smooth" });
 }
 
-/* CAMBIO COLOR NAVBAR SCROLL */
-window.addEventListener("scroll", function(){
-  const navbar = document.querySelector(".navbar");
-  if(window.scrollY > 50){
-    navbar.classList.add("scrolled");
-  } else {
-    navbar.classList.remove("scrolled");
-  }
+// NAVBAR CELULAR
+function toggleMenu(){
+  const navLinks = document.querySelector(".nav-links");
+  const toggle = document.querySelector(".menu-toggle");
+  navLinks.classList.toggle("active");
+  toggle.classList.toggle("active");
+}
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    const navLinks = document.querySelector(".nav-links");
+    const toggle = document.querySelector(".menu-toggle");
+    if(navLinks.classList.contains("active")){
+      navLinks.classList.remove("active");
+      toggle.classList.remove("active");
+    }
+  });
 });
 
-/* PROTEINA */
+// PROTEINA
 function calcularProteina(){
   let peso = document.getElementById("peso").value;
   let factor = document.getElementById("actividad").value;
@@ -233,7 +222,7 @@ function calcularProteina(){
     "Debes consumir aproximadamente <b>" + proteina.toFixed(1) + " g de proteína al día</b>";
 }
 
-/* IMC */
+// IMC
 function calcularIMC(){
   let altura = document.getElementById("altura").value;
   let peso = document.getElementById("pesoIMC").value;
@@ -241,18 +230,13 @@ function calcularIMC(){
     document.getElementById("resultadoIMC").innerHTML = "Por favor ingresa altura y peso";
     return;
   }
-  if(altura > 3) altura = altura / 100;
-  let imc = peso / (altura * altura);
-  let categoria = "";
-  if(imc < 18.5) categoria = "Bajo peso";
-  else if(imc < 25) categoria = "Peso normal";
-  else if(imc < 30) categoria = "Sobrepeso";
-  else categoria = "Obesidad";
-  document.getElementById("resultadoIMC").innerHTML =
-    "Tu IMC es <b>" + imc.toFixed(2) + "</b><br>Clasificación: <b>" + categoria + "</b>";
+  if(altura > 3) altura /= 100;
+  let imc = peso / (altura*altura);
+  let categoria = imc < 18.5 ? "Bajo peso" : imc < 25 ? "Peso normal" : imc < 30 ? "Sobrepeso" : "Obesidad";
+  document.getElementById("resultadoIMC").innerHTML = `Tu IMC es <b>${imc.toFixed(2)}</b><br>Clasificación: <b>${categoria}</b>`;
 }
 
-/* MACROS */
+// MACROS
 function calcularMacros(){
   let peso = parseFloat(document.getElementById("pesoMacros").value);
   let objetivo = document.getElementById("objetivo").value;
@@ -261,24 +245,45 @@ function calcularMacros(){
     document.getElementById("resultadoMacros").innerHTML = "Por favor ingresa tu peso";
     return;
   }
-  let proteina = peso * 2;
-  let calorias = peso * 33;
+  let proteina = peso*2;
+  let calorias = peso*33;
   if(objetivo === "definicion") calorias -= 400;
   if(objetivo === "volumen") calorias += 300;
-  let grasa = (calorias * 0.25) / 9;
-  let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
-  let proteinaComida = proteina / comidas;
-  let carbosComida = carbos / comidas;
-  let grasaComida = grasa / comidas;
+  let grasa = (calorias*0.25)/9;
+  let carbos = (calorias - (proteina*4) - (grasa*9))/4;
   document.getElementById("resultadoMacros").innerHTML =
-    `<b>Macros diarios</b><br><br>
-    🥩 Proteína: ${proteina.toFixed(0)} g<br>
-    🍚 Carbohidratos: ${carbos.toFixed(0)} g<br>
-    🥑 Grasas: ${grasa.toFixed(0)} g<br><br>
-    <b>Macros por comida (${comidas} comidas)</b><br>
-    🥩 Proteína: ${proteinaComida.toFixed(0)} g<br>
-    🍚 Carbos: ${carbosComida.toFixed(0)} g<br>
-    🥑 Grasas: ${grasaComida.toFixed(0)} g`;
+    `<b>Macros diarios</b><br>
+     🥩 Proteína: ${proteina.toFixed(0)} g<br>
+     🍚 Carbohidratos: ${carbos.toFixed(0)} g<br>
+     🥑 Grasas: ${grasa.toFixed(0)} g<br><br>
+     <b>Macros por comida (${comidas} comidas)</b><br>
+     🥩 Proteína: ${(proteina/comidas).toFixed(0)} g<br>
+     🍚 Carbos: ${(carbos/comidas).toFixed(0)} g<br>
+     🥑 Grasas: ${(grasa/comidas).toFixed(0)} g`;
+}
+
+// CALORIAS PRO
+function caloriasPRO(){
+  let peso = parseFloat(document.getElementById("pesoCal").value);
+  let altura = parseFloat(document.getElementById("alturaCal").value);
+  let edad = parseFloat(document.getElementById("edadCal").value);
+  let sexo = document.getElementById("sexoCal").value;
+  let actividad = parseFloat(document.getElementById("actividadCal").value);
+  let objetivo = document.getElementById("objetivoCal").value;
+
+  if(!peso || !altura || !edad){
+    document.getElementById("resultadoCalorias").innerHTML = "Por favor completa todos los campos";
+    return;
+  }
+
+  if(altura>3) altura/=100; // cm a m
+  let bmr = sexo==="hombre" ? 10*peso + 6.25*altura*100 - 5*edad + 5
+                             : 10*peso + 6.25*altura*100 - 5*edad -161;
+  let calorias = bmr * actividad;
+  if(objetivo==="definicion") calorias-=400;
+  if(objetivo==="volumen") calorias+=300;
+
+  document.getElementById("resultadoCalorias").innerHTML = `<b>Calorías diarias aproximadas: ${Math.round(calorias)} kcal</b>`;
 }
 </script>
 
