@@ -156,7 +156,7 @@ Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tene
 <option value="hombre">Hombre</option>
 <option value="mujer">Mujer</option>
 </select>
-<select id="actividadCal">
+<select id="comidasCalorias">
 <option value="1.2">Sedentario</option>
 <option value="1.375">Ejercicio ligero</option>
 <option value="1.55">Entrenamiento moderado</option>
@@ -273,7 +273,7 @@ let altura = parseFloat(document.getElementById("alturaCal").value);
 let edad = parseFloat(document.getElementById("edadCal").value);
 let sexo = document.getElementById("sexoCal").value;
 let actividad = parseFloat(document.getElementById("actividadCal").value);
-let comidas = parseFloat(document.getElementById("comidasDia").value);
+let comidas = parseFloat(document.getElementById("comidasCalorias").value);
 if(!peso || !altura || !edad){
 document.getElementById("resultadoCalorias").innerHTML =
 "Por favor completa todos los campos";
