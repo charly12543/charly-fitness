@@ -210,17 +210,13 @@ behavior: "smooth"
 /* PROTEINA */
 
 function calcularProteina(){
-
 let peso = document.getElementById("peso").value;
 let factor = document.getElementById("actividad").value;
-
 let proteina = peso * factor;
-
 document.getElementById("resultadoProteina").innerHTML =
 "Debes consumir aproximadamente <b>" +
 proteina.toFixed(1) +
 " g de proteína al día</b>";
-
 }
 
 /* IMC */
@@ -270,11 +266,18 @@ let edad = parseFloat(document.getElementById("edadCal").value);
 let sexo = document.getElementById("sexoCal").value;
 let actividad = parseFloat(document.getElementById("actividadCal").value);
 let comidas = parseFloat(document.getElementById("comidasDia").value);
+
 if(!peso || !altura || !edad){
 document.getElementById("resultadoCalorias").innerHTML =
 "Por favor completa todos los campos";
 return;
 }
+
+/* detectar si altura está en metros */
+if(altura < 3){
+altura = altura * 100;
+}
+ 
 /* BMR */
 let bmr;
 if(sexo === "hombre"){
