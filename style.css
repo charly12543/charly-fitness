@@ -363,5 +363,31 @@ footer{
     margin-left: auto;
   }
 
+  @media screen and (max-width: 768px){
+
+  .hero h1{
+    font-size: 1.8rem;
+  }
+  .hero p{
+    font-size: 0.9rem;
+  }
+
+  .calculadora{
+    padding: 20px;
+  }
+
+  .tool-card{
+    padding: 20px;
+  }
+
+  iframe{
+    height: 180px;
+  }
+
+  .videos{
+    gap: 15px;
+  }
+}
+
 
 
