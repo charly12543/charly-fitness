@@ -308,8 +308,9 @@ background:#1e293b;
 padding:30px;
 border-radius:15px;
 text-align:center;
-transition:0.3s;
+transition:all 0.35s ease;
 box-shadow:0 10px 25px rgba(0,0,0,0.4);
+position:relative;
 }
 .tool-card:hover{
 transform:translateY(-5px);
@@ -331,17 +332,23 @@ text-decoration:none;
 font-size:14px;
 transition:0.3s;
 }
-.tool-card a:hover{
-background:#16a34a;
+.tool-card:hover{
+transform:translateY(-10px);
+box-shadow:
+0 20px 40px rgba(0,0,0,0.6),
+0 0 15px #22c55e;
 }
 /* ICONOS HERRAMIENTAS */
 
 .tool-icon{
-
 font-size:40px;
 color:#22c55e;
 margin-bottom:15px;
-
+transition:all 0.35s ease;
+}
+.tool-card:hover .tool-icon{
+transform:scale(1.2);
+text-shadow:0 0 15px #22c55e;
 }
 
 /* YOUTUBE FLOAT */
