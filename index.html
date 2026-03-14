@@ -61,30 +61,36 @@ y sigue mi transformación real.
 <div class="tools-grid">
 <div class="tool-card">
 <i class="fa-solid fa-drumstick-bite tool-icon"></i>
+ 
 <h3>Proteína</h3>
 <p>Calcula tu proteína diaria según tu peso corporal.</p>
 <a href="#proteina">Usar calculadora</a>
 </div>
 <div class="tool-card">
 <i class="fa-solid fa-chart-line tool-icon"></i>
+ 
 <h3>IMC</h3>
 <p>Descubre tu índice de masa corporal.</p>
 <a href="#imc">Usar calculadora</a>
 </div>
 <div class="tool-card">
 <i class="fa-solid fa-fire tool-icon"></i>
+ 
 <h3>Calorías</h3>
 <p>Calcula tu gasto energético diario.</p>
 <a href="#calorias">Usar calculadora</a>
 </div>
 <div class="tool-card">
 <i class="fa-solid fa-bowl-rice tool-icon"></i>
+ 
 <h3>Macros</h3>
 <p>Distribuye proteína, carbohidratos y grasas por comida.</p>
 <a href="#macros">Usar calculadora</a>
+ 
 </div>
 </div>
 </section>
+ 
 <!-- CALCULADORA PROTEINA -->
 <section id="proteina">
 <h2>Calculadora de proteína</h2>
@@ -126,7 +132,7 @@ Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tene
 </select>
 
 <label>Comidas al día</label>
-<select id="comidasDia">
+<select id="comidasMacros">
 <option value="3">3 comidas</option>
 <option value="4" selected>4 comidas</option>
 <option value="5">5 comidas</option>
@@ -193,6 +199,7 @@ Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tene
 </footer>
 
 <script>
+
 
  /* SCROLL */
 function scrollToSection(id){
@@ -261,14 +268,12 @@ Suscríbete
 /* CALCULADORA CALORIAS */
 
 function calcularCalorias(){
-
 let peso = parseFloat(document.getElementById("pesoCal").value);
 let altura = parseFloat(document.getElementById("alturaCal").value);
 let edad = parseFloat(document.getElementById("edadCal").value);
 let sexo = document.getElementById("sexoCal").value;
 let actividad = parseFloat(document.getElementById("actividadCal").value);
 let comidas = parseFloat(document.getElementById("comidasDia").value);
-
 if(!peso || !altura || !edad){
 document.getElementById("resultadoCalorias").innerHTML =
 "Por favor completa todos los campos";
@@ -276,48 +281,119 @@ return;
 }
 
 /* detectar metros o cm */
-
 if(altura < 3){
 altura = altura * 100;
 }
 
 /* BMR */
-
 let bmr;
-
 if(sexo === "hombre"){
 bmr = (10 * peso) + (6.25 * altura) - (5 * edad) + 5;
 }else{
 bmr = (10 * peso) + (6.25 * altura) - (5 * edad) - 161;
 }
-
 let calorias = bmr * actividad;
 
 /* MACROS */
-
 let proteina = peso * 2;
 let caloriasProteina = proteina * 4;
-
 let grasa = (calorias * 0.25) / 9;
 let carbos = (calorias - caloriasProteina - (grasa*9)) / 4;
 
 /* MACROS POR COMIDA */
-
 let proteinaComida = proteina / comidas;
 let carbosComida = carbos / comidas;
 let grasaComida = grasa / comidas;
 
 /* EQUIVALENTES */
-
 let equivalentes = equivalentesProteina(proteinaComida);
 
 /* RESULTADO */
-
 document.getElementById("resultadoCalorias").innerHTML =
-
 "🔥 Calorías diarias: <b>" + calorias.toFixed(0) + " kcal</b><br><br>" +
-
 "<b>Macros diarios</b><br>" +
+"🥩 Proteína: " + proteina.toFixed(0) + " g<br>" +
+"🍚 Carbohidratos: " + carbos.toFixed(0) + " g<br>" +
+"🥑 Grasas: " + grasa.toFixed(0) + " g<br><br>" +
+"<b>Macros por comida (" + comidas + " comidas)</b><br>" +
+"🥩 Proteína: " + proteinaComida.toFixed(0) + " g<br>" +
+"🍚 Carbos: " + carbosComida.toFixed(0) + " g<br>" +
+"🥑 Grasas: " + grasaComida.toFixed(0) + " g<br><br>" +
+equivalentes;
+}
+
+/* EQUIVALENTES DE PROTEINA */
+function equivalentesProteina(gramosProteina){
+const protPollo100 = 31;
+const protAtunLata = 25;
+const protClara = 3.6;
+const protHuevo = 6;
+let polloGramos = (gramosProteina / protPollo100) * 100;
+let latasAtun = gramosProteina / protAtunLata;
+let proteinaRestante = gramosProteina - protHuevo;
+let claras = proteinaRestante / protClara;
+return `
+<b>Equivalentes de proteína (~${gramosProteina.toFixed(0)} g)</b><br>
+• ${polloGramos.toFixed(0)} g pechuga de pollo<br>
+• ${latasAtun.toFixed(1)} lata de atún<br>
+• ${claras.toFixed(0)} claras + 1 huevo
+`;
+}
+
+/* CALCULADORA MACROS POR COMIDA */
+
+function calcularMacros(){
+
+let peso = parseFloat(document.getElementById("pesoMacros").value);
+let objetivo = document.getElementById("objetivo").value;
+let comidas = parseFloat(document.getElementById("comidasDia").value);
+
+if(!peso){
+document.getElementById("resultadoMacros").innerHTML =
+"Por favor ingresa tu peso";
+return;
+}
+
+/* PROTEINA */
+
+let proteina = peso * 2;
+
+/* CALORIAS BASE */
+
+let calorias = peso * 33;
+
+/* AJUSTE SEGUN OBJETIVO */
+
+if(objetivo === "definicion"){
+calorias -= 400;
+}
+
+if(objetivo === "volumen"){
+calorias += 300;
+}
+
+/* GRASAS */
+
+let grasa = (calorias * 0.25) / 9;
+
+/* CARBOHIDRATOS */
+
+let caloriasProteina = proteina * 4;
+let caloriasGrasa = grasa * 9;
+
+let carbos = (calorias - caloriasProteina - caloriasGrasa) / 4;
+
+/* POR COMIDA */
+
+let proteinaComida = proteina / comidas;
+let carbosComida = carbos / comidas;
+let grasaComida = grasa / comidas;
+
+/* RESULTADO */
+
+document.getElementById("resultadoMacros").innerHTML =
+
+"<b>Macros diarios</b><br><br>" +
 
 "🥩 Proteína: " + proteina.toFixed(0) + " g<br>" +
 "🍚 Carbohidratos: " + carbos.toFixed(0) + " g<br>" +
@@ -327,37 +403,9 @@ document.getElementById("resultadoCalorias").innerHTML =
 
 "🥩 Proteína: " + proteinaComida.toFixed(0) + " g<br>" +
 "🍚 Carbos: " + carbosComida.toFixed(0) + " g<br>" +
-"🥑 Grasas: " + grasaComida.toFixed(0) + " g<br><br>" +
+"🥑 Grasas: " + grasaComida.toFixed(0) + " g";
 
-equivalentes;
-
-}
-
-
-/* EQUIVALENTES DE PROTEINA */
-
-function equivalentesProteina(gramosProteina){
-
-const protPollo100 = 31;
-const protAtunLata = 25;
-const protClara = 3.6;
-const protHuevo = 6;
-
-let polloGramos = (gramosProteina / protPollo100) * 100;
-let latasAtun = gramosProteina / protAtunLata;
-
-let proteinaRestante = gramosProteina - protHuevo;
-let claras = proteinaRestante / protClara;
-
-return `
-<b>Equivalentes de proteína (~${gramosProteina.toFixed(0)} g)</b><br>
-• ${polloGramos.toFixed(0)} g pechuga de pollo<br>
-• ${latasAtun.toFixed(1)} lata de atún<br>
-• ${claras.toFixed(0)} claras + 1 huevo
-`;
-
-}
-
+} 
 </script>
 
 </body>
