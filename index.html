@@ -145,7 +145,7 @@ Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tene
 </section>
  
  
-<!-- CALCULADORA MACROS --> 
+<!-- CALCULADORA CALORIAS DIARIAS --> 
 <section id="calorias">
 <h2>Calculadora de calorías diarias</h2>
 <div class="calculadora">
@@ -162,6 +162,12 @@ Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tene
 <option value="1.55">Entrenamiento moderado</option>
 <option value="1.725">Entrenamiento intenso</option>
 <option value="1.9">Atleta avanzado</option>
+</select>
+ <select id="comidas">
+<option value="3">3 comidas</option>
+<option value="4">4 comidas</option>
+<option value="5">5 comidas</option>
+<option value="6">6 comidas</option>
 </select>
 <button onclick="calcularCalorias()">Calcular calorías</button>
 <div class="resultado" id="resultadoCalorias"></div>
@@ -263,20 +269,22 @@ Suscríbete
 </a>
 
 <script>
+ 
 
 
 /* CALCULADORA CALORIAS */
 
 function calcularCalorias(){
+
 let peso = parseFloat(document.getElementById("pesoCal").value);
 let altura = parseFloat(document.getElementById("alturaCal").value);
 let edad = parseFloat(document.getElementById("edadCal").value);
 let sexo = document.getElementById("sexoCal").value;
-let actividad = parseFloat(document.getElementById("actividadCal").value);
- 
+let actividad = parseFloat(document.getElementById("comidasCalorias").value);
+let comidas = parseFloat(document.getElementById("comidas").value);
+let comidas = 4; // numero de comidas
 
- 
-if(!peso || !altura || !edad){
+if(isNaN(peso) || isNaN(altura) || isNaN(edad)){
 document.getElementById("resultadoCalorias").innerHTML =
 "Por favor completa todos los campos";
 return;
@@ -289,18 +297,20 @@ altura = altura * 100;
 
 /* BMR */
 let bmr;
+
 if(sexo === "hombre"){
 bmr = (10 * peso) + (6.25 * altura) - (5 * edad) + 5;
 }else{
 bmr = (10 * peso) + (6.25 * altura) - (5 * edad) - 161;
 }
+
 let calorias = bmr * actividad;
 
 /* MACROS */
 let proteina = peso * 2;
 let caloriasProteina = proteina * 4;
 let grasa = (calorias * 0.25) / 9;
-let carbos = (calorias - caloriasProteina - (grasa*9)) / 4;
+let carbos = (calorias - caloriasProteina - (grasa * 9)) / 4;
 
 /* MACROS POR COMIDA */
 let proteinaComida = proteina / comidas;
@@ -311,6 +321,7 @@ let grasaComida = grasa / comidas;
 let equivalentes = equivalentesProteina(proteinaComida);
 
 /* RESULTADO */
+
 document.getElementById("resultadoCalorias").innerHTML =
 "🔥 Calorías diarias: <b>" + calorias.toFixed(0) + " kcal</b><br><br>" +
 "<b>Macros diarios</b><br>" +
@@ -322,18 +333,23 @@ document.getElementById("resultadoCalorias").innerHTML =
 "🍚 Carbos: " + carbosComida.toFixed(0) + " g<br>" +
 "🥑 Grasas: " + grasaComida.toFixed(0) + " g<br><br>" +
 equivalentes;
+
 }
 
-/* EQUIVALENTES DE PROTEINA */
+/* EQUIVALENTES */
+
 function equivalentesProteina(gramosProteina){
+
 const protPollo100 = 31;
 const protAtunLata = 25;
 const protClara = 3.6;
 const protHuevo = 6;
+
 let polloGramos = (gramosProteina / protPollo100) * 100;
 let latasAtun = gramosProteina / protAtunLata;
 let proteinaRestante = gramosProteina - protHuevo;
 let claras = proteinaRestante / protClara;
+
 return `
 <b>Equivalentes de proteína (~${gramosProteina.toFixed(0)} g)</b><br>
 • ${polloGramos.toFixed(0)} g pechuga de pollo<br>
