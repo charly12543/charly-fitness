@@ -125,10 +125,14 @@ Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tene
 <option value="mantenimiento">Mantenimiento</option>
 <option value="volumen">Volumen</option>
 </select>
-<select id="comidas">
+
+<label>Comidas al día</label>
+<select id="comidasDia">
 <option value="3">3 comidas</option>
-<option value="4">4 comidas</option>
+<option value="4" selected>4 comidas</option>
 <option value="5">5 comidas</option>
+<option value="6">6 comidas</option>
+
 </select>
 <button onclick="calcularMacros()">Calcular macros</button>
 <div class="resultado" id="resultadoMacros"></div>
@@ -257,17 +261,21 @@ Suscríbete
 </a>
 
 <script>
+
+/* calcularCalorias */ 
 function calcularCalorias(){
 let peso = parseFloat(document.getElementById("pesoCal").value);
 let altura = parseFloat(document.getElementById("alturaCal").value);
 let edad = parseFloat(document.getElementById("edadCal").value);
 let sexo = document.getElementById("sexoCal").value;
 let actividad = parseFloat(document.getElementById("actividadCal").value);
+let comidas = parseFloat(document.getElementById("comidasDia").value);
 if(!peso || !altura || !edad){
 document.getElementById("resultadoCalorias").innerHTML =
 "Por favor completa todos los campos";
 return;
 }
+/* BMR */
 let bmr;
 if(sexo === "hombre"){
 bmr = (10 * peso) + (6.25 * altura) - (5 * edad) + 5;
@@ -275,88 +283,42 @@ bmr = (10 * peso) + (6.25 * altura) - (5 * edad) + 5;
 bmr = (10 * peso) + (6.25 * altura) - (5 * edad) - 161;
 }
 let calorias = bmr * actividad;
-/* CALCULAR MACROS */
+/* MACROS */
 let proteina = peso * 2;
 let caloriasProteina = proteina * 4;
 let grasa = (calorias * 0.25) / 9;
 let caloriasGrasa = grasa * 9;
 let carbos = (calorias - caloriasProteina - caloriasGrasa) / 4;
+/* MACROS POR COMIDA */
+let proteinaComida = proteina / comidas;
+let carbosComida = carbos / comidas;
+let grasaComida = grasa / comidas;
 /* RESULTADO */
 document.getElementById("resultadoCalorias").innerHTML =
 "🔥 Calorías diarias: <b>" + calorias.toFixed(0) + " kcal</b><br><br>" +
-"Macros recomendados:<br><br>" +
-"🥩 Proteína: <b>" + proteina.toFixed(0) + " g</b><br>" +
-"🍚 Carbohidratos: <b>" + carbos.toFixed(0) + " g</b><br>" +
-"🥑 Grasas: <b>" + grasa.toFixed(0) + " g</b>";
+"<b>Macros diarios</b><br>" +
+"🥩 Proteína: " + proteina.toFixed(0) + " g<br>" +
+"🍚 Carbohidratos: " + carbos.toFixed(0) + " g<br>" +
+"🥑 Grasas: " + grasa.toFixed(0) + " g<br><br>" +
+"<b>Macros por comida (" + comidas + " comidas)</b><br>" +
+"🥩 Proteína: " + proteinaComida.toFixed(0) + " g<br>" +
+"🍚 Carbos: " + carbosComida.toFixed(0) + " g<br>" +
+"🥑 Grasas: " + grasaComida.toFixed(0) + " g<br><br>" +
+"<b>Ejemplo de equivalentes</b><br>" +
+"🥩 " + proteinaComida.toFixed(0) + " g proteína ≈<br>" +
+"• 180 g pollo<br>" +
+"• 200 g pescado<br>" +
+"• 1 lata atún + 2 claras<br><br>" +
+"🍚 " + carbosComida.toFixed(0) + " g carbos ≈<br>" +
+"• 1 taza arroz<br>" +
+"• 250 g papa<br>" +
+"• 1 plátano macho<br><br>" +
+"🥑 " + grasaComida.toFixed(0) + " g grasa ≈<br>" +
+"• 1/2 aguacate<br>" +
+"• 15 g nueces<br>" +
+"• 1 cucharada aceite de oliva";
 }
 </script>
-
- 
-<!-- MACROS CALCULADORA --> 
-<script> 
-function calcularMacros(){
-let peso = document.getElementById("pesoMacros").value;
-let objetivo = document.getElementById("objetivo").value;
-let comidas = document.getElementById("comidas").value;
-if(!peso){
-document.getElementById("resultadoMacros").innerHTML =
-"Ingresa tu peso corporal";
-return;
-}
-/* proteína por kg */
-let proteinaKg;
-if(objetivo === "definicion"){
-proteinaKg = 2.2;
-}
-else if(objetivo === "volumen"){
-proteinaKg = 2;
-}
-else{
-proteinaKg = 1.8;
-}
-let proteinaTotal = peso * proteinaKg;
-/* carbohidratos */
-let carbosTotal;
-if(objetivo === "definicion"){
-carbosTotal = peso * 2;
-}
-else if(objetivo === "volumen"){
-carbosTotal = peso * 4;
-}
-else{
-carbosTotal = peso * 3;
-}
-/* grasas */
-let grasasTotal = peso * 0.8;
-/* macros por comida */
-let proteinaComida = proteinaTotal / comidas;
-let carbosComida = carbosTotal / comidas;
-let grasasComida = grasasTotal / comidas;
-document.getElementById("resultadoMacros").innerHTML =
-"<b>Macros diarios</b><br>" +
-"Proteína: " + Math.round(proteinaTotal) + " g<br>" +
-"Carbohidratos: " + Math.round(carbosTotal) + " g<br>" +
-"Grasas: " + Math.round(grasasTotal) + " g<br><br>" +
-"<b>Por comida</b><br>" +
-"Proteína: " + Math.round(proteinaComida) + " g<br>" +
-"Carbohidratos: " + Math.round(carbosComida) + " g<br>" +
-"Grasas: " + Math.round(grasasComida) + " g<br><br>" +
-"<b>Opciones de proteína (~40g)</b><br>" +
-"🍗 150g pollo<br>" +
-"🐟 180g pescado<br>" +
-"🥩 200g carne magra<br>" +
-"🥚 6 claras + 1 huevo<br><br>" +
-"<b>Opciones de carbohidratos (~50g)</b><br>" +
-"🍚 1 taza arroz<br>" +
-"🍠 150g camote<br>" +
-"🥔 200g papa<br>" +
-"🍌 1 plátano macho<br><br>" +
-"<b>Opciones de grasas (~15g)</b><br>" +
-"🥑 ½ aguacate<br>" +
-"🌰 30g nueces<br>" +
-"🫒 1 cucharada aceite de oliva";
-}
-</script> 
 
 </body>
 </html>
