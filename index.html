@@ -21,7 +21,6 @@
 <img src="imagenes/logoGitHub.png" alt="CB Fitness Logo">
 </div>
 <ul class="nav-links">
-<ul class="nav-links">
 <li><a href="#inicio">Inicio</a></li>
 <li><a href="#transformacion">Transformación</a></li> 
 <li><a href="#herramientas">Herramientas</a></li>
@@ -145,7 +144,7 @@ Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tene
 <h2>Calculadora de calorías diarias</h2>
 <div class="calculadora">
 <input type="number" id="pesoCal" placeholder="Peso (kg)">
-<input type="number" id="alturaCal" placeholder="Altura (cm)">
+<input type="number" id="alturaCal" placeholder="Altura (1.82 o 182)">
 <input type="number" id="edadCal" placeholder="Edad">
 <select id="sexoCal">
 <option value="hombre">Hombre</option>
@@ -258,8 +257,11 @@ Suscríbete
 
 <script>
 
-/* calcularCalorias */ 
+
+/* CALCULADORA CALORIAS */
+
 function calcularCalorias(){
+
 let peso = parseFloat(document.getElementById("pesoCal").value);
 let altura = parseFloat(document.getElementById("alturaCal").value);
 let edad = parseFloat(document.getElementById("edadCal").value);
@@ -273,54 +275,89 @@ document.getElementById("resultadoCalorias").innerHTML =
 return;
 }
 
-/* detectar si altura está en metros */
+/* detectar metros o cm */
+
 if(altura < 3){
 altura = altura * 100;
 }
- 
+
 /* BMR */
+
 let bmr;
+
 if(sexo === "hombre"){
 bmr = (10 * peso) + (6.25 * altura) - (5 * edad) + 5;
 }else{
 bmr = (10 * peso) + (6.25 * altura) - (5 * edad) - 161;
 }
+
 let calorias = bmr * actividad;
+
 /* MACROS */
+
 let proteina = peso * 2;
 let caloriasProteina = proteina * 4;
+
 let grasa = (calorias * 0.25) / 9;
-let caloriasGrasa = grasa * 9;
-let carbos = (calorias - caloriasProteina - caloriasGrasa) / 4;
+let carbos = (calorias - caloriasProteina - (grasa*9)) / 4;
+
 /* MACROS POR COMIDA */
+
 let proteinaComida = proteina / comidas;
 let carbosComida = carbos / comidas;
 let grasaComida = grasa / comidas;
+
+/* EQUIVALENTES */
+
+let equivalentes = equivalentesProteina(proteinaComida);
+
 /* RESULTADO */
+
 document.getElementById("resultadoCalorias").innerHTML =
+
 "🔥 Calorías diarias: <b>" + calorias.toFixed(0) + " kcal</b><br><br>" +
+
 "<b>Macros diarios</b><br>" +
+
 "🥩 Proteína: " + proteina.toFixed(0) + " g<br>" +
 "🍚 Carbohidratos: " + carbos.toFixed(0) + " g<br>" +
 "🥑 Grasas: " + grasa.toFixed(0) + " g<br><br>" +
+
 "<b>Macros por comida (" + comidas + " comidas)</b><br>" +
+
 "🥩 Proteína: " + proteinaComida.toFixed(0) + " g<br>" +
 "🍚 Carbos: " + carbosComida.toFixed(0) + " g<br>" +
 "🥑 Grasas: " + grasaComida.toFixed(0) + " g<br><br>" +
-"<b>Ejemplo de equivalentes</b><br>" +
-"🥩 " + proteinaComida.toFixed(0) + " g proteína ≈<br>" +
-"• 180 g pollo<br>" +
-"• 200 g pescado<br>" +
-"• 1 lata atún + 2 claras<br><br>" +
-"🍚 " + carbosComida.toFixed(0) + " g carbos ≈<br>" +
-"• 1 taza arroz<br>" +
-"• 250 g papa<br>" +
-"• 1 plátano macho<br><br>" +
-"🥑 " + grasaComida.toFixed(0) + " g grasa ≈<br>" +
-"• 1/2 aguacate<br>" +
-"• 15 g nueces<br>" +
-"• 1 cucharada aceite de oliva";
+
+equivalentes;
+
 }
+
+
+/* EQUIVALENTES DE PROTEINA */
+
+function equivalentesProteina(gramosProteina){
+
+const protPollo100 = 31;
+const protAtunLata = 25;
+const protClara = 3.6;
+const protHuevo = 6;
+
+let polloGramos = (gramosProteina / protPollo100) * 100;
+let latasAtun = gramosProteina / protAtunLata;
+
+let proteinaRestante = gramosProteina - protHuevo;
+let claras = proteinaRestante / protClara;
+
+return `
+<b>Equivalentes de proteína (~${gramosProteina.toFixed(0)} g)</b><br>
+• ${polloGramos.toFixed(0)} g pechuga de pollo<br>
+• ${latasAtun.toFixed(1)} lata de atún<br>
+• ${claras.toFixed(0)} claras + 1 huevo
+`;
+
+}
+
 </script>
 
 </body>
