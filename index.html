@@ -357,36 +357,53 @@ window.addEventListener("scroll", function(){
 
 <!-- FIREBASE -->
 <script type="module">
+  // Inicializar Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyDOxpeHeeyd7Lc0mDeq16a_ogi6sSihOHg",
+    authDomain: "fitneabcounter.firebaseapp.com",
+    projectId: "fitneabcounter",
+    storageBucket: "fitneabcounter.firebasestorage.app",
+    messagingSenderId: "727656034208",
+    appId: "1:727656034208:web:cf59326b898203924cfec5"
+  };
+
+  const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // Cambia esta IP por tu IP de casa para pruebas
+  // IP de prueba (tú)
   const ipDePrueba = "187.214.49.188"; 
 
   async function contarVisita() {
     try {
-      // Obtenemos la IP pública del visitante
+      // Obtener IP del visitante
       const response = await fetch("https://api.ipify.org?format=json");
       const data = await response.json();
       const ipUsuario = data.ip;
 
       if(ipUsuario === ipDePrueba){
-        // Solo para ti: mensaje de bienvenida
+        // Solo para tu IP: mensaje de prueba
         alert("Bienvenido bro 👋 ¡Esto es solo una prueba, no cuenta como visita real!");
         console.log("Visita de prueba detectada, no se incrementa el contador.");
-        return; // salimos sin contar
+        return;
       }
 
       // Para cualquier otro usuario: contar visita real
       const docRef = doc(db, "contador", "visitas");
       const docSnap = await getDoc(docRef);
 
+      let total = 1;
       if (docSnap.exists()) {
+        total = docSnap.data().total + 1;
         await updateDoc(docRef, { total: increment(1) });
       } else {
         await setDoc(docRef, { total: 1 });
       }
+
+      // Mostrar contador en la página
+      document.getElementById("contadorVisitas").textContent = total;
 
       console.log("Contador actualizado ✅");
     } catch (error) {
@@ -396,7 +413,6 @@ window.addEventListener("scroll", function(){
 
   contarVisita();
 </script>
-</script>  
 
 </body>
 </html>
