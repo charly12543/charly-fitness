@@ -350,5 +350,47 @@ window.addEventListener("scroll", function(){
 });
 </script>  
 
+<!-- CONTADOR DE VISITAS -->
+<div style="text-align:center; margin-top:20px; color:#d4af37; font-weight:600;">
+  Visitas a la página: <span id="contadorVisitas">0</span>
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+  // Importa Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+  import { getDatabase, ref, get, runTransaction } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
+
+  // Config de tu proyecto
+  const firebaseConfig = {
+    apiKey: "AIzaSyDOxpeHeeyd7Lc0mDeq16a_ogi6sSihOHg",
+    authDomain: "fitneabcounter.firebaseapp.com",
+    databaseURL: "https://fitneabcounter-default-rtdb.firebaseio.com",
+    projectId: "fitneabcounter",
+    storageBucket: "fitneabcounter.appspot.com",
+    messagingSenderId: "727656034208",
+    appId: "1:727656034208:web:cf59326b898203924cfec5"
+  };
+
+  // Inicializa Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Referencia al contador
+  const counterRef = ref(db, 'visitas/contador');
+
+  // Incrementar contador cada vez que alguien entra
+  runTransaction(counterRef, (current) => {
+    return (current || 0) + 1;
+  });
+
+  // Mostrar valor en la web
+  get(counterRef).then((snapshot) => {
+    if(snapshot.exists()){
+      document.getElementById('contadorVisitas').innerText = snapshot.val();
+    }
+  });
+</script>  
+
 </body>
 </html>
