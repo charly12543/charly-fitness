@@ -348,7 +348,7 @@ let peso = parseFloat(document.getElementById("pesoMacros").value);
 let objetivo = document.getElementById("objetivo").value;
 let comidas = parseFloat(document.getElementById("comidasMacros").value);
 
-if(!peso){
+if(!peso || !comidas){
 document.getElementById("resultadoMacros").innerHTML =
 "Por favor ingresa tu peso";
 return;
