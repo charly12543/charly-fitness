@@ -20,6 +20,11 @@
 <div class="logo">
 <img src="imagenes/logoGitHub.png" alt="CB Fitness Logo">
 </div>
+
+<span class="menu-toggle" onclick="toggleMenu()">
+ <i class="fa-solid fa-bars"></i>
+</span>
+
 <ul class="nav-links">
 <li><a href="#inicio">Inicio</a></li>
 <li><a href="#transformacion">Transformación</a></li> 
@@ -377,5 +382,14 @@ document.getElementById("resultadoMacros").innerHTML =
 } 
 </script>
 
+ <!-- NAVBAR CELULAR -->
+<script>
+function toggleMenu(){
+  document.querySelector(".nav-links").classList.toggle("active");
+}
+</script> 
+
+
+ 
 </body>
 </html>
