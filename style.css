@@ -335,6 +335,9 @@ footer{
   background:var(--bg-dark);
   margin-top:40px;
 }
+footer img{
+margin-top:10px;
+}
 
 .redes{
   margin-top:10px;
