@@ -276,14 +276,17 @@ h2{
 }
 .video-destacado iframe{
 width:100%;
-max-width:900px;
+max-width:720px;
 aspect-ratio:16/9;
 margin:auto;
 display:block;
 border-radius:14px;
 margin-bottom:40px;
 }
-
+.video-destacado{
+text-align:center;
+margin-bottom:40px;
+}
 .videos-sub{
 text-align:center;
 opacity:0.8;
