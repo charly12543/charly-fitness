@@ -147,13 +147,19 @@ body{
 }
 
 .hero-buttons{
-  display:flex;
+  display:grid;
+  grid-template-columns: repeat(2,1fr);
   gap:15px;
-  justify-content:center;
-  flex-wrap:wrap;
-  margin-top:20px;
+  max-width:450px;
+  margin:25px auto 0 auto;
 }
-
+.hero-buttons button,
+.hero-buttons a{
+  width:100%;
+  padding:14px 20px;
+  text-align:center;
+  border-radius:30px;
+}
 .btn-outline{
   padding:12px 26px;
   border:2px solid var(--gold);
@@ -425,7 +431,16 @@ footer{
 .menu-toggle{
   display:block;
 }
+  
+@media (min-width:768px){
 
+.hero-buttons{
+  grid-template-columns: repeat(4,1fr);
+  max-width:800px;
+}
+
+}
+  
 .nav-links{
   position:absolute;
   top:70px;
