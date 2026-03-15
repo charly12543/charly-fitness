@@ -274,18 +274,19 @@ h2{
   transform:scale(1.05);
   box-shadow:0 10px 25px rgba(0,0,0,0.5);
 }
-.video-destacado iframe{
-width:100%;
-max-width:720px;
-aspect-ratio:16/9;
-margin:auto;
-display:block;
-border-radius:14px;
-margin-bottom:40px;
-}
+
 .video-destacado{
 text-align:center;
-margin-bottom:40px;
+margin-bottom:20px;
+}
+
+.video-destacado iframe{
+width:100%;
+max-width:750px;
+aspect-ratio:16/9;
+display:block;
+margin:auto;
+border-radius:14px;
 }
 .videos-sub{
 text-align:center;
