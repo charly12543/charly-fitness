@@ -272,13 +272,12 @@ grid-template-columns:repeat(2,1fr);
 grid-template-columns:1fr;
 }
 }
-iframe{
+.videos iframe{
   width:100%;
-  height:200px;
-  border-radius:10px;
+  aspect-ratio:16/9;
   border:none;
+  border-radius:10px;
 }
-
 /* FOOTER */
 footer{
   text-align:center;
