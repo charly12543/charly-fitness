@@ -410,28 +410,32 @@ Suscríbete
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
+  apiKey: "AIzaSyDOxpeHeeyd7Lc0mDeq16a_ogi6sSihOHg",
   authDomain: "fitneabcounter.firebaseapp.com",
   projectId: "fitneabcounter",
   storageBucket: "fitneabcounter.firebasestorage.app",
   messagingSenderId: "727656034208",
   appId: "1:727656034208:web:cf59326b898203924cfec5"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const contadorRef = doc(db,"contador","visitas");
+const contadorRef = doc(db, "contador", "visitas");
 async function contarVisita(){
   try{
+
     const docSnap = await getDoc(contadorRef);
 
     if(docSnap.exists()){
-      const totalActual = docSnap.data().total;
-
-      document.getElementById("contadorVisitas").textContent = totalActual;
 
       await updateDoc(contadorRef,{
         total: increment(1)
       });
+
+      const nuevoDoc = await getDoc(contadorRef);
+
+      document.getElementById("contadorVisitas").textContent =
+        nuevoDoc.data().total;
 
     }else{
 
@@ -442,7 +446,7 @@ async function contarVisita(){
     }
 
   }catch(error){
-    console.log("Error contador:",error);
+    console.log("Error contador:", error);
   }
 }
 contarVisita();
