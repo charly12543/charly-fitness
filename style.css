@@ -1,3 +1,8 @@
+/* BODY */
+html, body{
+overflow-x:hidden;
+}
+
 /* RESET */
 *{
   margin:0;
@@ -149,8 +154,8 @@ body{
 .hero-buttons{
   display:grid;
   grid-template-columns: repeat(2,1fr);
-  gap:15px;
-  max-width:450px;
+  gap:12px;
+  max-width:380px;
   margin:25px auto 0 auto;
 }
 .hero-buttons button,
@@ -468,8 +473,32 @@ footer{
   align-items:center;
 }
 
+.hero{
+padding:20px 15px;
+}
+
+.hero h1{
+font-size:2rem;
+}
+
+.hero-main{
+font-size:0.95rem;
+}
+
+.hero-sub{
+font-size:0.9rem;
+}
+
+
+
+
+
+  
+
 .hero-buttons button,
 .hero-buttons a{
-  width:220px;
-}  
+width:100%;
+font-size:14px;
+padding:12px 10px;
+} 
 }
