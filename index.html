@@ -355,63 +355,71 @@ window.addEventListener("scroll", function(){
   Visitas a la página: <span id="contadorVisitas">0</span>
 </div>
 
-<!-- FIREBASE -->
 <script type="module">
-  // Inicializar Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDOxpeHeeyd7Lc0mDeq16a_ogi6sSihOHg",
-    authDomain: "fitneabcounter.firebaseapp.com",
-    projectId: "fitneabcounter",
-    storageBucket: "fitneabcounter.firebasestorage.app",
-    messagingSenderId: "727656034208",
-    appId: "1:727656034208:web:cf59326b898203924cfec5"
-  };
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const firebaseConfig = {
+  apiKey: "AIzaSyDOxpeHeeyd7Lc0mDeq16a_ogi6sSihOHg",
+  authDomain: "fitneabcounter.firebaseapp.com",
+  projectId: "fitneabcounter",
+  storageBucket: "fitneabcounter.firebasestorage.app",
+  messagingSenderId: "727656034208",
+  appId: "1:727656034208:web:cf59326b898203924cfec5"
+};
 
-  // IP de prueba (tú)
-  const ipDePrueba = "187.214.49.188"; 
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  async function contarVisita() {
-    try {
-      // Obtener IP del visitante
-      const response = await fetch("https://api.ipify.org?format=json");
-      const data = await response.json();
-      const ipUsuario = data.ip;
+const ipDePrueba = "187.214.49.188";
 
-      if(ipUsuario === ipDePrueba){
-        // Solo para tu IP: mensaje de prueba
-        alert("Bienvenido bro 👋 ¡Esto es solo una prueba, no cuenta como visita real!");
-        console.log("Visita de prueba detectada, no se incrementa el contador.");
-        return;
-      }
+async function contarVisita() {
 
-      // Para cualquier otro usuario: contar visita real
-      const docRef = doc(db, "contador", "visitas");
-      const docSnap = await getDoc(docRef);
+  const docRef = doc(db, "contador", "visitas");
 
-      let total = 1;
-      if (docSnap.exists()) {
-        total = docSnap.data().total + 1;
-        await updateDoc(docRef, { total: increment(1) });
-      } else {
-        await setDoc(docRef, { total: 1 });
-      }
+  try {
 
-      // Mostrar contador en la página
-      document.getElementById("contadorVisitas").textContent = total;
+    // Obtener IP
+    const res = await fetch("https://api.ipify.org?format=json");
+    const data = await res.json();
+    const ipUsuario = data.ip;
 
-      console.log("Contador actualizado ✅");
-    } catch (error) {
-      console.error("Error al contar visita:", error);
+    // Obtener contador actual
+    const docSnap = await getDoc(docRef);
+
+    let total = 0;
+
+    if(docSnap.exists()){
+      total = docSnap.data().total;
     }
-  }
 
-  contarVisita();
+    // Mostrar visitas actuales
+    document.getElementById("contadorVisitas").textContent = total;
+
+ // Si es tu IP no contar
+   if(ipUsuario === ipDePrueba){
+   console.log("Visita de prueba");
+   return;
+}
+
+// Incrementar contador
+    if(docSnap.exists()){
+      await updateDoc(docRef,{
+        total: increment(1)
+      });
+    }else{
+      await setDoc(docRef,{
+        total:1
+      });
+    }
+  } catch(error){
+   console.log("Error contador:", error);
+  }
+}
+contarVisita();
+</script>
+contarVisita();
 </script>
 
 </body>
