@@ -372,53 +372,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const ipDePrueba = "187.214.49.188";
-
-async function contarVisita() {
-
-  const docRef = doc(db, "contador", "visitas");
-
-  try {
-
-    // Obtener IP
-    const res = await fetch("https://api.ipify.org?format=json");
-    const data = await res.json();
-    const ipUsuario = data.ip;
-
-    // Obtener contador actual
-    const docSnap = await getDoc(docRef);
-
-    let total = 0;
-
+const contadorRef = doc(db,"contador","visitas");
+async function contarVisita(){
+  try{
+    const docSnap = await getDoc(contadorRef);
     if(docSnap.exists()){
-      total = docSnap.data().total;
-    }
-
-    // Mostrar visitas actuales
-    document.getElementById("contadorVisitas").textContent = total;
-
- // Si es tu IP no contar
-   if(ipUsuario === ipDePrueba){
-   console.log("Visita de prueba");
-   return;
-}
-
-// Incrementar contador
-    if(docSnap.exists()){
-      await updateDoc(docRef,{
+      const totalActual = docSnap.data().total;
+      document.getElementById("contadorVisitas").textContent = totalActual;
+      await updateDoc(contadorRef,{
         total: increment(1)
       });
     }else{
-      await setDoc(docRef,{
-        total:1
-      });
+      await setDoc(contadorRef,{ total:1 });
+      document.getElementById("contadorVisitas").textContent = 1;
     }
-  } catch(error){
-   console.log("Error contador:", error);
+  }catch(error){
+    console.log("Error contador:",error);
   }
 }
-contarVisita();
-</script>
 contarVisita();
 </script>
 
