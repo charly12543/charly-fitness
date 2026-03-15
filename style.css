@@ -259,6 +259,26 @@ h2{
   display:grid;
   grid-template-columns: repeat(4,1fr);
   gap:20px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.videos iframe{
+  width:100%;
+  aspect-ratio:16/9;
+  border:none;
+  border-radius:12px;
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+.videos iframe:hover{
+  transform:scale(1.05);
+  box-shadow:0 10px 25px rgba(0,0,0,0.5);
+}
+
+.videos-sub{
+text-align:center;
+opacity:0.8;
+margin-bottom:30px;
 }
 
 @media (max-width:1000px){
@@ -272,12 +292,7 @@ grid-template-columns:repeat(2,1fr);
 grid-template-columns:1fr;
 }
 }
-.videos iframe{
-  width:100%;
-  aspect-ratio:16/9;
-  border:none;
-  border-radius:10px;
-}
+
 /* FOOTER */
 footer{
   text-align:center;
