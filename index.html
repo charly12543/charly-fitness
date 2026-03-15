@@ -386,73 +386,35 @@ window.addEventListener("scroll", function(){
 });
 </script>
 
-<!-- FOOTER -->
+  <!-- FOOTER -->
 <footer>
-
 <p>© 2026 CharlyBFitness Lab</p>
 <p>Sitio desarrollado por CharlyB 💻</p>
-
 <div class="redes">
-<a href="https://www.youtube.com/@ACUARIO12543/shorts">YouTube</a>
-<a href="#">Instagram</a>
-<a href="#">TikTok</a>
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank">YouTube</a>
+<a href="#" target="_blank">Instagram</a>
+<a href="https://www.tiktok.com/@charlybustamante12" target="_blank">TikTok</a>
 </div>
+<div style="margin-top:20px; color:#d4af37; font-weight:600;">
+🔥 Atletas usando Fitness Lab
+<br><br>
 
-<div style="margin-top:15px; color:#d4af37; font-weight:600;">
-🔥 Atletas usando Fitness Lab: <span id="contadorVisitas">0</span>
+<!-- CONTADOR -->
+<a href="https://www.hitwebcounter.com/" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=21483068&style=0048&nbdigits=5&type=page&initCount=0"
+title="Contador de visitas"
+alt="contador visitas"
+border="0"/>
+</a>
 </div>
-
 </footer>
+<!-- BOTON FLOTANTE YOUTUBE -->
 <a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="youtube-float">
-Suscríbete
+🔥 Suscríbete
 </a>
 
-<!-- CONTADOR FIREBASE -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyDOxpeHeeyd7Lc0mDeq16a_ogi6sSihOHg",
-  authDomain: "fitneabcounter.firebaseapp.com",
-  projectId: "fitneabcounter",
-  storageBucket: "fitneabcounter.firebasestorage.app",
-  messagingSenderId: "727656034208",
-  appId: "1:727656034208:web:cf59326b898203924cfec5"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const contadorRef = doc(db, "contador", "visitas");
-async function contarVisita(){
-  try{
-
-    const docSnap = await getDoc(contadorRef);
-
-    if(docSnap.exists()){
-
-      await updateDoc(contadorRef,{
-        total: increment(1)
-      });
-
-      const nuevoDoc = await getDoc(contadorRef);
-
-      document.getElementById("contadorVisitas").textContent =
-        nuevoDoc.data().total;
-
-    }else{
-
-      await setDoc(contadorRef,{ total:1 });
-
-      document.getElementById("contadorVisitas").textContent = 1;
-
-    }
-
-  }catch(error){
-    console.log("Error contador:", error);
-  }
-}
-contarVisita();
-</script>
+</body>
+</html>
 
 </body>
 </html>  
