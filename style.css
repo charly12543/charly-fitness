@@ -55,7 +55,7 @@ padding:16px 20px;
 /* NAVBAR */
 .navbar{
   position: fixed;
-  top:0;
+  top:40;
   width:100%;
   padding:16px 40px;
   z-index:1000;
@@ -134,7 +134,7 @@ body{
     url("imagenes/fondo-fitness.jpg");
   background-size:cover;
   background-position:center;
-  margin-top:90px;
+  margin-top:130px;
 }
 
 .hero h1{
