@@ -96,7 +96,7 @@ Ver entrenamientos
 <p class="videos-sub">
 Entrenamientos reales, tips de nutrición y progreso personal.
 </p> 
-<div class="videos">
+<div class="videos" id="youtubeVideos"></div>  
 <iframe src="https://www.youtube.com/embed/pvsgVVlw88g" allowfullscreen></iframe>
 <iframe src="https://www.youtube.com/embed/xTadB9eAtgk" allowfullscreen></iframe>
 <iframe src="https://www.youtube.com/embed/GyCqZSFOa4s" allowfullscreen></iframe>
@@ -478,7 +478,33 @@ function cerrarPopup(){
   document.getElementById("popupYT").style.display = "none";
 }
 </script>  
-  
+
+  <!-- VIDEOS DINAMICOS -->  
+<script>
+const API_KEY = "AIzaSyCuAgdEKPKzXYLTQWi7HF3DlOqeobSDDj8";
+const CHANNEL_ID = "UCC5BpAev5IBVwTQb1DxrSUA";  
+async function cargarVideos() {
+  const url = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&maxResults=6`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    const contenedor = document.getElementById("youtubeVideos");
+    contenedor.innerHTML = "";
+    data.items.forEach(video => {
+      if(video.id.videoId){
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube.com/embed/${video.id.videoId}`;
+        iframe.allowFullscreen = true;
+        contenedor.appendChild(iframe);
+      }
+    });
+
+  } catch (error) {
+    console.log("Error YouTube:", error);
+  }
+}
+cargarVideos();
+</script>  
 
 </body>
 </html>
