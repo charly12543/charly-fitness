@@ -44,12 +44,20 @@
   </div>
 </nav>
 
+  <!-- BANNER -->
+<div class="top-banner">
+🔥 Nuevo: Mira mi transformación completa en YouTube →
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank">
+Ver ahora
+</a>
+</div>  
+
 <!-- HERO -->
 <section class="hero" id="inicio">
   
 <h1>Transforma tu cuerpo como un atleta</h1>
 <p class="hero-main">
-🔥 Más de 1000 personas ya están mejorando su físico con este método
+🔥 Más de 1000 personas ya iniciaron su cambio (y siguen el proceso en YouTube)
 </p>
 <p class="hero-sub">
 📺 Sigue mi transformación real paso a paso en YouTube  
@@ -443,6 +451,34 @@ border="0"/>
 <a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="youtube-float">
 🔥 Suscríbete
 </a>
+
+  <!-- CIERRE -->
+<div id="popupYT" class="popup">
+  <div class="popup-content">
+    <h2>🔥 Espera!</h2>
+    <p>
+    Antes de irte...  
+    Mira el método completo que estoy usando para transformar mi físico.
+    </p>
+    <a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="btn-main">
+      📺 Ver en YouTube
+    </a>
+    <button onclick="cerrarPopup()">Seguir en la página</button>
+</div>
+</div>
+<script>
+let popupMostrado = false;
+document.addEventListener("mouseout", function(e){
+  if(e.clientY < 10 && !popupMostrado){
+    document.getElementById("popupYT").style.display = "flex";
+    popupMostrado = true;
+  }
+});
+function cerrarPopup(){
+  document.getElementById("popupYT").style.display = "none";
+}
+</script>  
+  
 
 </body>
 </html>
