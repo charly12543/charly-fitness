@@ -538,7 +538,14 @@ font-size:0.95rem;
 font-size:0.9rem;
 }
 
-
+.cta-final{
+text-align:center;
+padding:60px 20px;
+}
+.cta-final p{
+opacity:0.8;
+margin:15px 0;
+}
 
 
 
