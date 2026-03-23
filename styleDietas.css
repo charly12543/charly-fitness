@@ -350,7 +350,9 @@ body{
 
 }
 
-
+.lead-box{
+  display:none;
+}
 
 
 /* RESPONSIVE */
