@@ -64,37 +64,71 @@ function usarPro(){
 
 <script>
 function generarDietaPRO(datos){
- let {peso, altura, edad, objetivo} = datos;
- if(altura > 3){ altura = altura / 100; }
+
+  let {peso, altura, edad, objetivo} = datos;
+
+  if(altura > 3){ altura = altura / 100; }
+
+  // 🔥 CALORÍAS BASE
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
   let calorias = bmr * 1.55;
 
   if(objetivo === "definicion") calorias -= 400;
   if(objetivo === "volumen") calorias += 300;
 
+  // 🔥 MACROS
   let proteina = peso * 2;
   let grasa = (calorias * 0.25) / 9;
   let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
 
-  const proteinas = ["pollo", "carne", "atún", "huevo"];
-  const carbosLista = ["arroz", "papa", "avena"];
-  const grasasLista = ["aguacate", "aceite"];
+  // 🔥 DISTRIBUCIÓN (4 comidas)
+  let protePorComida = proteina / 4;
+  let carbosPorComida = carbos / 4;
+  let grasaPorComida = grasa / 4;
 
-  function random(arr){
-    return arr[Math.floor(Math.random() * arr.length)];
+  // 🔥 EQUIVALENCIAS REALES
+  const alimentos = {
+    pollo: 31,
+    carne: 26,
+    atun: 25,
+    huevo: 6,
+    claras: 3.6
+  };
+
+  function calcularProteinaFuente(gramosNecesarios){
+    return (gramosNecesarios / alimentos.pollo) * 100;
+  }
+
+  function carbosFuente(gramos){
+    return gramos; // arroz base
+  }
+
+  function grasaFuente(gramos){
+    return gramos; // aguacate/aceite
   }
 
   let comidas = [];
 
   for(let i=0;i<4;i++){
+
+    let proteGr = calcularProteinaFuente(protePorComida);
+    let carbosGr = carbosFuente(carbosPorComida);
+    let grasaGr = grasaFuente(grasaPorComida);
+
     comidas.push({
-      proteina: random(proteinas),
-      carbos: random(carbosLista),
-      grasa: random(grasasLista)
+      proteina: `${proteGr.toFixed(0)}g pollo`,
+      carbos: `${carbosGr.toFixed(0)}g arroz`,
+      grasa: `${grasaGr.toFixed(0)}g grasa`
     });
   }
 
-  return {calorias, proteina, carbos, grasa, comidas};
+  return {
+    calorias,
+    proteina,
+    carbos,
+    grasa,
+    comidas
+  };
 }
 </script>
 
