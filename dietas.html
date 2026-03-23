@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dietas Fitness PRO</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<section class="hero">
+  <h1>🥗 Genera tu dieta personalizada</h1>
+  <p>Basada en tu cuerpo y objetivo</p>
+</section>
+
+<!-- DIETA GRATIS -->
+<section>
+  <h2>🔥 Dieta base automática</h2>
+
+  <div class="calculadora">
+    <input type="number" id="pesoDieta" placeholder="Peso (kg)">
+    <input type="number" id="alturaDieta" placeholder="Altura (cm)">
+    <input type="number" id="edadDieta" placeholder="Edad">
+
+    <select id="objetivoDieta">
+      <option value="definicion">Definición</option>
+      <option value="volumen">Volumen</option>
+    </select>
+
+    <button onclick="generarDieta()">Generar dieta</button>
+
+    <div id="resultadoDieta"></div>
+  </div>
+</section>
+
+<!-- DIETA PRO -->
+<section class="lead-box">
+  <h2>🔥 Lleva esto al siguiente nivel</h2>
+  <p>Te hago tu dieta EXACTA + seguimiento</p>
+
+  <input type="text" id="nombreLead" placeholder="Tu nombre">
+  <input type="text" id="whatsLead" placeholder="Tu WhatsApp">
+
+  <button onclick="enviarWhats()">📲 Quiero mi dieta PRO</button>
+</section>
+
+<script>
+
+function generarDieta(){
+  let peso = document.getElementById("pesoDieta").value;
+
+  if(!peso){
+    document.getElementById("resultadoDieta").innerHTML = "Ingresa tu peso";
+    return;
+  }
+
+  let proteina = peso * 2;
+
+  let html = `
+  <b>🔥 Tu dieta base:</b><br><br>
+
+  🥣 Desayuno:
+  - 4 claras + 2 huevos<br>
+
+  🍗 Comida:
+  - 150g pollo<br>
+
+  🥩 Cena:
+  - 150g carne<br><br>
+
+  🥩 Proteína diaria: ${proteina} g
+  `;
+
+  document.getElementById("resultadoDieta").innerHTML = html;
+}
+
+function enviarWhats(){
+  let nombre = document.getElementById("nombreLead").value;
+
+  let mensaje = `Hola, soy ${nombre}. Quiero mi dieta personalizada`;
+
+  let url = `https://wa.me/TUNUMERO?text=${encodeURIComponent(mensaje)}`;
+
+  window.open(url, "_blank");
+}
+
+</script>
+
+</body>
+</html>
