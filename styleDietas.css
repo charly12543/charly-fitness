@@ -243,8 +243,6 @@ h2{
   animation:pulse 1s infinite;
 }
 
-
-
 .urgencia{
   text-align:center;
   margin-top:10px;
@@ -254,19 +252,91 @@ h2{
 }
 
 
+/* NAVBAR */
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:rgba(11,11,11,0.9);
+  backdrop-filter:blur(10px);
+  padding:10px 20px;
+  z-index:1000;
+}
 
+/* CONTENEDOR */
+.nav-container{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  max-width:900px;
+  margin:auto;
+}
 
-@keyframes pulse{
-  0%{opacity:0.4;}
-  50%{opacity:1;}
-  100%{opacity:0.4;}
+/* LOGO CONTROLADO */
+.logo img{
+  height:45px; /* 🔥 clave */
+  width:auto;
+  object-fit:contain;
+  transition:0.3s;
+}
+
+.logo img:hover{
+  transform:scale(1.05);
+}
+
+/* LINKS */
+.nav-links{
+  display:flex;
+  gap:20px;
+  list-style:none;
+}
+
+.nav-links a{
+  color:white;
+  text-decoration:none;
+  font-size:14px;
+  transition:0.3s;
+}
+
+.nav-links a:hover{
+  color:var(--gold);
+}
+
+/* ESPACIO PARA NAVBAR */
+body{
+  padding-top:70px;
 }
 
 
 
 
 
+
 /* RESPONSIVE */
+@keyframes pulse{
+  0%{opacity:0.4;}
+  50%{opacity:1;}
+  100%{opacity:0.4;}
+}
+
+@media (max-width:768px){
+
+.logo img{
+  height:38px; /* más pequeño en celular */
+}
+
+.nav-links{
+  gap:12px;
+  font-size:12px;
+}
+
+}
+
+
+
+
+
+
 @media (max-width:768px){
 
 .hero h1{
