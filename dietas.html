@@ -44,9 +44,22 @@
   <input type="text" id="nombreLead" placeholder="Tu nombre">
   <input type="text" id="whatsLead" placeholder="Tu WhatsApp">
 
+
+<p class="contador">
+🔥 Más de <span id="contadorUsuarios">147</span> personas ya generaron su dieta
+</p>
+
+
+  
   <button onclick="enviarWhats()">📲 Quiero mi dieta PRO</button>
 </section>
 
+
+<p class="urgencia">
+⚠️ Solo quedan <span id="cupos">3</span> cupos para dieta personalizada hoy
+</p>
+
+  
 
 <!-- SECCIONES DE SCRIPTS -->
 <script>     
@@ -58,50 +71,86 @@ function generarDieta(){
     return;
   }
 
-  let proteina = peso * 2;
+  let contenedor = document.getElementById("resultadoDieta");
 
-  let html = `
-  <div class="card-header">
-    <h3>🔥 Tu plan personalizado</h3>
-    <p>${proteina}g proteína diaria</p>
-  </div>
-
-  <div class="card-meal">
-    <h4>🥣 Desayuno</h4>
-    <ul>
-      <li>4 claras + 2 huevos</li>
-      <li>50g avena</li>
-    </ul>
-  </div>
-
-  <div class="card-meal">
-    <h4>🍗 Comida</h4>
-    <ul>
-      <li>150g pollo</li>
-      <li>100g arroz</li>
-    </ul>
-  </div>
-
-  <div class="card-meal">
-    <h4>🥩 Cena</h4>
-    <ul>
-      <li>150g carne o pescado</li>
-      <li>verduras libres</li>
-    </ul>
-  </div>
-
-  <div class="card-macros">
-    <p>🔥 Proteína: ${proteina}g</p>
-  </div>
+  // ANIMACIÓN
+  contenedor.innerHTML = `
+    <div class="loading">
+      🔥 Calculando tu dieta...
+    </div>
   `;
 
-  document.getElementById("resultadoDieta").innerHTML = html;
+  // Delay fake (efecto psicológico)
+  setTimeout(() => {
+
+    let proteina = peso * 2;
+
+    contenedor.innerHTML = `
+      <div class="dieta-card">
+        <div class="card-header">
+          <h3>🔥 Tu plan personalizado</h3>
+          <p>${proteina}g proteína diaria</p>
+        </div>
+
+        <div class="card-meal">
+          <h4>🥣 Desayuno</h4>
+          <ul>
+            <li>4 claras + 2 huevos</li>
+            <li>50g avena</li>
+          </ul>
+        </div>
+
+        <div class="card-meal">
+          <h4>🍗 Comida</h4>
+          <ul>
+            <li>150g pollo</li>
+            <li>100g arroz</li>
+          </ul>
+        </div>
+
+        <div class="card-meal">
+          <h4>🥩 Cena</h4>
+          <ul>
+            <li>150g carne</li>
+            <li>verduras libres</li>
+          </ul>
+        </div>
+
+        <div class="card-macros">
+          🔥 Proteína: ${proteina}g
+        </div>
+      </div>
+    `;
+
+  }, 1500); // 1.5 segundos
 }
 </script>   
 
 
 
-  
+<script>   
+let contador = 1287;
 
+setInterval(() => {
+  contador += Math.floor(Math.random() * 3); // suma random
+  document.getElementById("contadorUsuarios").innerText = contador;
+}, 3000);
+</script> 
+
+
+<script>   
+let cupos = 3;
+
+setInterval(() => {
+  if(cupos > 1){
+    cupos--;
+    document.getElementById("cupos").innerText = cupos;
+  }
+}, 10000); // baja cada 10 seg  
+</script> 
+
+
+
+  
 </body>
 </html>
