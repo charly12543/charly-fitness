@@ -149,6 +149,9 @@ let html = `
   <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
     <h1 style="color:#d4af37; margin-bottom:5px;">🔥 Charly Fitness</h1>
     <p style="font-size:14px;">Plan Nutricional Personalizado</p>
+    <p style="font-size:12px; text-align:center;">
+    Sistema inteligente de nutrición  | Charly Fitness
+    </p>
   </div>
 
   <div style="text-align:center; margin-bottom:25px;">
@@ -268,13 +271,15 @@ function descargarPDF(){
     return;
   }
 
+  // 🔥 CLONAMOS CONTENIDO
   let copia = elemento.cloneNode(true);
 
   copia.style.padding = "20px";
   copia.style.background = "#ffffff";
   copia.style.color = "#000000";
+  copia.style.fontFamily = "Arial, sans-serif";
 
-  // 👇 lo agregamos al DOM
+  // 🔥 LO AGREGAMOS AL DOM (clave para evitar PDF en blanco)
   document.body.appendChild(copia);
 
   setTimeout(() => {
@@ -287,16 +292,15 @@ function descargarPDF(){
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     })
     .from(copia)
-    copia.style.fontFamily = "Arial, sans-serif";  
     .save()
     .then(() => {
-      // 👇 lo quitamos DESPUÉS de generar PDF
-      document.body.removeChild(copia);
+      document.body.removeChild(copia); // 🔥 limpiar después
     });
 
   }, 500);
 }
 </script>
+
 
 
 
