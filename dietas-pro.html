@@ -3,19 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dietas Fitness PRO</title>
+<title>Dietas PRO</title>
 <link rel="stylesheet" href="styleDietas.css">
 </head>
 
 <body>
 
-<!-- BOTONES -->  
-<script src="scriptPro.js"></script>
+<section class="hero">
+  <h1>🔥 Calculadora PRO (Privada)</h1>
+  <p>Solo para generar dietas personalizadas</p>
+</section>
+
+<section>
+
+<div class="calculadora">
+
+<input type="number" id="peso" placeholder="Peso (kg)">
+<input type="number" step="0.01" id="altura" placeholder="Altura (1.80 o 180)">
+<input type="number" id="edad" placeholder="Edad">
+
+<select id="objetivo">
+  <option value="definicion">Definición</option>
+  <option value="volumen">Volumen</option>
+</select>
+
 <button onclick="usarPro()">Generar dieta PRO</button>
+
 <div id="resultadoPRO"></div>
 
+</div>
 
-<!-- FUNCION PARA USAR CALCULADORA --> 
+</section>
+
 <script>
 function usarPro(){
 
@@ -26,19 +45,20 @@ function usarPro(){
     objetivo: document.getElementById("objetivo").value
   };
 
+  if(!datos.peso || !datos.altura || !datos.edad){
+    alert("Completa todos los datos bro 🔥");
+    return;
+  }
+
   let dieta = generarDietaPRO(datos);
 
-  document.getElementById("resultadoPRO").innerHTML =
-    JSON.stringify(dieta, null, 2);
+  mostrarDieta(dieta);
 }
 </script>
 
-
-
-  
-<!--  CALCULADORA PRO --> 
 <script>
-  function generarDietaPRO(datos){
+function generarDietaPRO(datos){
+
   let {peso, altura, edad, objetivo} = datos;
 
   if(altura > 3){ altura = altura / 100; }
@@ -74,7 +94,43 @@ function usarPro(){
   return {calorias, proteina, carbos, grasa, comidas};
 }
 </script>
-  
-  
+
+<script>
+function mostrarDieta(dieta){
+
+  let html = `
+    <div class="dieta-card">
+      <div class="card-header">
+        <h3>🔥 Plan PRO</h3>
+        <p>${dieta.calorias.toFixed(0)} kcal</p>
+      </div>
+  `;
+
+  dieta.comidas.forEach((c, i)=>{
+    html += `
+      <div class="card-meal">
+        <h4>🍽️ Comida ${i+1}</h4>
+        <ul>
+          <li>🥩 ${c.proteina}</li>
+          <li>🍚 ${c.carbos}</li>
+          <li>🥑 ${c.grasa}</li>
+        </ul>
+      </div>
+    `;
+  });
+
+  html += `
+      <div class="card-macros">
+        🥩 ${dieta.proteina.toFixed(0)}g |
+        🍚 ${dieta.carbos.toFixed(0)}g |
+        🥑 ${dieta.grasa.toFixed(0)}g
+      </div>
+    </div>
+  `;
+
+  document.getElementById("resultadoPRO").innerHTML = html;
+}
+</script>
+
 </body>
-</html>  
+</html>
