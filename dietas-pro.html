@@ -17,7 +17,7 @@
 <section>
 
 <div class="calculadora">
-
+<input type="text" id="nombreCliente" placeholder="Nombre del cliente">
 <input type="number" id="peso" placeholder="Peso (kg)">
 <input type="number" step="0.01" id="altura" placeholder="Altura (1.80 o 180)">
 <input type="number" id="edad" placeholder="Edad">
@@ -35,34 +35,37 @@
 
 </section>
 
+<button onclick="descargarPDF()">📄 Descargar PDF</button>
+
+
+
+
+
+
+  
+  
+
 <script>
 function usarPro(){
-
   let datos = {
     peso: parseFloat(document.getElementById("peso").value),
     altura: parseFloat(document.getElementById("altura").value),
     edad: parseFloat(document.getElementById("edad").value),
     objetivo: document.getElementById("objetivo").value
   };
-
   if(!datos.peso || !datos.altura || !datos.edad){
     alert("Completa todos los datos bro 🔥");
     return;
   }
-
-  let dieta = generarDietaPRO(datos);
-
+ let dieta = generarDietaPRO(datos);
   mostrarDieta(dieta);
 }
 </script>
 
 <script>
 function generarDietaPRO(datos){
-
-  let {peso, altura, edad, objetivo} = datos;
-
-  if(altura > 3){ altura = altura / 100; }
-
+ let {peso, altura, edad, objetivo} = datos;
+ if(altura > 3){ altura = altura / 100; }
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
   let calorias = bmr * 1.55;
 
@@ -95,11 +98,20 @@ function generarDietaPRO(datos){
 }
 </script>
 
+
+  
 <script>
 function mostrarDieta(dieta){
-
-  let html = `
+  let nombre = document.getElementById("nombreCliente").value;
+ let html = `
     <div class="dieta-card">
+
+      <div style="text-align:center;">
+        <h2>🔥 Charly Fitness</h2>
+        <p>Plan personalizado</p>
+        <p><b>Cliente:</b> ${nombre || "Cliente"}</p>
+      </div>
+
       <div class="card-header">
         <h3>🔥 Plan PRO</h3>
         <p>${dieta.calorias.toFixed(0)} kcal</p>
@@ -125,6 +137,7 @@ function mostrarDieta(dieta){
         🍚 ${dieta.carbos.toFixed(0)}g |
         🥑 ${dieta.grasa.toFixed(0)}g
       </div>
+
     </div>
   `;
 
@@ -132,5 +145,26 @@ function mostrarDieta(dieta){
 }
 </script>
 
+<script>
+function descargarPDF(){
+ const elemento = document.getElementById("resultadoPRO");
+ if(!elemento.innerHTML){
+    alert("Primero genera la dieta bro 🔥");
+    return;
+  }
+  const opciones = {
+    margin: 10,
+    filename: `dieta-${nombre}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opciones).from(elemento).save();
+}
+</script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
 </html>
