@@ -139,20 +139,32 @@ function generarDietaPRO(datos){
 <script>
 function mostrarDieta(dieta){
 
-  let nombre = document.getElementById("nombreCliente").value;
+let nombre = document.getElementById("nombreCliente").value;
+let fecha = new Date().toLocaleDateString();
 
-  let html = `
-<div class="dieta-card" style="background:white; color:black;">
+let html = `
+<div class="dieta-card" style="background:white; color:black; padding:25px;">
 
-  <div style="text-align:center; margin-bottom:20px;">
-    <h2 style="color:#d4af37;">🔥 Charly Fitness</h2>
-    <p>Plan personalizado</p>
-    <p><b>Cliente:</b> ${nombre || "Cliente"}</p>
+  <!-- PORTADA -->
+  <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
+    <h1 style="color:#d4af37; margin-bottom:5px;">🔥 Charly Fitness</h1>
+    <p style="font-size:14px;">Plan Nutricional Personalizado</p>
   </div>
 
-  <div style="text-align:center; margin-bottom:15px;">
-    <h3>🔥 Plan PRO</h3>
-    <p><b>${dieta.calorias.toFixed(0)} kcal</b></p>
+  <div style="text-align:center; margin-bottom:25px;">
+    <h2 style="margin-bottom:10px;">${nombre || "Cliente"}</h2>
+    <p style="font-size:13px;">📅 Fecha: ${fecha}</p>
+  </div>
+
+  <!-- RESUMEN -->
+  <div style="background:#f5f5f5; padding:15px; border-radius:10px; margin-bottom:20px;">
+    <h3 style="text-align:center; margin-bottom:10px;">Resumen Nutricional</h3>
+    <p style="text-align:center;">
+      🔥 ${dieta.calorias.toFixed(0)} kcal<br>
+      🥩 ${dieta.proteina.toFixed(0)}g proteína<br>
+      🍚 ${dieta.carbos.toFixed(0)}g carbohidratos<br>
+      🥑 ${dieta.grasa.toFixed(0)}g grasas
+    </p>
   </div>
 `;
 
@@ -185,6 +197,18 @@ html += `
     Ajustes recomendados cada 2-3 semanas.
   </div>
 `;
+
+html += `
+  <div style="margin-top:25px; padding:15px; background:#f9f9f9; border-radius:10px;">
+    <h3 style="text-align:center; margin-bottom:10px;">Recomendaciones</h3>
+    <ul style="font-size:14px;">
+      <li>💧 Toma mínimo 2-3 litros de agua al día</li>
+      <li>🏋️ Entrena al menos 4 veces por semana</li>
+      <li>😴 Descansa 7-8 horas diarias</li>
+      <li>📊 Ajusta calorías cada 2-3 semanas</li>
+    </ul>
+  </div>
+`;  
   
   document.getElementById("resultadoPRO").innerHTML = html;
 }
