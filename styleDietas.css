@@ -355,6 +355,108 @@ body{
 }
 
 
+/* LEAD-BOX PREMIUM */
+.lead-box {
+  background: linear-gradient(135deg, #1c1c1c, #0b0b0b);
+  padding: 40px 20px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+  border: 2px solid rgba(212,175,55,0.5); /* borde dorado premium */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto dorado animado */
+.lead-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 50%, rgba(212,175,55,0.2), transparent 70%);
+  transform: rotate(45deg);
+  animation: shine 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes shine {
+  0% { transform: rotate(0deg) translate(0,0); }
+  100% { transform: rotate(360deg) translate(0,0); }
+}
+
+/* Títulos PRO */
+.lead-box h2 {
+  color: var(--gold);
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(212,175,55,0.6);
+}
+
+.lead-box .pro-info h3 {
+  color: var(--gold-bright);
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  text-shadow: 0 0 6px rgba(212,175,55,0.5);
+}
+
+/* Botón destacado */
+.lead-box .btn-whats {
+  background: linear-gradient(135deg,#25D366,#1ebe5d);
+  color:white;
+  font-size:1.1rem;
+  font-weight:bold;
+  padding:16px 25px;
+  border-radius:30px;
+  box-shadow:0 10px 25px rgba(37,211,102,0.5);
+  transition:0.3s;
+}
+
+.lead-box .btn-whats:hover {
+  transform: scale(1.08);
+  box-shadow:0 15px 35px rgba(37,211,102,0.7);
+  background: linear-gradient(135deg,#1ebe5d,#25D366);
+}
+
+/* Urgencia y contador */
+.lead-box .contador {
+  color: #f5d76e;
+  font-weight:bold;
+  margin-top:10px;
+  text-shadow: 0 0 4px rgba(212,175,55,0.5);
+}
+
+.lead-box .urgencia {
+  color:#ff6b6b;
+  font-weight:bold;
+  margin-top:15px;
+  text-shadow: 0 0 3px rgba(255,0,0,0.4);
+}
+
+/* Inputs más premium */
+.lead-box input {
+  background:#111;
+  color:white;
+  border:1px solid rgba(212,175,55,0.3);
+  width:250px;
+  padding:12px 15px;
+  border-radius:10px;
+  margin:10px 0;
+  transition:0.3s;
+}
+
+.lead-box input:focus {
+  border-color: var(--gold-bright);
+  box-shadow:0 0 10px rgba(212,175,55,0.5);
+  outline:none;
+}
+
+
+
+
+
+
 /* RESPONSIVE */
 @keyframes pulse{
   0%{opacity:0.4;}
