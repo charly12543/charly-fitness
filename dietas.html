@@ -9,20 +9,39 @@
 
 <body>
 
-  <a href="index.html">⬅ Volver</a>
 
+<a href="index.html" class="back-btn">⬅ Volver</a>
+
+
+<!-- NAVBAR -->  
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo">
+      <img src="imagenes/logoGitHub.png">
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="#dieta">Dieta</a></li>
+      <li><a href="#pro">PRO</a></li>
+    </ul>
+  </div>
+</nav>
+
+  
+  
 <section class="hero">
   <h1>🥗 Genera tu dieta personalizada</h1>
   <p>Basada en tu cuerpo y objetivo</p>
 </section>
 
 <!-- DIETA GRATIS -->
-<section>
+<section id="dieta">
   <h2>🔥 Dieta base automática</h2>
 
   <div class="calculadora">
     <input type="number" id="pesoDieta" placeholder="Peso (kg)">
-    <input type="number" id="alturaDieta" placeholder="Altura (cm)">
+    <input type="number" step="0.01" id="alturaDieta" placeholder="Altura (1.80 o 180)">
     <input type="number" id="edadDieta" placeholder="Edad">
 
     <select id="objetivoDieta">
@@ -37,7 +56,7 @@
 </section>
 
 <!-- DIETA PRO -->
-<section class="lead-box">
+<section class="lead-box"  id="pro">>
   <h2>🔥 Lleva esto al siguiente nivel</h2>
   <p>Te hago tu dieta EXACTA + seguimiento</p>
 
@@ -128,8 +147,9 @@ function generarDieta(){
 
 
 
+<!-- SECCIONES DE CONTADOR -->
 <script>   
-let contador = 1287;
+let contador = 147;
 
 setInterval(() => {
   contador += Math.floor(Math.random() * 3); // suma random
@@ -138,6 +158,7 @@ setInterval(() => {
 </script> 
 
 
+<!-- SECCIONES DE CUPOS -->
 <script>   
 let cupos = 3;
 
@@ -150,6 +171,21 @@ setInterval(() => {
 </script> 
 
 
+
+
+<!-- SECCIONES DE WHATS -->  
+<script>
+function enviarWhats(){
+  let nombre = document.getElementById("nombreLead").value;
+  if(!nombre){
+    alert("Pon tu nombre bro 🔥");
+    return;
+  }
+  let mensaje = `Hola, soy ${nombre}. Quiero mi dieta personalizada`;
+  let url = `https://wa.me/5217341771575?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, "_blank");
+}
+</script>
 
   
 </body>
