@@ -32,7 +32,7 @@
 
     <button onclick="generarDieta()">Generar dieta</button>
 
-    <div id="resultadoDieta"></div>
+    <div id="resultadoDieta" class="dieta-card"></div>
   </div>
 </section>
 
@@ -47,8 +47,8 @@
   <button onclick="enviarWhats()">📲 Quiero mi dieta PRO</button>
 </section>
 
-<script>
 
+<!-- SECCIONES DE SCRIPTS -->
 function generarDieta(){
   let peso = document.getElementById("pesoDieta").value;
 
@@ -60,34 +60,47 @@ function generarDieta(){
   let proteina = peso * 2;
 
   let html = `
-  <b>🔥 Tu dieta base:</b><br><br>
+  <div class="card-header">
+    <h3>🔥 Tu plan personalizado</h3>
+    <p>${proteina}g proteína diaria</p>
+  </div>
 
-  🥣 Desayuno:
-  - 4 claras + 2 huevos<br>
+  <div class="card-meal">
+    <h4>🥣 Desayuno</h4>
+    <ul>
+      <li>4 claras + 2 huevos</li>
+      <li>50g avena</li>
+    </ul>
+  </div>
 
-  🍗 Comida:
-  - 150g pollo<br>
+  <div class="card-meal">
+    <h4>🍗 Comida</h4>
+    <ul>
+      <li>150g pollo</li>
+      <li>100g arroz</li>
+    </ul>
+  </div>
 
-  🥩 Cena:
-  - 150g carne<br><br>
+  <div class="card-meal">
+    <h4>🥩 Cena</h4>
+    <ul>
+      <li>150g carne o pescado</li>
+      <li>verduras libres</li>
+    </ul>
+  </div>
 
-  🥩 Proteína diaria: ${proteina} g
+  <div class="card-macros">
+    <p>🔥 Proteína: ${proteina}g</p>
+  </div>
   `;
 
   document.getElementById("resultadoDieta").innerHTML = html;
 }
 
-function enviarWhats(){
-  let nombre = document.getElementById("nombreLead").value;
 
-  let mensaje = `Hola, soy ${nombre}. Quiero mi dieta personalizada`;
 
-  let url = `https://wa.me/TUNUMERO?text=${encodeURIComponent(mensaje)}`;
 
-  window.open(url, "_blank");
-}
-
-</script>
+  
 
 </body>
 </html>
