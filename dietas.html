@@ -25,7 +25,7 @@
 
     <!-- LINKS -->
     <ul class="nav-links" id="navLinks">
-      <li><a href="index.html" class="back-btn">⬅ Volver</li></a>
+      <li><a href="index.html" class="back-btn">⬅ Volver</a></li>
       <li><a href="index.html">Inicio</a></li>
       <li><a href="#dieta">Dieta</a></li>
       <li><a href="#pro">PRO</a></li>
@@ -93,7 +93,6 @@
   </p>
 </section>
 
-<script>
 <script>
 function enviarWhatsPro(){
   // Captura los datos del usuario
@@ -248,22 +247,24 @@ function enviarWhats(){
     alert("Completa tus datos bro 🔥");
     return;
   }
-  let mensaje = `🔥 QUIERO MI DIETA PRO 🔥
-Nombre: ${nombre}
-WhatsApp: ${whats}
-📊 MIS DATOS:
-Peso:
-Altura:
-Edad:
-Objetivo (definición/volumen):
-Nivel de actividad:
-🍽️ RESTRICCIONES:
-(Alimentos que no comes)
-⏰ HORARIOS:
-(Horas en las que puedes comer)
-💪 OBJETIVO REAL:
-(Ej: bajar grasa, subir músculo)
-🔥 Me interesa la dieta personalizada + seguimiento`;
+
+  // Mensaje combinado: datos del usuario + detalles de pago seguros
+  let mensaje = `🔥 QUIERO MI DIETA PRO 🔥%0A%0A` +
+                `Nombre: ${nombre}%0A` +
+                `WhatsApp: ${whats}%0A%0A` +
+                `📊 MIS DATOS:%0A` +
+                `Peso:%0AAltura:%0AEdad:%0AObjetivo:%0ANivel de actividad:%0A` +
+                `🍽️ RESTRICCIONES:(Alimentos que no comes)%0A` +
+                `⏰ HORARIOS:(Horas en las que puedes comer)%0A` +
+                `💪 OBJETIVO REAL:(Ej: bajar grasa, subir músculo)%0A%0A` +
+                `💰 DETALLES DE PAGO:%0A` +
+                `➤ Cuenta AZTECA: 6774 0164 4103 34%0A` +
+                `➤ CLABE: 1275 5200 1644 1033 40%0A` +
+                `➤ Banco: BANCO AZTECA México%0A%0A` +
+                `➡️ Estoy listo para realizar el pago y recibir mi dieta.`;
+
+
+  
   let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
 }
