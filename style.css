@@ -532,6 +532,51 @@ text-decoration:underline;
 }
 
 
+
+
+
+
+
+.lead-box{
+  margin-top:20px;
+  padding:20px;
+  background:#111;
+  border-radius:12px;
+  text-align:center;
+}
+
+.lead-box input{
+  display:block;
+  width:100%;
+  margin:10px 0;
+  padding:10px;
+}
+
+.lead-box button{
+  background:#d4af37;
+  color:black;
+  font-weight:bold;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* RESPONSIVE */
 @media (max-width: 768px){
 
