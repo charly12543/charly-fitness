@@ -88,65 +88,87 @@
 <!-- SECCIONES DE SCRIPTS -->
 <script>     
 function generarDieta(){
-  let peso = document.getElementById("pesoDieta").value;
 
-  if(!peso){
-    document.getElementById("resultadoDieta").innerHTML = "Ingresa tu peso";
+  let peso = parseFloat(document.getElementById("pesoDieta").value);
+  let altura = parseFloat(document.getElementById("alturaDieta").value);
+  let edad = parseFloat(document.getElementById("edadDieta").value);
+  let objetivo = document.getElementById("objetivoDieta").value;
+
+  if(!peso || !altura || !edad){
+    document.getElementById("resultadoDieta").innerHTML = "Completa todos los datos bro 🔥";
     return;
   }
 
+  // CONVERTIR ALTURA
+  if(altura > 3){ altura = altura / 100; }
+
   let contenedor = document.getElementById("resultadoDieta");
 
-  // ANIMACIÓN
-  contenedor.innerHTML = `
-    <div class="loading">
-      🔥 Calculando tu dieta...
-    </div>
-  `;
+  // LOADING
+  contenedor.innerHTML = `<div class="loading">🔥 Calculando tu dieta...</div>`;
 
-  // Delay fake (efecto psicológico)
   setTimeout(() => {
 
+    // 🔥 PROTEINA BASE
     let proteina = peso * 2;
+
+    // 🔥 CALORÍAS BASE
+    let calorias = peso * 30;
+
+    if(objetivo === "definicion"){
+      calorias -= 400;
+    } else {
+      calorias += 300;
+    }
+
+    // 🔥 MACROS
+    let grasa = (calorias * 0.25) / 9;
+    let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
+
+    // 🔥 DIETA SEGÚN OBJETIVO
+    let desayuno, comida, cena;
+
+    if(objetivo === "definicion"){
+      desayuno = "4 claras + 1 huevo + 30g avena";
+      comida = "150g pollo + 80g arroz + verduras";
+      cena = "150g pescado + ensalada";
+    } else {
+      desayuno = "4 claras + 2 huevos + 60g avena";
+      comida = "180g pollo + 120g arroz";
+      cena = "150g carne + papa";
+    }
 
     contenedor.innerHTML = `
       <div class="dieta-card">
+
         <div class="card-header">
           <h3>🔥 Tu plan personalizado</h3>
-          <p>${proteina}g proteína diaria</p>
+          <p>${calorias.toFixed(0)} kcal / día</p>
         </div>
 
         <div class="card-meal">
           <h4>🥣 Desayuno</h4>
-          <ul>
-            <li>4 claras + 2 huevos</li>
-            <li>50g avena</li>
-          </ul>
+          <ul><li>${desayuno}</li></ul>
         </div>
 
         <div class="card-meal">
           <h4>🍗 Comida</h4>
-          <ul>
-            <li>150g pollo</li>
-            <li>100g arroz</li>
-          </ul>
+          <ul><li>${comida}</li></ul>
         </div>
 
         <div class="card-meal">
           <h4>🥩 Cena</h4>
-          <ul>
-            <li>150g carne</li>
-            <li>verduras libres</li>
-          </ul>
+          <ul><li>${cena}</li></ul>
         </div>
 
         <div class="card-macros">
-          🔥 Proteína: ${proteina}g
+          🥩 ${proteina.toFixed(0)}g | 🍚 ${carbos.toFixed(0)}g | 🥑 ${grasa.toFixed(0)}g
         </div>
+
       </div>
     `;
 
-  }, 1500); // 1.5 segundos
+  }, 1500);
 }
 </script>   
 
