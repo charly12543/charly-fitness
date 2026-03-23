@@ -16,15 +16,23 @@
 <!-- NAVBAR -->  
 <nav class="navbar">
   <div class="nav-container">
+
     <div class="logo">
       <img src="imagenes/logoGitHub.png">
     </div>
 
-    <ul class="nav-links">
+    <!-- BOTÓN HAMBURGUESA -->
+    <div class="menu-toggle" onclick="toggleMenu()">
+      ☰
+    </div>
+
+    <!-- LINKS -->
+    <ul class="nav-links" id="navLinks">
       <li><a href="index.html">Inicio</a></li>
       <li><a href="#dieta">Dieta</a></li>
       <li><a href="#pro">PRO</a></li>
     </ul>
+
   </div>
 </nav>
 
@@ -171,8 +179,6 @@ setInterval(() => {
 </script> 
 
 
-
-
 <!-- SECCIONES DE WHATS -->  
 <script>
 function enviarWhats(){
@@ -187,6 +193,22 @@ function enviarWhats(){
 }
 </script>
 
+
+<!-- SECCIONES DE NAVBAR CELULAR RESPONSIVE -->  
+<script>
+function toggleMenu(){
+  const nav = document.getElementById("navLinks");
+  nav.classList.toggle("active");
+}
+</script>
+<script>
+document.querySelectorAll("#navLinks a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.getElementById("navLinks").classList.remove("active");
+  });
+});
+</script>
+  
   
 </body>
 </html>
