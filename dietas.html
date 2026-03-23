@@ -60,42 +60,64 @@
   </div>
 </section>
 
-<!-- DIETA PRO -->
-<!-- DIETA PRO -->
-<section class="lead-box" id="pro">
-  <h2>🔥 Lleva esto al siguiente nivel</h2>
-  <p>Te hago tu dieta EXACTA + seguimiento</p>
 
-  <input type="text" id="nombreLead" placeholder="Tu nombre">
-  <input type="text" id="whatsLead" placeholder="Tu WhatsApp">
+<!-- DIETA PRO – BLOQUE CENTRADO Y MODERNO -->
+<section class="lead-box" id="pro" style="
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  background: linear-gradient(135deg, #fff9e6, #ffe8b3);
+  border-radius: 15px;
+  margin: 40px 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  text-align: center;
+">
 
-  <p class="contador">🔥 Más de <span id="contadorUsuarios">147</span> personas ya generaron su dieta</p>
+  <h2 style="font-size:2.5rem; color:#d47f00; margin-bottom:15px; line-height:1.2;">
+    🔥 Lleva tu dieta al siguiente nivel
+  </h2>
+  <p style="font-size:1.2rem; margin-bottom:25px;">
+    Te hago tu dieta EXACTA + seguimiento personalizado
+  </p>
 
-  <!-- BLOQUE ÚNICO DIETA PRO -->
+  <input type="text" id="nombreLead" placeholder="Tu nombre" style="
+    padding:12px 15px; margin:10px 0; border-radius:8px; border:1px solid #ccc; width:250px;
+  ">
+  <input type="text" id="whatsLead" placeholder="Tu WhatsApp" style="
+    padding:12px 15px; margin:10px 0; border-radius:8px; border:1px solid #ccc; width:250px;
+  ">
+
+  <p class="contador" style="margin-top:10px; font-weight:bold; color:#d47f00;">
+    🔥 Más de <span id="contadorUsuarios">147</span> personas ya generaron su dieta
+  </p>
+
   <div class="pro-info" style="
-    background: #fff9e6;
-    border-left: 5px solid #d4af37;
-    padding: 25px;
-    margin-top: 25px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background:#fff4d6;
+    border-left:5px solid #d47f00;
+    padding:25px;
+    margin:25px 0;
+    border-radius:12px;
+    max-width:500px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    text-align:center;
   ">
     <h3 style="color:#d47f00; font-size:1.8rem; margin-bottom:10px;">🔥 Dieta PRO – Plan Premium</h3>
     <p style="font-size:1rem; line-height:1.5; margin-bottom:15px;">
-      Este plan avanzado <strong>no es gratuito</strong> — está diseñado profesionalmente para tu objetivo y requiere un pago para acceder al cálculo completo y seguimiento personalizado.
+      Este plan avanzado <strong>no es gratuito</strong> — incluye cálculo completo y seguimiento profesional, requiere pago para acceder al plan.
     </p>
     <p style="font-size:0.95rem; color:#555; margin-bottom:20px;">
-      ➤ Incluye cálculo de macros, distribución de alimentos detallada y receta personalizada en PDF.  
-      ➤ Ajustes y seguimiento semanal según tus progresos.
+      ➤ Cálculo de macros y distribución de alimentos detallada<br>
+      ➤ Receta personalizada en PDF y ajustes semanales según tus progresos
     </p>
     <button onclick="enviarWhatsPro()" style="
-      padding: 12px 20px;
+      padding:12px 25px;
       background:#d47f00;
       color:white;
       border:none;
-      border-radius:8px;
-      font-size:1rem;
+      border-radius:10px;
+      font-size:1.1rem;
       cursor:pointer;
       transition: all 0.3s ease;
     " 
@@ -105,7 +127,12 @@
     </button>
   </div>
 
-  <p class="urgencia">⚠️ Solo quedan <span id="cupos">3</span> cupos para dieta personalizada hoy</p>
+  <p class="urgencia" style="font-size:0.95rem; color:#d47f00;">
+    ⚠️ Solo quedan <span id="cupos">3</span> cupos para dieta personalizada hoy
+  </p>
+  <p style="font-size:12px; color:#555; margin-top:10px;">
+    📲 Respuesta en menos de 10 minutos
+  </p>
 </section>
 
 <script>
@@ -124,35 +151,19 @@ function enviarWhatsPro(){
                 `📊 MIS DATOS:%0A` +
                 `Peso:%0AAltura:%0AEdad:%0AObjetivo:%0A%0A` +
                 `💰 DETALLES DE PAGO:%0A` +
-                `➤ Cuenta BBVA: XXXX XXXX XXXX XXXX%0A` +
-                `➤ CLABE: XXXXXXXXXXXXXXXX%0A` +
-                `➤ Banco: BBVA México%0A%0A` +
+                `➤ Numero Tarjeta: 4027 6650 0671 2393` +
+                `➤ Cuenta AZTECA: 6774 0164 4103 34` +
+                `➤ CLABE: 1275 5200 1644 1033 40` +
+                `➤ Banco: BANCO AZTECA México%0A%0A` +
                 `➡️ Estoy listo para realizar el pago y recibir mi dieta.`;
+
 
   let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
 }
 </script>
 
-
-
   
-
-
-  
-<p style="font-size:12px; color:#aaa; margin-top:10px;">
-📲 Respuesta en menos de 10 minutos
-</p>
-
-
-<p class="urgencia">
-⚠️ Solo quedan <span id="cupos">3</span> cupos para dieta personalizada hoy
-</p>
-
-  
-<script> 
-document.querySelector(".lead-box").style.display = "block";
-</script> 
   
 <!-- SECCIONES DE SCRIPTS -->
 <script>     
