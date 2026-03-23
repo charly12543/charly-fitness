@@ -173,9 +173,10 @@ let html = `
 
   dieta.comidas.forEach((c, i)=>{
     html += `
-      <div class="card-meal">
+     <div class="card-meal" style="background:#ffffff; color:#000;
+  border:1px solid #ddd;  box-shadow:0 5px 15px rgba(0,0,0,0.1);">
         <h4>🍽️ Comida ${i+1}</h4>
-        <ul>
+        <ul style="color:#000;">
           <li>🥩 ${c.proteina}</li>
           <li>🍚 ${c.carbos}</li>
           <li>🥑 ${c.grasa}</li>
@@ -185,7 +186,8 @@ let html = `
   });
 
   html += `
-      <div class="card-macros">
+
+      <div class="card-macros" style="color:#000;">
         🥩 ${dieta.proteina.toFixed(0)}g |
         🍚 ${dieta.carbos.toFixed(0)}g |
         🥑 ${dieta.grasa.toFixed(0)}g
