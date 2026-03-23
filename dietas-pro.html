@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dietas Fitness PRO</title>
+<link rel="stylesheet" href="styleDietas.css">
+</head>
+
+<body>
+
+<!-- BOTONES -->  
+<script src="scriptPro.js"></script>
+<button onclick="usarPro()">Generar dieta PRO</button>
+<div id="resultadoPRO"></div>
+
+
+<!-- FUNCION PARA USAR CALCULADORA --> 
+<script>
+function usarPro(){
+
+  let datos = {
+    peso: parseFloat(document.getElementById("peso").value),
+    altura: parseFloat(document.getElementById("altura").value),
+    edad: parseFloat(document.getElementById("edad").value),
+    objetivo: document.getElementById("objetivo").value
+  };
+
+  let dieta = generarDietaPRO(datos);
+
+  document.getElementById("resultadoPRO").innerHTML =
+    JSON.stringify(dieta, null, 2);
+}
+</script>
+
+
+
+  
+<!--  CALCULADORA PRO --> 
+<script>
+  function generarDietaPRO(datos){
+  let {peso, altura, edad, objetivo} = datos;
+
+  if(altura > 3){ altura = altura / 100; }
+
+  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
+  let calorias = bmr * 1.55;
+
+  if(objetivo === "definicion") calorias -= 400;
+  if(objetivo === "volumen") calorias += 300;
+
+  let proteina = peso * 2;
+  let grasa = (calorias * 0.25) / 9;
+  let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
+
+  const proteinas = ["pollo", "carne", "atún", "huevo"];
+  const carbosLista = ["arroz", "papa", "avena"];
+  const grasasLista = ["aguacate", "aceite"];
+
+  function random(arr){
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  let comidas = [];
+
+  for(let i=0;i<4;i++){
+    comidas.push({
+      proteina: random(proteinas),
+      carbos: random(carbosLista),
+      grasa: random(grasasLista)
+    });
+  }
+
+  return {calorias, proteina, carbos, grasa, comidas};
+}
+</script>
+  
+  
+</body>
+</html>  
