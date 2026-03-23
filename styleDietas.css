@@ -373,7 +373,24 @@ body{
 
 }
 
+.btn-whats{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(135deg,#25D366,#1ebe5d);
+  color:white;
+  font-weight:bold;
+  font-size:17px;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 10px 25px rgba(37,211,102,0.4);
+}
 
+.btn-whats:hover{
+  transform:scale(1.05);
+  box-shadow:0 15px 30px rgba(37,211,102,0.6);
+}
 
 
 
