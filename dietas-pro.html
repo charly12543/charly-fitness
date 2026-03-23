@@ -9,59 +9,54 @@
 
 <body>
 
+<!-- HERO -->   
 <section class="hero">
   <h1>🔥 Calculadora PRO (Privada)</h1>
   <p>Solo para generar dietas personalizadas</p>
 </section>
 
+
+  <!-- CALCULADORA -->  
 <section>
-
 <div class="calculadora">
-
 <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
 <input type="number" id="peso" placeholder="Peso (kg)">
 <input type="number" step="0.01" id="altura" placeholder="Altura (1.80 o 180)">
 <input type="number" id="edad" placeholder="Edad">
-
 <select id="objetivo">
   <option value="definicion">Definición</option>
   <option value="volumen">Volumen</option>
 </select>
-
 <button onclick="usarPro()">🔥 Generar dieta PRO</button>
-
 <div id="resultadoPRO"></div>
-
 <button onclick="descargarPDF()" style="margin-top:15px;">
 📄 Descargar PDF
 </button>
-
 </div>
-
 </section>
 
 <!-- ================= JS ================= -->
 
+
+  <!-- usarPro -->    
 <script>
 function usarPro(){
-
-  let datos = {
+let datos = {
     peso: parseFloat(document.getElementById("peso").value),
     altura: parseFloat(document.getElementById("altura").value),
     edad: parseFloat(document.getElementById("edad").value),
     objetivo: document.getElementById("objetivo").value
   };
-
   if(!datos.peso || !datos.altura || !datos.edad){
     alert("Completa todos los datos bro 🔥");
     return;
   }
-
   let dieta = generarDietaPRO(datos);
   mostrarDieta(dieta);
 }
 </script>
 
+  <!-- generarDietaPRO -->     
 <script>
 function generarDietaPRO(datos){
 
@@ -69,40 +64,77 @@ function generarDietaPRO(datos){
 
   if(altura > 3){ altura = altura / 100; }
 
+  // 🔥 CALORÍAS BASE (Mifflin)
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
   let calorias = bmr * 1.55;
 
   if(objetivo === "definicion") calorias -= 400;
   if(objetivo === "volumen") calorias += 300;
 
+  // 🔥 MACROS
   let proteina = peso * 2;
   let grasa = (calorias * 0.25) / 9;
   let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
 
+  // 🔥 DISTRIBUCIÓN (4 comidas)
+  let comidas = [];
   let protePorComida = proteina / 4;
   let carbosPorComida = carbos / 4;
   let grasaPorComida = grasa / 4;
 
-  const alimentos = { pollo: 31 };
+  // 🔥 BASE DE ALIMENTOS (REAL)
+  const proteinas = [
+    {nombre:"pollo", prote:31},
+    {nombre:"carne", prote:26},
+    {nombre:"atún", prote:25},
+    {nombre:"huevo", prote:6}
+  ];
 
-  function calcularProteinaFuente(g){
-    return (g / alimentos.pollo) * 100;
+  const carbosLista = [
+    {nombre:"arroz", carbos:28},
+    {nombre:"papa", carbos:20},
+    {nombre:"avena", carbos:60}
+  ];
+
+  const grasasLista = [
+    {nombre:"aguacate", grasa:15},
+    {nombre:"aceite de oliva", grasa:10}
+  ];
+
+  function random(arr){
+    return arr[Math.floor(Math.random() * arr.length)];
   }
 
-  let comidas = [];
-
   for(let i=0;i<4;i++){
+
+    let p = random(proteinas);
+    let c = random(carbosLista);
+    let g = random(grasasLista);
+
+    let gramosProte = (protePorComida / p.prote) * 100;
+    let gramosCarbos = (carbosPorComida / c.carbos) * 100;
+    let gramosGrasa = (grasaPorComida / g.grasa) * 100;
+
     comidas.push({
-      proteina: `${calcularProteinaFuente(protePorComida).toFixed(0)}g pollo`,
-      carbos: `${carbosPorComida.toFixed(0)}g arroz`,
-      grasa: `${grasaPorComida.toFixed(0)}g aguacate`
+      proteina: `${gramosProte.toFixed(0)}g ${p.nombre}`,
+      carbos: `${gramosCarbos.toFixed(0)}g ${c.nombre}`,
+      grasa: `${gramosGrasa.toFixed(0)}g ${g.nombre}`
     });
   }
 
-  return {calorias, proteina, carbos, grasa, comidas};
+  return {
+    calorias,
+    proteina,
+    carbos,
+    grasa,
+    comidas
+  };
 }
 </script>
 
+
+  
+  <!-- mostrarDieta -->   
 <script>
 function mostrarDieta(dieta){
 
@@ -150,6 +182,8 @@ function mostrarDieta(dieta){
 }
 </script>
 
+
+  <!-- descargarPDF -->     
 <script>
 function descargarPDF(){
 
@@ -174,7 +208,9 @@ function descargarPDF(){
 }
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
 </html>
