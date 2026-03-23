@@ -64,23 +64,85 @@
 <section class="lead-box"  id="pro">
   <h2>🔥 Lleva esto al siguiente nivel</h2>
   <p>Te hago tu dieta EXACTA + seguimiento</p>
-
-  <input type="text" id="nombreLead" placeholder="Tu nombre">
-  <input type="text" id="whatsLead" placeholder="Tu WhatsApp">
-
-
+<input type="text" id="nombreLead" placeholder="Tu nombre">
+<input type="text" id="whatsLead" placeholder="Tu WhatsApp">
 <p class="contador">
 🔥 Más de <span id="contadorUsuarios">147</span> personas ya generaron su dieta
 </p>
-
-
   
  <p style="margin-top:15px; font-weight:bold; color:#d4af37;">
 🔥 Recibe tu dieta exacta + ajustes personalizados + seguimiento
 </p>
-<button class="btn-whats" onclick="enviarWhats()">
-📲 Quiero mi dieta PRO
-</button>
+<button class="btn-whats" onclick="enviarWhats()">📲 Quiero mi dieta PRO</button>
+
+<!-- ================= DIETA PRO – PLAN PREMIUM ================= -->
+<div class="pro-info" style="
+  background: #fff9e6;
+  border-left: 5px solid #d4af37;
+  padding: 25px;
+  margin-top: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+">
+  <h3 style="color:#d47f00; font-size:1.8rem; margin-bottom:10px;">🔥 Dieta PRO – Plan Premium</h3>
+  <p style="font-size:1rem; line-height:1.5; margin-bottom:15px;">
+    Este plan avanzado <strong>no es gratuito</strong> — está diseñado profesionalmente para tu objetivo y requiere un pago para acceder al cálculo completo y seguimiento personalizado.
+  </p>
+  <p style="font-size:0.95rem; color:#555; margin-bottom:20px;">
+    ➤ Incluye cálculo de macros, distribución de alimentos detallada y receta personalizada en PDF.  
+    ➤ Ajustes y seguimiento semanal según tus progresos.
+  </p>
+  <button onclick="enviarWhatsPro()" style="
+    padding: 12px 20px;
+    background:#d47f00;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:1rem;
+    cursor:pointer;
+    transition: all 0.3s ease;
+  " 
+  onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.3)';"
+  onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.2)';">
+    🟢 Solicitar Dieta PRO
+  </button>
+</div>
+
+<script>
+function enviarWhatsPro(){
+  let nombre = document.getElementById("nombreLead").value || "";
+  let whats = document.getElementById("whatsLead").value || "";
+
+  if(!nombre || !whats){
+    alert("Completa tus datos bro 🔥");
+    return;
+  }
+
+  let mensaje = `🔥 QUIERO MI DIETA PRO 🔥%0A%0A` +
+                `Nombre: ${nombre}%0A` +
+                `WhatsApp: ${whats}%0A%0A` +
+                `📊 MIS DATOS:%0A` +
+                `Peso:%0AAltura:%0AEdad:%0AObjetivo:%0A%0A` +
+                `💰 DETALLES DE PAGO:%0A` +
+                `➤ Cuenta BBVA: XXXX XXXX XXXX XXXX%0A` +
+                `➤ CLABE: XXXXXXXXXXXXXXXX%0A` +
+                `➤ Banco: BBVA México%0A%0A` +
+                `➡️ Estoy listo para realizar el pago y recibir mi dieta.`;
+
+  let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
+  window.open(url, "_blank");
+}
+</script>
+<!-- ================= FIN DIETA PRO – PLAN PREMIUM ================= -->
+
+
+
+
+  
+
+
+  
 <p style="font-size:12px; color:#aaa; margin-top:10px;">
 📲 Respuesta en menos de 10 minutos
 </p>
