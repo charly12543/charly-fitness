@@ -63,7 +63,8 @@ function generarDietaPRO(datos){
 
   let {peso, altura, edad, objetivo} = datos;
 
-  if(altura > 3){ altura = altura / 100; }
+
+  if(altura > 3) altura = altura / 100;  }// cm -> m
 
   // 🔥 CALORÍAS BASE (Mifflin)
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
@@ -137,6 +138,86 @@ function generarDietaPRO(datos){
   
   <!-- mostrarDieta -->   
 <script>
+function mostrarDieta(dieta){
+
+let nombre = document.getElementById("nombreCliente").value;
+let fecha = new Date().toLocaleDateString();
+
+let html = `
+<div class="dieta-card" style="background:white; color:black; padding:25px;">
+
+  <!-- PORTADA -->
+  <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
+    <h1 style="color:#d4af37; margin-bottom:5px;">🔥 Charly Fitness</h1>
+    <p style="font-size:14px;">Plan Nutricional Personalizado</p>
+    <p style="font-size:12px; text-align:center;">
+    Sistema inteligente de nutrición  | Charly Fitness
+    </p>
+  </div>
+
+  <div style="text-align:center; margin-bottom:25px;">
+    <h2 style="margin-bottom:10px;">${nombre || "Cliente"}</h2>
+    <p style="font-size:13px;">📅 Fecha: ${fecha}</p>
+  </div>
+
+  <!-- RESUMEN -->
+  <div style="background:#f5f5f5; padding:15px; border-radius:10px; margin-bottom:20px;">
+    <h3 style="text-align:center; margin-bottom:10px;">Resumen Nutricional</h3>
+    <p style="text-align:center;">
+      🔥 ${dieta.calorias.toFixed(0)} kcal<br>
+      🥩 ${dieta.proteina.toFixed(0)}g proteína<br>
+      🍚 ${dieta.carbos.toFixed(0)}g carbohidratos<br>
+      🥑 ${dieta.grasa.toFixed(0)}g grasas
+    </p>
+  </div>
+`;
+
+  dieta.comidas.forEach((c, i)=>{
+    html += `
+     <div class="card-meal" style="background:#ffffff; color:#000;
+  border:1px solid #ddd;  box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+        <h4>🍽️ Comida ${i+1}</h4>
+        <ul style="color:#000;">
+          <li>🥩 ${c.proteina}</li>
+          <li>🍚 ${c.carbos}</li>
+          <li>🥑 ${c.grasa}</li>
+        </ul>
+      </div>
+    `;
+  });
+
+  html += `
+
+      <div class="card-macros" style="color:#000;">
+        🥩 ${dieta.proteina.toFixed(0)}g |
+        🍚 ${dieta.carbos.toFixed(0)}g |
+        🥑 ${dieta.grasa.toFixed(0)}g
+      </div>
+
+    </div>
+  `;
+
+html += `
+  <div style="margin-top:20px; font-size:12px; text-align:center;">
+    ⚠️ Plan personalizado basado en tus datos.  
+    Ajustes recomendados cada 2-3 semanas.
+  </div>
+`;
+
+html += `
+  <div style="margin-top:25px; padding:15px; background:#f9f9f9; border-radius:10px;">
+    <h3 style="text-align:center; margin-bottom:10px;">Recomendaciones</h3>
+    <ul style="font-size:14px;">
+      <li>💧 Toma mínimo 2-3 litros de agua al día</li>
+      <li>🏋️ Entrena al menos 4 veces por semana</li>
+      <li>😴 Descansa 7-8 horas diarias</li>
+      <li>📊 Ajusta calorías cada 2-3 semanas</li>
+    </ul>
+  </div>
+`;  
+  
+  document.getElementById("resultadoPRO").innerHTML = html;
+  
 function descargarPDF(){
 
   const elemento = document.getElementById("resultadoPRO");
