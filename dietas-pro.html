@@ -17,6 +17,7 @@
 <section>
 
 <div class="calculadora">
+
 <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
 <input type="number" id="peso" placeholder="Peso (kg)">
 <input type="number" step="0.01" id="altura" placeholder="Altura (1.80 o 180)">
@@ -27,37 +28,36 @@
   <option value="volumen">Volumen</option>
 </select>
 
-<button onclick="usarPro()">Generar dieta PRO</button>
+<button onclick="usarPro()">🔥 Generar dieta PRO</button>
 
 <div id="resultadoPRO"></div>
+
+<button onclick="descargarPDF()" style="margin-top:15px;">
+📄 Descargar PDF
+</button>
 
 </div>
 
 </section>
 
-<button onclick="descargarPDF()">📄 Descargar PDF</button>
-
-
-
-
-
-
-  
-  
+<!-- ================= JS ================= -->
 
 <script>
 function usarPro(){
+
   let datos = {
     peso: parseFloat(document.getElementById("peso").value),
     altura: parseFloat(document.getElementById("altura").value),
     edad: parseFloat(document.getElementById("edad").value),
     objetivo: document.getElementById("objetivo").value
   };
+
   if(!datos.peso || !datos.altura || !datos.edad){
     alert("Completa todos los datos bro 🔥");
     return;
   }
- let dieta = generarDietaPRO(datos);
+
+  let dieta = generarDietaPRO(datos);
   mostrarDieta(dieta);
 }
 </script>
@@ -69,75 +69,46 @@ function generarDietaPRO(datos){
 
   if(altura > 3){ altura = altura / 100; }
 
-  // 🔥 CALORÍAS BASE
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
   let calorias = bmr * 1.55;
 
   if(objetivo === "definicion") calorias -= 400;
   if(objetivo === "volumen") calorias += 300;
 
-  // 🔥 MACROS
   let proteina = peso * 2;
   let grasa = (calorias * 0.25) / 9;
   let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
 
-  // 🔥 DISTRIBUCIÓN (4 comidas)
   let protePorComida = proteina / 4;
   let carbosPorComida = carbos / 4;
   let grasaPorComida = grasa / 4;
 
-  // 🔥 EQUIVALENCIAS REALES
-  const alimentos = {
-    pollo: 31,
-    carne: 26,
-    atun: 25,
-    huevo: 6,
-    claras: 3.6
-  };
+  const alimentos = { pollo: 31 };
 
-  function calcularProteinaFuente(gramosNecesarios){
-    return (gramosNecesarios / alimentos.pollo) * 100;
-  }
-
-  function carbosFuente(gramos){
-    return gramos; // arroz base
-  }
-
-  function grasaFuente(gramos){
-    return gramos; // aguacate/aceite
+  function calcularProteinaFuente(g){
+    return (g / alimentos.pollo) * 100;
   }
 
   let comidas = [];
 
   for(let i=0;i<4;i++){
-
-    let proteGr = calcularProteinaFuente(protePorComida);
-    let carbosGr = carbosFuente(carbosPorComida);
-    let grasaGr = grasaFuente(grasaPorComida);
-
     comidas.push({
-      proteina: `${proteGr.toFixed(0)}g pollo`,
-      carbos: `${carbosGr.toFixed(0)}g arroz`,
-      grasa: `${grasaGr.toFixed(0)}g grasa`
+      proteina: `${calcularProteinaFuente(protePorComida).toFixed(0)}g pollo`,
+      carbos: `${carbosPorComida.toFixed(0)}g arroz`,
+      grasa: `${grasaPorComida.toFixed(0)}g aguacate`
     });
   }
 
-  return {
-    calorias,
-    proteina,
-    carbos,
-    grasa,
-    comidas
-  };
+  return {calorias, proteina, carbos, grasa, comidas};
 }
 </script>
 
-
-  
 <script>
 function mostrarDieta(dieta){
+
   let nombre = document.getElementById("nombreCliente").value;
- let html = `
+
+  let html = `
     <div class="dieta-card">
 
       <div style="text-align:center;">
@@ -181,11 +152,16 @@ function mostrarDieta(dieta){
 
 <script>
 function descargarPDF(){
- const elemento = document.getElementById("resultadoPRO");
- if(!elemento.innerHTML){
+
+  const elemento = document.getElementById("resultadoPRO");
+
+  if(!elemento.innerHTML){
     alert("Primero genera la dieta bro 🔥");
     return;
   }
+
+  let nombre = document.getElementById("nombreCliente").value || "cliente";
+
   const opciones = {
     margin: 10,
     filename: `dieta-${nombre}.pdf`,
@@ -198,7 +174,7 @@ function descargarPDF(){
 }
 </script>
 
-  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 </body>
 </html>
