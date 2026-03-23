@@ -13,6 +13,7 @@
 <section class="hero">
   <h1>🔥 Calculadora PRO (Privada)</h1>
   <p>Solo para generar dietas personalizadas</p>
+  <h3>⚠️ Solo uso interno</h3>
 </section>
 
 
@@ -182,7 +183,48 @@ function mostrarDieta(dieta){
 }
 </script>
 
+  <!-- enviarWhats -->     
+<script>  
+function enviarWhats(){
 
+  let nombre = document.getElementById("nombreLead").value;
+  let whats = document.getElementById("whatsLead").value;
+
+  if(!nombre || !whats){
+    alert("Completa tus datos bro 🔥");
+    return;
+  }
+
+  let mensaje = `🔥 QUIERO MI DIETA PRO 🔥
+
+Nombre: ${nombre}
+WhatsApp: ${whats}
+
+📊 MIS DATOS:
+Peso:
+Altura:
+Edad:
+Objetivo (definición/volumen):
+Nivel de actividad:
+
+🍽️ RESTRICCIONES:
+(Alimentos que no comes)
+
+⏰ HORARIOS:
+(Horas en las que puedes comer)
+
+💪 OBJETIVO REAL:
+(Ej: bajar grasa, subir músculo, etc)
+
+🔥 Me interesa la dieta personalizada + seguimiento`;
+
+  let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
+  
+  window.open(url, "_blank");
+}
+</script> 
+
+  
   <!-- descargarPDF -->     
 <script>
 function descargarPDF(){
