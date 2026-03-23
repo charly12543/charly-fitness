@@ -137,85 +137,52 @@ function generarDietaPRO(datos){
   
   <!-- mostrarDieta -->   
 <script>
-function mostrarDieta(dieta){
+function descargarPDF(){
 
-let nombre = document.getElementById("nombreCliente").value;
-let fecha = new Date().toLocaleDateString();
+  const elemento = document.getElementById("resultadoPRO");
+  const nombre = document.getElementById("nombreCliente").value || "cliente";
 
-let html = `
-<div class="dieta-card" style="background:white; color:black; padding:25px;">
+  if(!elemento.innerHTML.trim()){
+    alert("Primero genera la dieta bro 🔥");
+    return;
+  }
 
-  <!-- PORTADA -->
-  <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
-    <h1 style="color:#d4af37; margin-bottom:5px;">🔥 Charly Fitness</h1>
-    <p style="font-size:14px;">Plan Nutricional Personalizado</p>
-    <p style="font-size:12px; text-align:center;">
-    Sistema inteligente de nutrición  | Charly Fitness
-    </p>
-  </div>
+  // 🔥 CLON LIMPIO
+  let copia = elemento.cloneNode(true);
 
-  <div style="text-align:center; margin-bottom:25px;">
-    <h2 style="margin-bottom:10px;">${nombre || "Cliente"}</h2>
-    <p style="font-size:13px;">📅 Fecha: ${fecha}</p>
-  </div>
+  // 🔥 FORZAMOS ESTILO PDF (CLAVE)
+  copia.style.position = "absolute";
+  copia.style.top = "0";
+  copia.style.left = "0";
+  copia.style.width = "800px";   // 🔥 ESTO ARREGLA EL BLANCO
+  copia.style.padding = "20px";
+  copia.style.background = "#ffffff";
+  copia.style.color = "#000000";
+  copia.style.zIndex = "-1"; // no visible al usuario
 
-  <!-- RESUMEN -->
-  <div style="background:#f5f5f5; padding:15px; border-radius:10px; margin-bottom:20px;">
-    <h3 style="text-align:center; margin-bottom:10px;">Resumen Nutricional</h3>
-    <p style="text-align:center;">
-      🔥 ${dieta.calorias.toFixed(0)} kcal<br>
-      🥩 ${dieta.proteina.toFixed(0)}g proteína<br>
-      🍚 ${dieta.carbos.toFixed(0)}g carbohidratos<br>
-      🥑 ${dieta.grasa.toFixed(0)}g grasas
-    </p>
-  </div>
-`;
+  document.body.appendChild(copia);
 
-  dieta.comidas.forEach((c, i)=>{
-    html += `
-     <div class="card-meal" style="background:#ffffff; color:#000;
-  border:1px solid #ddd;  box-shadow:0 5px 15px rgba(0,0,0,0.1);">
-        <h4>🍽️ Comida ${i+1}</h4>
-        <ul style="color:#000;">
-          <li>🥩 ${c.proteina}</li>
-          <li>🍚 ${c.carbos}</li>
-          <li>🥑 ${c.grasa}</li>
-        </ul>
-      </div>
-    `;
-  });
+  setTimeout(() => {
 
-  html += `
+    html2pdf().set({
+      margin: 10,
+      filename: `dieta-${nombre}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { 
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff"
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .from(copia)
+    .save()
+    .then(() => {
+      document.body.removeChild(copia);
+    //  document.getElementById("resultadoPRO").style.display = "block";
+    });
 
-      <div class="card-macros" style="color:#000;">
-        🥩 ${dieta.proteina.toFixed(0)}g |
-        🍚 ${dieta.carbos.toFixed(0)}g |
-        🥑 ${dieta.grasa.toFixed(0)}g
-      </div>
-
-    </div>
-  `;
-
-html += `
-  <div style="margin-top:20px; font-size:12px; text-align:center;">
-    ⚠️ Plan personalizado basado en tus datos.  
-    Ajustes recomendados cada 2-3 semanas.
-  </div>
-`;
-
-html += `
-  <div style="margin-top:25px; padding:15px; background:#f9f9f9; border-radius:10px;">
-    <h3 style="text-align:center; margin-bottom:10px;">Recomendaciones</h3>
-    <ul style="font-size:14px;">
-      <li>💧 Toma mínimo 2-3 litros de agua al día</li>
-      <li>🏋️ Entrena al menos 4 veces por semana</li>
-      <li>😴 Descansa 7-8 horas diarias</li>
-      <li>📊 Ajusta calorías cada 2-3 semanas</li>
-    </ul>
-  </div>
-`;  
-  
-  document.getElementById("resultadoPRO").innerHTML = html;
+  }, 800); // 🔥 más tiempo para render
 }
 </script>
 
