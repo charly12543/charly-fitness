@@ -438,7 +438,132 @@ async function descargarPDF(){
   pdf.save(`dieta-${nombre}.pdf`);
 }
 
+async function descargarPDF(){
+  const { jsPDF } = window.jspdf;
 
+  const nombre = document.getElementById("nombreCliente").value || "Cliente";
+  const elemento = document.getElementById("resultadoPRO");
+
+  if(!elemento.innerText.trim()){
+    alert("Primero genera la dieta bro 🔥");
+    return;
+  }
+
+  let fecha = new Date().toLocaleDateString();
+
+  // 🔥 EXTRAER DATOS LIMPIOS
+  let comidas = [];
+  elemento.querySelectorAll(".card-meal").forEach(card=>{
+    let titulo = card.querySelector("h4")?.innerText.replace("🍽️","").trim();
+    let items = [...card.querySelectorAll("li")].map(li =>
+      li.innerText.replace(/🥩|🍚|🥑/g,"").trim()
+    );
+
+    comidas.push({titulo, items});
+  });
+
+  let resumen = elemento.querySelector("div[style*='background']")?.innerText
+    .replace(/🔥|🥩|🍚|🥑/g,"") || "";
+
+  // 🔥 CREAR DISEÑO CLÍNICO
+  let contenedor = document.createElement("div");
+
+  contenedor.style.width = "800px";
+  contenedor.style.padding = "30px";
+  contenedor.style.fontFamily = "Arial, sans-serif";
+  contenedor.style.background = "#f4f4f4";
+  contenedor.style.color = "#000";
+
+  contenedor.innerHTML = `
+    <div style="background:white; padding:25px; border-radius:10px;">
+
+      <!-- HEADER -->
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <img src="imagenes/logoGitHub.png" style="height:60px;">
+        
+        <div style="text-align:right;">
+          <h2 style="margin:0;">Charly Fitness</h2>
+          <p style="margin:0; font-size:12px;">Nutrición & Entrenamiento</p>
+        </div>
+      </div>
+
+      <hr style="margin:15px 0; border:1px solid #ddd;">
+
+      <!-- INFO -->
+      <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+        <p><strong>Nombre:</strong> ${nombre}</p>
+        <p><strong>Fecha:</strong> ${fecha}</p>
+      </div>
+
+      <!-- RESUMEN -->
+      <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:20px;">
+        <strong>Consumo diario:</strong><br>
+        ${resumen}
+      </div>
+  `;
+
+  // 🔥 COMIDAS (FORMATO NUTRIÓLOGO)
+  comidas.forEach(c=>{
+    contenedor.innerHTML += `
+      <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:15px;">
+        <strong>${c.titulo.toUpperCase()}</strong><br>
+        ${c.items.join("<br>")}
+      </div>
+    `;
+  });
+
+  // 🔥 RECOMENDACIONES
+  contenedor.innerHTML += `
+    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:15px;">
+      <strong>Recomendaciones:</strong><br>
+      - Beber mínimo 2-3 litros de agua al día<br>
+      - Puedes añadir verduras libres entre comidas<br>
+      - Evitar azúcar refinada<br>
+      - Cocinar con aceite de oliva o spray
+    </div>
+  `;
+
+  // 🔥 SUPLEMENTOS
+  contenedor.innerHTML += `
+    <div style="background:#eaeaea; padding:15px; border-radius:8px;">
+      <strong>Suplementación:</strong><br>
+      - Proteína: 1 scoop post-entreno<br>
+      - Creatina: 5g diarios<br>
+      - Multivitamínico: 1 cápsula diaria<br>
+      - Omega 3: 1-2 cápsulas
+    </div>
+  `;
+
+  contenedor.innerHTML += `</div>`;
+
+  // 🔥 OCULTAR EN DOM
+  let wrapper = document.createElement("div");
+  wrapper.style.position = "fixed";
+  wrapper.style.left = "-9999px";
+  wrapper.appendChild(contenedor);
+  document.body.appendChild(wrapper);
+
+  // 🔥 CANVAS (ESTABLE)
+  const canvas = await html2canvas(contenedor, {
+    scale: 2,
+    useCORS: true
+  });
+
+  const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+  const pdf = new jsPDF("p","mm","a4");
+
+  const imgWidth = 210;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  let finalHeight = imgHeight > 280 ? 280 : imgHeight;
+
+  pdf.addImage(imgData,"JPEG",0,10,imgWidth,finalHeight);
+
+  pdf.save(`dieta-${nombre}.pdf`);
+
+  document.body.removeChild(wrapper);
+}
 
 
 
