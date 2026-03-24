@@ -49,10 +49,10 @@
   <label>📅 Días por semana</label>
   <input type="number" id="diasGym" min="2" max="7" placeholder="Ej: 3">
 
-  <button onclick="usarPro()">🔥 Generar Dieta PRO</button>
-  <button onclick="generarRutina()" style="margin-top:10px;">🏋️‍♂️ Generar Rutina PRO</button>
+  <button onclick="generarTodo()">🔥 Generar Dieta + Rutina</button>
 
   <div id="resultadoPRO"></div>
+
   <button onclick="descargarPDF('dieta')" style="margin-top:15px;">📄 Descargar PDF Dieta</button>
   <button onclick="descargarPDF('rutina')" style="margin-top:5px;">📄 Descargar PDF Rutina</button>
 </div>
@@ -68,32 +68,69 @@
 <span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
 </div>
 
-/* ===================== GENERAR DIETA PRO ===================== */
+<!-- SCRIPTS -->
+<script>
+/* ===================== GENERAR TODO ===================== */
+function generarTodo(){
+  let datos = {
+    nombre: document.getElementById("nombreCliente").value || "Cliente",
+    peso: parseFloat(document.getElementById("peso").value),
+    altura: parseFloat(document.getElementById("altura").value),
+    edad: parseFloat(document.getElementById("edad").value),
+    sexo: document.getElementById("sexo").value,
+    objetivo: document.getElementById("objetivo").value,
+    tipo: document.getElementById("tipoDieta").value,
+    dias: parseInt(document.getElementById("diasGym").value) || 3
+  };
+
+  if(!datos.peso || !datos.altura || !datos.edad){
+    alert("Completa todos los datos bro 🔥");
+    return;
+  }
+
+  let dieta = generarDietaPRO(datos);
+  let rutina = generarRutinaHTML(datos);
+
+  // Combinar resultados en un solo contenedor
+  document.getElementById("resultadoPRO").innerHTML = `
+    <div id="dietaPDF">${dieta}</div>
+    <div id="rutinaPDF">${rutina}</div>
+  `;
+}
+
+/* ===================== DIETA PRO ===================== */
 function generarDietaPRO(datos){
-  let {peso, altura, edad, objetivo, tipo} = datos;
+  let {peso, altura, edad, objetivo, tipo, nombre} = datos;
+
   if(altura > 3) altura = altura / 100;
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
   let calorias = Math.round(bmr * 1.55);
-  if(objetivo === "definicion") calorias -= 400;
-  if(objetivo === "volumen") calorias += 300;
+
+  if(objetivo==="definicion") calorias -=400;
+  if(objetivo==="volumen") calorias +=300;
 
   let proteina, grasa, carbos;
-  if(tipo === "keto"){
-    proteina = Math.round(peso * 2);
-    grasa = Math.round((calorias * 0.65)/9);
-    carbos = Math.round((calorias * 0.10)/4);
-  } else if(tipo === "runner"){
-    proteina = Math.round(peso * 1.8);
-    grasa = Math.round((calorias * 0.20)/9);
-    carbos = Math.round((calorias * 0.60)/4);
-  } else if(tipo === "godin"){
-    proteina = Math.round(peso * 2);
-    grasa = Math.round((calorias * 0.25)/9);
-    carbos = Math.round((calorias * 0.40)/4);
-  } else{
-    proteina = Math.round(peso * 2);
-    grasa = Math.round((calorias*0.25)/9);
-    carbos = Math.round((calorias-(proteina*4+grasa*9))/4);
+
+  switch(tipo){
+    case "keto":
+      proteina = Math.round(peso*2);
+      grasa = Math.round((calorias*0.65)/9);
+      carbos = Math.round((calorias*0.10)/4);
+      break;
+    case "runner":
+      proteina = Math.round(peso*1.8);
+      grasa = Math.round((calorias*0.20)/9);
+      carbos = Math.round((calorias*0.60)/4);
+      break;
+    case "godin":
+      proteina = Math.round(peso*2);
+      grasa = Math.round((calorias*0.25)/9);
+      carbos = Math.round((calorias*0.40)/4);
+      break;
+    default:
+      proteina = Math.round(peso*2);
+      grasa = Math.round((calorias*0.25)/9);
+      carbos = Math.round((calorias - (proteina*4 + grasa*9))/4);
   }
 
   let protePorComida = Math.round(proteina/4);
@@ -102,41 +139,26 @@ function generarDietaPRO(datos){
 
   const nombresComida = ["Desayuno","Comida","Pre-entreno","Cena"];
 
-  let comidas = [];
-  for(let i=0;i<4;i++){
-    comidas.push({
-      nombre: nombresComida[i],
-      proteina: `${protePorComida}g`,
-      carbos: `${carbosPorComida}g`,
-      grasa: `${grasaPorComida}g`
-    });
-  }
+  // Para simplificar, misma lista para todos
+  let comidas = nombresComida.map(n=>{
+    return {nombre:n, proteina:`${protePorComida}g`, carbos:`${carbosPorComida}g`, grasa:`${grasaPorComida}g`};
+  });
 
-  return {calorias, proteina, carbos, grasa, comidas};
-}
-
-function mostrarDieta(dieta){
-  let nombre = document.getElementById("nombreCliente").value || "Cliente";
-  let fecha = new Date().toLocaleDateString();
   let html = `<div class="dieta-card">
     <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
       <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
       <p>Plan Nutricional Personalizado</p>
+      <p style="font-size:12px;">Sistema inteligente de nutrición</p>
     </div>
-    <div style="text-align:center; margin-bottom:20px;">
+    <div style="text-align:center; margin-bottom:25px;">
       <h2>${nombre}</h2>
-      <p>📅 ${fecha}</p>
+      <p>📅 ${new Date().toLocaleDateString()}</p>
     </div>
     <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px;">
-      <p>
-        🔥 ${dieta.calorias} kcal<br>
-        🥩 ${dieta.proteina}g proteína<br>
-        🍚 ${dieta.carbos}g carbohidratos<br>
-        🥑 ${dieta.grasa}g grasas
-      </p>
+      <p>🔥 ${calorias} kcal<br>🥩 ${proteina}g proteína<br>🍚 ${carbos}g carbohidratos<br>🥑 ${grasa}g grasas</p>
     </div>`;
 
-  dieta.comidas.forEach(c=>{
+  comidas.forEach(c=>{
     html += `<div class="card-meal no-break">
       <h4>🍽️ ${c.nombre}</h4>
       <ul>
@@ -148,79 +170,45 @@ function mostrarDieta(dieta){
   });
 
   html += `</div>`;
-  document.getElementById("resultadoPRO").innerHTML = html;
-}
-
-
-
-
-  
-
-<!-- SCRIPTS -->
-
-<script>
-/* ===================== DIETA PRO ===================== */
-function usarPro(){
- let datos = {
-  peso: parseFloat(document.getElementById("peso").value),
-  altura: parseFloat(document.getElementById("altura").value),
-  edad: parseFloat(document.getElementById("edad").value),
-  sexo: document.getElementById("sexo").value,
-  objetivo: document.getElementById("objetivo").value,
-  tipo: document.getElementById("tipoDieta").value
- };
-  if(!datos.peso || !datos.altura || !datos.edad){
-    alert("Completa todos los datos bro 🔥");
-    return;
-  }
-  let dieta = generarDietaPRO(datos);
-  mostrarDieta(dieta);
+  return html;
 }
 
 /* ===================== RUTINA PRO ===================== */
-function generarRutina(){
-  let nombre = document.getElementById("nombreCliente").value || "Cliente";
-  let sexo = document.getElementById("sexo").value;
-  let dias = parseInt(document.getElementById("diasGym").value) || 3;
+function generarRutinaHTML(datos){
+  let {nombre, sexo, dias} = datos;
 
-  let rutina = [];
-
-  // Ejercicios específicos por sexo
   const ejerciciosHombre = {
-    Pecho: ["Press banca 4x10", "Aperturas mancuernas 3x12", "Fondos 3x15"],
-    Espalda: ["Remo barra 4x10", "Jalón polea 3x12", "Peso muerto 3x8"],
-    Hombros: ["Press militar 4x10", "Elevaciones laterales 3x12", "Facepull 3x15"],
-    Bíceps: ["Curl barra 4x12", "Curl martillo 3x12"],
-    Tríceps: ["Press francés 4x12", "Fondos 3x15"],
-    Pierna: ["Sentadillas 4x10", "Prensa 3x12", "Curl femoral 3x12", "Gemelos 4x15"]
+    Pecho: ["Press banca 4x10","Aperturas mancuernas 3x12","Fondos 3x15"],
+    Espalda: ["Remo barra 4x10","Jalón polea 3x12","Peso muerto 3x8"],
+    Hombros: ["Press militar 4x10","Elevaciones laterales 3x12","Facepull 3x15"],
+    Bíceps: ["Curl barra 4x12","Curl martillo 3x12"],
+    Tríceps: ["Press francés 4x12","Fondos 3x15"],
+    Pierna: ["Sentadillas 4x10","Prensa 3x12","Curl femoral 3x12","Gemelos 4x15"]
   };
 
   const ejerciciosMujer = {
-    Pierna: ["Sentadillas 4x12", "Hip thrust 4x12", "Prensa 3x15", "Gemelos 3x20"],
-    Glúteo: ["Patada glúteo 3x15", "Abducción 3x20"],
-    Core: ["Plancha 3x60s", "Crunch 3x20", "Russian twist 3x20"],
-    Espalda: ["Remo mancuerna 4x12", "Jalón polea 3x12"],
-    Hombros: ["Elevaciones laterales 3x12", "Press militar 3x10"],
-    Brazos: ["Curl bíceps 3x12", "Extensión tríceps 3x12"]
+    Pierna: ["Sentadillas 4x12","Hip thrust 4x12","Prensa 3x15","Gemelos 3x20"],
+    Glúteo: ["Patada glúteo 3x15","Abducción 3x20"],
+    Core: ["Plancha 3x60s","Crunch 3x20","Russian twist 3x20"],
+    Espalda: ["Remo mancuerna 4x12","Jalón polea 3x12"],
+    Hombros: ["Elevaciones laterales 3x12","Press militar 3x10"],
+    Brazos: ["Curl bíceps 3x12","Extensión tríceps 3x12"]
   };
 
-  let pool = sexo === "hombre" ? ejerciciosHombre : ejerciciosMujer;
+  let pool = sexo==="hombre"?ejerciciosHombre:ejerciciosMujer;
   let grupos = Object.keys(pool);
 
+  let rutina = [];
   for(let i=0;i<dias;i++){
     let diaNombre = `Día ${i+1}`;
     let ejeDia = [];
-
-    // Elegir 3 grupos musculares distintos por día
     for(let j=0;j<3;j++){
-      let idx = (i+j) % grupos.length;
+      let idx = (i+j)%grupos.length;
       ejeDia.push({grupo: grupos[idx], ejercicios: pool[grupos[idx]]});
     }
-
-    rutina.push({dia: diaNombre, bloques: ejeDia});
+    rutina.push({dia:diaNombre,bloques:ejeDia});
   }
 
-  // Mostrar en card
   let html = `<div class="dieta-card">
     <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
       <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
@@ -228,40 +216,35 @@ function generarRutina(){
     </div>`;
 
   rutina.forEach(d=>{
-    html += `<div class="card-meal no-break">
-      <h4>🏋️ ${d.dia}</h4>`;
+    html += `<div class="card-meal no-break"><h4>🏋️ ${d.dia}</h4>`;
     d.bloques.forEach(b=>{
       html += `<strong>${b.grupo}</strong><ul>`;
-      b.ejercicios.forEach(e=>{
-        html += `<li>${e}</li>`;
-      });
+      b.ejercicios.forEach(e=>{ html += `<li>${e}</li>`; });
       html += `</ul>`;
     });
     html += `</div>`;
   });
 
   html += `</div>`;
-  document.getElementById("resultadoPRO").innerHTML = html;
+  return html;
 }
 
 /* ===================== DESCARGAR PDF ===================== */
 async function descargarPDF(tipo){
   const { jsPDF } = window.jspdf;
-  const elemento = document.getElementById("resultadoPRO");
-  if(!elemento.innerText.trim()){
+  let elemento = tipo==="dieta"?document.getElementById("dietaPDF"):document.getElementById("rutinaPDF");
+
+  if(!elemento || !elemento.innerText.trim()){
     alert("Primero genera la " + tipo + " bro 🔥");
     return;
   }
 
   const nombre = document.getElementById("nombreCliente").value || "Cliente";
-  let fecha = new Date().toLocaleDateString();
-  let planID = "CF-" + Math.floor(Math.random()*9000 + 1000);
-
-  let canvas = await html2canvas(elemento, {scale:2, useCORS:true, backgroundColor:"#ffffff"});
+  let canvas = await html2canvas(elemento,{scale:2,useCORS:true,backgroundColor:"#ffffff"});
   let imgData = canvas.toDataURL("image/jpeg",1.0);
   let pdf = new jsPDF("p","mm","a4");
-  const imgWidth = 210;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  let imgWidth = 210;
+  let imgHeight = (canvas.height*imgWidth)/canvas.width;
   pdf.addImage(imgData,"JPEG",0,10,imgWidth,imgHeight>280?280:imgHeight);
   pdf.save(`${tipo}-${nombre}.pdf`);
 }
