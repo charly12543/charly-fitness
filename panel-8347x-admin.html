@@ -330,10 +330,6 @@ function mostrarDieta(dieta){
 }
 
 
-  
-  
-
-  
 async function descargarPDF(){
   const { jsPDF } = window.jspdf;
 
@@ -345,64 +341,60 @@ async function descargarPDF(){
     return;
   }
 
-  // 🔥 CLON LIMPIO
+  // 🔥 CLON
   let copia = elemento.cloneNode(true);
 
   copia.style.background = "#ffffff";
   copia.style.color = "#111";
-  copia.style.padding = "40px";
-  copia.style.width = "800px";
+  copia.style.padding = "30px";
+  copia.style.width = "700px";
   copia.style.fontFamily = "Arial, sans-serif";
 
-  // 🔥 LIMPIAR ICONOS
+  // 🔥 LIMPIAR ICONOS Y FONDOS NEGROS
   copia.querySelectorAll("*").forEach(el=>{
-  el.innerHTML = el.innerHTML
-    .replace(/🔥/g,"")
-    .replace(/🥩/g,"")
-    .replace(/🍚/g,"")
-    .replace(/🥑/g,"")
-    .replace(/📅/g,"");
+    el.innerHTML = el.innerHTML
+      .replace(/🔥/g,"")
+      .replace(/🥩/g,"")
+      .replace(/🍚/g,"")
+      .replace(/🥑/g,"")
+      .replace(/📅/g,"");
 
-  // 🔥 FORZAR TEXTO NEGRO
-  el.style.color = "#000";
+    el.style.color = "#111";
 
-  // 🔥 ELIMINAR FONDOS OSCUROS
-  el.style.background = "transparent";
-  el.style.backgroundColor = "transparent";
-});
+    // ❌ eliminar fondos negros
+    if(el.style.background === "rgb(17, 17, 17)" || el.style.background === "#111"){
+      el.style.background = "#f5f5f5";
+      el.style.padding = "10px";
+      el.style.borderRadius = "8px";
+    }
+  });
 
-// 🔥 CORREGIR CARDS OSCURAS
-copia.querySelectorAll(".card-meal").forEach(card=>{
-  card.style.background = "#f5f5f5"; // gris elegante
-  card.style.color = "#000";
-  card.style.padding = "10px";
-  card.style.borderRadius = "8px";
-  card.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
-});  
+  // 🔥 AGREGAR TITULO A LA PRIMERA CARD (RESUMEN)
+  let resumen = copia.querySelector("div[style*='background']");
+  if(resumen){
+    resumen.innerHTML = `
+      <h3 style="margin-bottom:10px; color:#000;">
+        Resumen nutricional diario
+      </h3>
+      ${resumen.innerHTML}
+    `;
+  }
 
-  // 🔥 HEADER PRO (CLÍNICA)
+  // 🔥 HEADER PRO
   let header = document.createElement("div");
   header.innerHTML = `
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:25px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
       
-      <!-- LOGO -->
-      <div>
-        <img src="https://i.imgur.com/4NZ6uLY.png" style="height:50px;">
-      </div>
+      <img src="https://i.imgur.com/4NZ6uLY.png" style="height:45px;">
 
-      <!-- INFO -->
       <div style="text-align:right;">
-        <h1 style="margin:0; font-size:20px; letter-spacing:1px;">
-          CHARLY FITNESS
-        </h1>
-        <p style="margin:2px 0; font-size:11px;">
-          Nutrición & Transformación Física
-        </p>
+        <h2 style="margin:0;">Charly Fitness</h2>
+        <p style="margin:0; font-size:11px;">Nutrición & Transformación Física</p>
       </div>
 
     </div>
 
-    <hr style="border:none; border-top:2px solid #d4af37; margin-bottom:20px;">
+    <hr style="border:none; border-top:2px solid #d4af37; margin-bottom:15px;">
   `;
 
   copia.prepend(header);
@@ -410,8 +402,8 @@ copia.querySelectorAll(".card-meal").forEach(card=>{
   // 🔥 FOOTER
   let footer = document.createElement("div");
   footer.innerHTML = `
-    <div style="margin-top:30px; font-size:10px; text-align:center; color:#777;">
-      © Charly Fitness - Plan personalizado | WhatsApp: 7341771575
+    <div style="margin-top:20px; font-size:10px; text-align:center; color:#777;">
+      Plan personalizado | WhatsApp: 7341771575
     </div>
   `;
   copia.appendChild(footer);
@@ -423,9 +415,9 @@ copia.querySelectorAll(".card-meal").forEach(card=>{
   contenedor.appendChild(copia);
   document.body.appendChild(contenedor);
 
-  // 🔥 CANVAS (ALTA CALIDAD)
+  // 🔥 REDUCIR ESCALA PARA QUE TODO QUEPA EN 1 HOJA
   const canvas = await html2canvas(copia, {
-    scale: 2,
+    scale: 1.5,
     useCORS: true
   });
 
@@ -434,44 +426,28 @@ copia.querySelectorAll(".card-meal").forEach(card=>{
   const pdf = new jsPDF("p","mm","a4");
 
   const imgWidth = 210;
-  const pageHeight = 297;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-  let heightLeft = imgHeight;
-  let position = 0;
-
-  // 🔥 FONDO PREMIUM (BLANCO + BARRA DORADA)
+  // 🔥 FONDO PREMIUM
   pdf.setFillColor(255,255,255);
   pdf.rect(0,0,210,297,"F");
 
-  pdf.setFillColor(212,175,55); // dorado
-  pdf.rect(0,0,210,10,"F");
+  pdf.setFillColor(212,175,55);
+  pdf.rect(0,0,210,8,"F");
 
-  pdf.addImage(imgData,"JPEG",0,position,imgWidth,imgHeight);
-  heightLeft -= pageHeight;
+  // 🔥 AJUSTE AUTOMÁTICO A UNA HOJA
+  let finalHeight = imgHeight;
 
-  while(heightLeft > 0){
-    position = heightLeft - imgHeight;
-    pdf.addPage();
-
-    // fondo en cada hoja
-    pdf.setFillColor(255,255,255);
-    pdf.rect(0,0,210,297,"F");
-
-    pdf.setFillColor(212,175,55);
-    pdf.rect(0,0,210,10,"F");
-
-    pdf.addImage(imgData,"JPEG",0,position,imgWidth,imgHeight);
-    heightLeft -= pageHeight;
+  if(imgHeight > 280){
+    finalHeight = 280;
   }
+
+  pdf.addImage(imgData,"JPEG",0,10,imgWidth,finalHeight);
 
   pdf.save(`dieta-${nombre}.pdf`);
 
   document.body.removeChild(contenedor);
 }
-
-
-
   
 
 function enviarWhats(){
