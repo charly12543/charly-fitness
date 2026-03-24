@@ -68,7 +68,6 @@
 <span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
 </div>
 
-<!-- SCRIPTS -->
 <script>
 /* ===================== GENERAR TODO ===================== */
 function generarTodo(){
@@ -91,7 +90,6 @@ function generarTodo(){
   let dieta = generarDietaPRO(datos);
   let rutina = generarRutinaHTML(datos);
 
-  // Combinar resultados en un solo contenedor
   document.getElementById("resultadoPRO").innerHTML = `
     <div id="dietaPDF">${dieta}</div>
     <div id="rutinaPDF">${rutina}</div>
@@ -105,12 +103,10 @@ function generarDietaPRO(datos){
   if(altura > 3) altura = altura / 100;
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
   let calorias = Math.round(bmr * 1.55);
-
   if(objetivo==="definicion") calorias -=400;
   if(objetivo==="volumen") calorias +=300;
 
   let proteina, grasa, carbos;
-
   switch(tipo){
     case "keto":
       proteina = Math.round(peso*2);
@@ -136,10 +132,7 @@ function generarDietaPRO(datos){
   let protePorComida = Math.round(proteina/4);
   let carbosPorComida = Math.round(carbos/4);
   let grasaPorComida = Math.round(grasa/4);
-
   const nombresComida = ["Desayuno","Comida","Pre-entreno","Cena"];
-
-  // Para simplificar, misma lista para todos
   let comidas = nombresComida.map(n=>{
     return {nombre:n, proteina:`${protePorComida}g`, carbos:`${carbosPorComida}g`, grasa:`${grasaPorComida}g`};
   });
@@ -168,12 +161,11 @@ function generarDietaPRO(datos){
       </ul>
     </div>`;
   });
-
   html += `</div>`;
   return html;
 }
 
-/* ===================== RUTINA PRO ===================== */
+/* ===================== RUTINA PRO AVANZADA ===================== */
 function generarRutinaHTML(datos){
   let {nombre, sexo, dias} = datos;
 
@@ -198,15 +190,16 @@ function generarRutinaHTML(datos){
   let pool = sexo==="hombre"?ejerciciosHombre:ejerciciosMujer;
   let grupos = Object.keys(pool);
 
+  // Balancear grupos según días de entrenamiento
   let rutina = [];
   for(let i=0;i<dias;i++){
     let diaNombre = `Día ${i+1}`;
-    let ejeDia = [];
+    let bloques = [];
     for(let j=0;j<3;j++){
       let idx = (i+j)%grupos.length;
-      ejeDia.push({grupo: grupos[idx], ejercicios: pool[grupos[idx]]});
+      bloques.push({grupo: grupos[idx], ejercicios: pool[grupos[idx]]});
     }
-    rutina.push({dia:diaNombre,bloques:ejeDia});
+    rutina.push({dia:diaNombre,bloques});
   }
 
   let html = `<div class="dieta-card">
@@ -233,12 +226,10 @@ function generarRutinaHTML(datos){
 async function descargarPDF(tipo){
   const { jsPDF } = window.jspdf;
   let elemento = tipo==="dieta"?document.getElementById("dietaPDF"):document.getElementById("rutinaPDF");
-
   if(!elemento || !elemento.innerText.trim()){
     alert("Primero genera la " + tipo + " bro 🔥");
     return;
   }
-
   const nombre = document.getElementById("nombreCliente").value || "Cliente";
   let canvas = await html2canvas(elemento,{scale:2,useCORS:true,backgroundColor:"#ffffff"});
   let imgData = canvas.toDataURL("image/jpeg",1.0);
