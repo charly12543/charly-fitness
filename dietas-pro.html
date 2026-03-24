@@ -170,71 +170,36 @@ function mostrarDieta(dieta){
 }
   
 
-function descargarPDF(){
-  const elemento = document.getElementById("resultadoPRO");
-  const nombre = document.getElementById("nombreCliente").value || "cliente";
+async function descargarPDF(){
+  const { jsPDF } = window.jspdf;
 
-  if(!elemento.innerHTML.trim()){
+  const nombre = document.getElementById("nombreCliente").value || "cliente";
+  const contenido = document.getElementById("resultadoPRO").innerText;
+
+  if(!contenido.trim()){
     alert("Primero genera la dieta bro 🔥");
     return;
   }
 
-  // 🔥 CLON REAL
-  let copia = elemento.cloneNode(true);
+  const doc = new jsPDF();
 
-  // 🔥 CONTENEDOR VISIBLE (CLAVE)
-  let wrapper = document.createElement("div");
-  wrapper.style.position = "fixed";
-  wrapper.style.top = "0";
-  wrapper.style.left = "0";
-  wrapper.style.width = "100%";
-  wrapper.style.background = "#ffffff";
-  wrapper.style.zIndex = "9999";
-  wrapper.style.padding = "20px";
+  // 🔥 CONFIGURACIÓN TEXTO
+  let y = 10;
+  const lineHeight = 7;
+  const maxWidth = 180;
 
-  // 🔥 FORZAR ESTILO PDF
-  copia.style.background = "#ffffff";
-  copia.style.color = "#000000";
-  copia.style.fontFamily = "Arial, sans-serif";
-  copia.style.width = "210mm";
+  const lines = doc.splitTextToSize(contenido, maxWidth);
 
-  // 🔥 FORZAR TEXTO NEGRO (CRÍTICO)
-  copia.querySelectorAll("*").forEach(el => {
-    el.style.setProperty("color", "#000", "important");
-    el.style.setProperty("background", "#fff", "important");
+  lines.forEach(line => {
+    if (y > 280) {
+      doc.addPage();
+      y = 10;
+    }
+    doc.text(line, 10, y);
+    y += lineHeight;
   });
 
-  // evitar cortes
-  copia.querySelectorAll('.card-meal').forEach(el=>{
-    el.style.pageBreakInside = "avoid";
-  });
-
-  wrapper.appendChild(copia);
-  document.body.appendChild(wrapper);
-
-  // 🔥 ESPERAR RENDER (CLAVE)
-  setTimeout(() => {
-    html2pdf().set({
-      margin: 10,
-      filename: `dieta-${nombre}.pdf`,
-      image: { type: 'jpeg', quality: 1 },
-      html2canvas: { 
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff"
-      },
-      jsPDF: { 
-        unit: 'mm', 
-        format: 'a4', 
-        orientation: 'portrait' 
-      }
-    })
-    .from(copia)
-    .save()
-    .then(() => {
-      document.body.removeChild(wrapper);
-    });
-  }, 500); // 🔥 IMPORTANTE
+  doc.save(`dieta-${nombre}.pdf`);
 }
 
   
@@ -245,5 +210,6 @@ function descargarPDF(){
 
   
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>  
 </body>
 </html>
