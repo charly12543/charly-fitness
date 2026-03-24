@@ -63,6 +63,8 @@ function redondear5(x){
   return Math.round(x/5)*5;
 }
 
+
+
 function generarDietaPRO(datos){
   let {peso, altura, edad, objetivo} = datos;
   if(altura > 3) altura = altura / 100;
@@ -75,51 +77,103 @@ function generarDietaPRO(datos){
 
   let proteina = Math.round(peso * 2);
   let grasa = Math.round((calorias * 0.25) / 9);
-  let carbos = Math.round(calorias - (proteina*4 + grasa*9));
+  let carbos = Math.round((calorias - (proteina*4 + grasa*9)) / 4);
 
-  let comidas = [];
   let protePorComida = Math.round(proteina / 4);
   let carbosPorComida = Math.round(carbos / 4);
   let grasaPorComida = Math.round(grasa / 4);
 
+  // 🔥 NOMBRES PRO
+  const nombresComida = ["Desayuno", "Comida", "Pre-entreno", "Cena"];
+
+  // 🔥 BASE DE ALIMENTOS
   const proteinas = [
     {nombre:"pollo", prote:31},
     {nombre:"carne", prote:26},
     {nombre:"atún", prote:25},
-    {nombre:"huevo", prote:6}
+    {nombre:"huevo", prote:6},
+    {nombre:"claras", prote:3.5}
   ];
 
   const carbosLista = [
     {nombre:"arroz", carbos:28},
+    {nombre:"avena", carbos:60},
     {nombre:"papa", carbos:20},
-    {nombre:"avena", carbos:60}
+    {nombre:"tortillas", carbos:15},
+    {nombre:"pan", carbos:12}
   ];
 
   const grasasLista = [
     {nombre:"aguacate", grasa:15},
-    {nombre:"aceite de oliva", grasa:10}
+    {nombre:"aceite de oliva", grasa:10},
+    {nombre:"nueces", grasa:14}
   ];
 
-  function random(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+  function random(arr){
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function proteMix(gramos){
+    // 🔥 mezcla PRO
+    let claras = Math.round(gramos * 0.6 / 3.5);
+    let huevos = Math.round(gramos * 0.4 / 6);
+    return `${claras} claras + ${huevos} huevo(s)`;
+  }
+
+  function calcularProte(p, gramos){
+    if(p.nombre === "huevo" || p.nombre === "claras"){
+      return proteMix(gramos);
+    } else {
+      let g = Math.round((gramos / p.prote) * 100);
+      return `${g}g ${p.nombre}`;
+    }
+  }
+
+  function calcularCarbos(c, gramos){
+    if(c.nombre === "tortillas"){
+      let piezas = Math.round(gramos / c.carbos);
+      return `${piezas} tortillas`;
+    }
+    if(c.nombre === "pan"){
+      let piezas = Math.round(gramos / c.carbos);
+      return `${piezas} rebanadas de pan`;
+    }
+    if(c.nombre === "arroz"){
+      return `1 taza de arroz`;
+    }
+    if(c.nombre === "avena"){
+      return `1 taza de avena`;
+    }
+    let g = Math.round((gramos / c.carbos) * 100);
+    return `${g}g ${c.nombre}`;
+  }
+
+  function calcularGrasa(g, gramos){
+    if(g.nombre === "aceite de oliva"){
+      let cucharadas = Math.round(gramos / g.grasa);
+      return `${cucharadas} cucharada de aceite de oliva`;
+    }
+    let gReal = Math.round((gramos / g.grasa) * 100);
+    return `${gReal}g ${g.nombre}`;
+  }
+
+  let comidas = [];
 
   for(let i=0;i<4;i++){
     let p = random(proteinas);
     let c = random(carbosLista);
     let g = random(grasasLista);
 
-    let gramosProte = (protePorComida / p.prote) * 100;
-    let gramosCarbos = redondear5((carbosPorComida / c.carbos) * 100);
-    let gramosGrasa = redondear5((grasaPorComida / g.grasa) * 100);
-
     comidas.push({
-      proteina: `${gramosProte.toFixed(0)}g ${p.nombre}`,
-      carbos: `${gramosCarbos}g ${c.nombre}`,
-      grasa: `${gramosGrasa}g ${g.nombre}`
+      nombre: nombresComida[i],
+      proteina: calcularProte(p, protePorComida),
+      carbos: calcularCarbos(c, carbosPorComida),
+      grasa: calcularGrasa(g, grasaPorComida)
     });
   }
 
   return { calorias, proteina, carbos, grasa, comidas };
-}
+}  
 
   
 
@@ -152,17 +206,17 @@ function mostrarDieta(dieta){
   `;
 
   dieta.comidas.forEach((c,i)=>{
-    html += `
-      <div class="card-meal no-break">
-        <h4>🍽️ Comida ${i+1}</h4>
-        <ul>
-          <li>${c.proteina}</li>
-          <li>${c.carbos}</li>
-          <li>${c.grasa}</li>
-        </ul>
-      </div>
-    `;
-  });
+  html += `
+    <div class="card-meal no-break">
+      <h4>🍽️ ${c.nombre}</h4>
+      <ul>
+        <li>🥩 ${c.proteina}</li>
+        <li>🍚 ${c.carbos}</li>
+        <li>🥑 ${c.grasa}</li>
+      </ul>
+    </div>
+  `;
+});
 
   html += `</div>`;
 
