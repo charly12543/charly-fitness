@@ -219,7 +219,7 @@ function descargarPDF(){
   // 🔥 Clonar contenido
   let copia = elemento.cloneNode(true);
 
-  // 🔥 Estilos tipo documento A4
+  // 🔥 Forzar estilos tipo documento
   copia.style.background = "#ffffff";
   copia.style.color = "#000000";
   copia.style.fontFamily = "Arial, sans-serif";
@@ -227,12 +227,17 @@ function descargarPDF(){
   copia.style.width = "210mm";
   copia.style.maxWidth = "210mm";
 
+  // 🔥 FIX CRÍTICO: forzar texto negro en TODO
+  copia.querySelectorAll("*").forEach(el => {
+    el.style.color = "#000";
+  });
+
   // 🔥 Evitar cortes en comidas
   copia.querySelectorAll('.card-meal').forEach(el=>{
     el.style.pageBreakInside = "avoid";
   });
 
-  // 🔥 Contenedor aislado (CLAVE)
+  // 🔥 Contenedor aislado (evita conflictos con tu CSS global)
   let contenedorPDF = document.createElement("div");
   contenedorPDF.style.position = "fixed";
   contenedorPDF.style.left = "-9999px";
@@ -240,6 +245,7 @@ function descargarPDF(){
 
   document.body.appendChild(contenedorPDF);
 
+  // 🔥 Generar PDF
   html2pdf().set({
     margin: 10,
     filename: `dieta-${nombre}.pdf`,
