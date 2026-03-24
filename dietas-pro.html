@@ -22,6 +22,12 @@
 <input type="number" step="0.01" id="altura" placeholder="Altura (1.80 o 180)">
 <input type="number" id="edad" placeholder="Edad">
 <select id="objetivo">
+  <select id="tipoDieta">
+  <option value="normal">Dieta normal</option>
+  <option value="keto">Keto</option>
+  <option value="godin">Godín</option>
+  <option value="runner">Runner</option>
+</select>
   <option value="definicion">Definición</option>
   <option value="volumen">Volumen</option>
 </select>
@@ -44,12 +50,13 @@
 <!-- USARPRO -->  
 <script>
 function usarPro(){
-  let datos = {
-    peso: parseFloat(document.getElementById("peso").value),
-    altura: parseFloat(document.getElementById("altura").value),
-    edad: parseFloat(document.getElementById("edad").value),
-    objetivo: document.getElementById("objetivo").value
-  };
+ let datos = {
+  peso: parseFloat(document.getElementById("peso").value),
+  altura: parseFloat(document.getElementById("altura").value),
+  edad: parseFloat(document.getElementById("edad").value),
+  objetivo: document.getElementById("objetivo").value,
+  tipo: document.getElementById("tipoDieta").value
+};
 
   if(!datos.peso || !datos.altura || !datos.edad){
     alert("Completa todos los datos bro 🔥");
@@ -67,7 +74,8 @@ function redondear5(x){
 
 
 function generarDietaPRO(datos){
-  let {peso, altura, edad, objetivo} = datos;
+  let {peso, altura, edad, objetivo, tipo} = datos;
+
   if(altura > 3) altura = altura / 100;
 
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
@@ -76,9 +84,29 @@ function generarDietaPRO(datos){
   if(objetivo === "definicion") calorias -= 400;
   if(objetivo === "volumen") calorias += 300;
 
-  let proteina = Math.round(peso * 2);
-  let grasa = Math.round((calorias * 0.25) / 9);
-  let carbos = Math.round((calorias - (proteina*4 + grasa*9)) / 4);
+  // 🔥 MACROS SEGÚN TIPO
+  let proteina, grasa, carbos;
+
+  if(tipo === "keto"){
+    proteina = Math.round(peso * 2);
+    grasa = Math.round((calorias * 0.65) / 9);
+    carbos = Math.round((calorias * 0.10) / 4);
+  }
+  else if(tipo === "runner"){
+    proteina = Math.round(peso * 1.8);
+    grasa = Math.round((calorias * 0.20) / 9);
+    carbos = Math.round((calorias * 0.60) / 4);
+  }
+  else if(tipo === "godin"){
+    proteina = Math.round(peso * 2);
+    grasa = Math.round((calorias * 0.25) / 9);
+    carbos = Math.round((calorias * 0.40) / 4);
+  }
+  else{
+    proteina = Math.round(peso * 2);
+    grasa = Math.round((calorias * 0.25) / 9);
+    carbos = Math.round((calorias - (proteina*4 + grasa*9)) / 4);
+  }
 
   let protePorComida = Math.round(proteina / 4);
   let carbosPorComida = Math.round(carbos / 4);
@@ -87,35 +115,95 @@ function generarDietaPRO(datos){
   // 🔥 NOMBRES PRO
   const nombresComida = ["Desayuno", "Comida", "Pre-entreno", "Cena"];
 
-  // 🔥 BASE DE ALIMENTOS
-  const proteinas = [
-    {nombre:"pollo", prote:31},
-    {nombre:"carne", prote:26},
-    {nombre:"atún", prote:25},
-    {nombre:"huevo", prote:6},
-    {nombre:"claras", prote:3.5}
-  ];
+  // 🔥 BASE SEGÚN TIPO
+  let proteinas, carbosLista, grasasLista;
 
-  const carbosLista = [
-    {nombre:"arroz", carbos:28},
-    {nombre:"avena", carbos:60},
-    {nombre:"papa", carbos:20},
-    {nombre:"tortillas", carbos:15},
-    {nombre:"pan", carbos:12}
-  ];
+  if(tipo === "keto"){
+    proteinas = [
+      {nombre:"carne", prote:26},
+      {nombre:"pollo", prote:31},
+      {nombre:"huevo", prote:6}
+    ];
 
-  const grasasLista = [
-    {nombre:"aguacate", grasa:15},
-    {nombre:"aceite de oliva", grasa:10},
-    {nombre:"nueces", grasa:14}
-  ];
+    carbosLista = [
+      {nombre:"verduras", carbos:5},
+      {nombre:"espinaca", carbos:4}
+    ];
+
+    grasasLista = [
+      {nombre:"aguacate", grasa:15},
+      {nombre:"aceite de oliva", grasa:10},
+      {nombre:"nueces", grasa:14}
+    ];
+  }
+
+  else if(tipo === "godin"){
+    proteinas = [
+      {nombre:"pollo", prote:31},
+      {nombre:"atún", prote:25},
+      {nombre:"jamón", prote:18}
+    ];
+
+    carbosLista = [
+      {nombre:"tortillas", carbos:15},
+      {nombre:"pan", carbos:12},
+      {nombre:"arroz", carbos:28}
+    ];
+
+    grasasLista = [
+      {nombre:"aguacate", grasa:15},
+      {nombre:"nueces", grasa:14}
+    ];
+  }
+
+  else if(tipo === "runner"){
+    proteinas = [
+      {nombre:"pollo", prote:31},
+      {nombre:"huevo", prote:6}
+    ];
+
+    carbosLista = [
+      {nombre:"arroz", carbos:28},
+      {nombre:"avena", carbos:60},
+      {nombre:"pasta", carbos:30},
+      {nombre:"plátano", carbos:23}
+    ];
+
+    grasasLista = [
+      {nombre:"aceite de oliva", grasa:10},
+      {nombre:"aguacate", grasa:15}
+    ];
+  }
+
+  else{
+    proteinas = [
+      {nombre:"pollo", prote:31},
+      {nombre:"carne", prote:26},
+      {nombre:"atún", prote:25},
+      {nombre:"huevo", prote:6},
+      {nombre:"claras", prote:3.5}
+    ];
+
+    carbosLista = [
+      {nombre:"arroz", carbos:28},
+      {nombre:"avena", carbos:60},
+      {nombre:"papa", carbos:20},
+      {nombre:"tortillas", carbos:15},
+      {nombre:"pan", carbos:12}
+    ];
+
+    grasasLista = [
+      {nombre:"aguacate", grasa:15},
+      {nombre:"aceite de oliva", grasa:10},
+      {nombre:"nueces", grasa:14}
+    ];
+  }
 
   function random(arr){
     return arr[Math.floor(Math.random() * arr.length)];
   }
 
   function proteMix(gramos){
-    // 🔥 mezcla PRO
     let claras = Math.round(gramos * 0.6 / 3.5);
     let huevos = Math.round(gramos * 0.4 / 6);
     return `${claras} claras + ${huevos} huevo(s)`;
@@ -144,6 +232,9 @@ function generarDietaPRO(datos){
     }
     if(c.nombre === "avena"){
       return `1 taza de avena`;
+    }
+    if(c.nombre === "plátano"){
+      return `1 plátano`;
     }
     let g = Math.round((gramos / c.carbos) * 100);
     return `${g}g ${c.nombre}`;
@@ -174,7 +265,7 @@ function generarDietaPRO(datos){
   }
 
   return { calorias, proteina, carbos, grasa, comidas };
-}  
+}
 
   
 
