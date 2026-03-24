@@ -68,6 +68,94 @@
 <span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
 </div>
 
+/* ===================== GENERAR DIETA PRO ===================== */
+function generarDietaPRO(datos){
+  let {peso, altura, edad, objetivo, tipo} = datos;
+  if(altura > 3) altura = altura / 100;
+  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
+  let calorias = Math.round(bmr * 1.55);
+  if(objetivo === "definicion") calorias -= 400;
+  if(objetivo === "volumen") calorias += 300;
+
+  let proteina, grasa, carbos;
+  if(tipo === "keto"){
+    proteina = Math.round(peso * 2);
+    grasa = Math.round((calorias * 0.65)/9);
+    carbos = Math.round((calorias * 0.10)/4);
+  } else if(tipo === "runner"){
+    proteina = Math.round(peso * 1.8);
+    grasa = Math.round((calorias * 0.20)/9);
+    carbos = Math.round((calorias * 0.60)/4);
+  } else if(tipo === "godin"){
+    proteina = Math.round(peso * 2);
+    grasa = Math.round((calorias * 0.25)/9);
+    carbos = Math.round((calorias * 0.40)/4);
+  } else{
+    proteina = Math.round(peso * 2);
+    grasa = Math.round((calorias*0.25)/9);
+    carbos = Math.round((calorias-(proteina*4+grasa*9))/4);
+  }
+
+  let protePorComida = Math.round(proteina/4);
+  let carbosPorComida = Math.round(carbos/4);
+  let grasaPorComida = Math.round(grasa/4);
+
+  const nombresComida = ["Desayuno","Comida","Pre-entreno","Cena"];
+
+  let comidas = [];
+  for(let i=0;i<4;i++){
+    comidas.push({
+      nombre: nombresComida[i],
+      proteina: `${protePorComida}g`,
+      carbos: `${carbosPorComida}g`,
+      grasa: `${grasaPorComida}g`
+    });
+  }
+
+  return {calorias, proteina, carbos, grasa, comidas};
+}
+
+function mostrarDieta(dieta){
+  let nombre = document.getElementById("nombreCliente").value || "Cliente";
+  let fecha = new Date().toLocaleDateString();
+  let html = `<div class="dieta-card">
+    <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
+      <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
+      <p>Plan Nutricional Personalizado</p>
+    </div>
+    <div style="text-align:center; margin-bottom:20px;">
+      <h2>${nombre}</h2>
+      <p>📅 ${fecha}</p>
+    </div>
+    <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px;">
+      <p>
+        🔥 ${dieta.calorias} kcal<br>
+        🥩 ${dieta.proteina}g proteína<br>
+        🍚 ${dieta.carbos}g carbohidratos<br>
+        🥑 ${dieta.grasa}g grasas
+      </p>
+    </div>`;
+
+  dieta.comidas.forEach(c=>{
+    html += `<div class="card-meal no-break">
+      <h4>🍽️ ${c.nombre}</h4>
+      <ul>
+        <li>🥩 ${c.proteina}</li>
+        <li>🍚 ${c.carbos}</li>
+        <li>🥑 ${c.grasa}</li>
+      </ul>
+    </div>`;
+  });
+
+  html += `</div>`;
+  document.getElementById("resultadoPRO").innerHTML = html;
+}
+
+
+
+
+  
+
 <!-- SCRIPTS -->
 
 <script>
