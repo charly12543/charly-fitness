@@ -179,18 +179,29 @@ function descargarPDF(){
     return;
   }
 
+  // 🔥 CLON REAL
   let copia = elemento.cloneNode(true);
 
-  // 🔥 MODO PDF LIMPIO
+  // 🔥 CONTENEDOR VISIBLE (CLAVE)
+  let wrapper = document.createElement("div");
+  wrapper.style.position = "fixed";
+  wrapper.style.top = "0";
+  wrapper.style.left = "0";
+  wrapper.style.width = "100%";
+  wrapper.style.background = "#ffffff";
+  wrapper.style.zIndex = "9999";
+  wrapper.style.padding = "20px";
+
+  // 🔥 FORZAR ESTILO PDF
   copia.style.background = "#ffffff";
   copia.style.color = "#000000";
-  copia.style.padding = "20px";
-  copia.style.width = "800px";
+  copia.style.fontFamily = "Arial, sans-serif";
+  copia.style.width = "210mm";
 
-  // 🔥 FORZAR colores visibles
-  copia.querySelectorAll("*").forEach(el=>{
-    el.style.setProperty("color","#000","important");
-    el.style.setProperty("background","#fff","important");
+  // 🔥 FORZAR TEXTO NEGRO (CRÍTICO)
+  copia.querySelectorAll("*").forEach(el => {
+    el.style.setProperty("color", "#000", "important");
+    el.style.setProperty("background", "#fff", "important");
   });
 
   // evitar cortes
@@ -198,20 +209,32 @@ function descargarPDF(){
     el.style.pageBreakInside = "avoid";
   });
 
-  // 🔥 IMPORTANTE: hacerlo visible (NO hidden)
-  document.body.appendChild(copia);
+  wrapper.appendChild(copia);
+  document.body.appendChild(wrapper);
 
-  html2pdf().set({
-    margin: 10,
-    filename: `dieta-${nombre}.pdf`,
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  })
-  .from(copia)
-  .save()
-  .then(()=>{
-    document.body.removeChild(copia);
-  });
+  // 🔥 ESPERAR RENDER (CLAVE)
+  setTimeout(() => {
+    html2pdf().set({
+      margin: 10,
+      filename: `dieta-${nombre}.pdf`,
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { 
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff"
+      },
+      jsPDF: { 
+        unit: 'mm', 
+        format: 'a4', 
+        orientation: 'portrait' 
+      }
+    })
+    .from(copia)
+    .save()
+    .then(() => {
+      document.body.removeChild(wrapper);
+    });
+  }, 500); // 🔥 IMPORTANTE
 }
 
   
