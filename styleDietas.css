@@ -1,21 +1,14 @@
 /* RESET */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-html, body{
-  overflow-x:hidden;
-}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html, body{ overflow-x:hidden; }
 
 /* VARIABLES */
 :root{
-  --bg-dark: #0b0b0b;
-  --card-bg: #1c1c1c;
-  --text-light: #ffffff;
-  --gold: #d4af37;
-  --gold-bright: #f5d76e;
+  --bg-dark:#0b0b0b;
+  --card-bg:#1c1c1c;
+  --text-light:#fff;
+  --gold:#d4af37;
+  --gold-bright:#f5d76e;
 }
 
 /* BODY */
@@ -36,60 +29,58 @@ body{
   padding:10px 20px;
   z-index:1000;
 }
-
-/* 🔥 CONTENEDOR NAV */
 .nav-container{
   display:flex;
   align-items:center;
   justify-content:space-between;
 }
-
-/* 🔥 LOGO */
-.logo{
+.nav-links{
+  list-style:none;
   display:flex;
-  align-items:center;
+  gap:15px;
+}
+.nav-links li a{
+  color:white;
+  text-decoration:none;
+  font-weight:500;
+}
+.nav-links.active{
+  display:block;
 }
 
+/* LOGO */
 .logo img{
   height:45px;
   width:auto;
-  object-fit:contain;
-  transition:0.3s;
+  display:block;
   filter:drop-shadow(0 0 6px rgba(212,175,55,0.6));
+  transition:0.3s;
+}
+.logo img:hover{
+  transform:scale(1.05);
 }
 
-.logo img:hover{
-  transform:scale(1.08);
-  filter:brightness(1.2);
+/* MENU HAMBURGUESA */
+.menu-toggle{
+  display:none;
+  font-size:1.5rem;
+  cursor:pointer;
+  color:white;
 }
 
 /* HERO */
 .hero{
   padding:100px 20px 60px;
   text-align:center;
-  background:
-    linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
-    url("imagenes/fondo-fitness.jpg");
+  background:linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)), url("imagenes/fondo-fitness.jpg");
   background-size:cover;
   background-position:center;
 }
-
-.hero h1{
-  font-size:2.2rem;
-  color:var(--gold);
-}
-
-.hero p{
-  opacity:0.8;
-  margin-top:10px;
-}
+.hero h1{ font-size:2.2rem; color:var(--gold); }
+.hero p{ opacity:0.8; margin-top:10px; }
 
 /* SECCIONES */
-section{
-  padding:60px 20px;
-  max-width:800px;
-  margin:auto;
-}
+section{ padding:60px 20px; max-width:800px; margin:auto; }
 
 /* CALCULADORA */
 .calculadora{
@@ -101,24 +92,10 @@ section{
   flex-direction:column;
   gap:10px;
 }
-
-.calculadora input,
-.calculadora select,
-.calculadora button{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:none;
-  font-size:16px;
+.calculadora input, .calculadora select, .calculadora button{
+  width:100%; padding:14px; border-radius:10px; border:none; font-size:16px;
 }
-
-.calculadora input,
-.calculadora select{
-  background:#111;
-  color:white;
-}
-
-/* BOTÓN */
+.calculadora input, .calculadora select{ background:#111; color:white; }
 .calculadora button{
   background:var(--gold);
   color:black;
@@ -126,13 +103,9 @@ section{
   cursor:pointer;
   transition:0.3s;
 }
+.calculadora button:hover{ background:var(--gold-bright); transform:scale(1.03); }
 
-.calculadora button:hover{
-  background:var(--gold-bright);
-  transform:scale(1.03);
-}
-
-/* CARD WEB */
+/* CARD DIETA */
 .dieta-card{
   margin-top:20px;
   background:linear-gradient(135deg,#1c1c1c,#0b0b0b);
@@ -140,30 +113,12 @@ section{
   padding:20px;
   box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
+.card-meal{ background:#111; padding:15px; border-radius:12px; margin-bottom:15px; }
+.card-meal h4{ color:var(--gold); margin-bottom:8px; }
+.card-meal ul{ list-style:none; padding-left:0; }
+.card-meal li{ margin-bottom:5px; }
 
-/* COMIDAS */
-.card-meal{
-  background:#111;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:15px;
-}
-
-.card-meal h4{
-  color:var(--gold);
-  margin-bottom:8px;
-}
-
-.card-meal ul{
-  list-style:none;
-  padding-left:0;
-}
-
-.card-meal li{
-  margin-bottom:5px;
-}
-
-/* CONTENEDOR WHATS PRO */
+/* WHATS PRO */
 .whats-box{
   margin-top:30px;
   padding:25px;
@@ -173,20 +128,9 @@ section{
   border:1px solid rgba(212,175,55,0.4);
   box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
+.whats-box h3{ color:var(--gold); margin-bottom:10px; }
+.whats-box p{ font-size:14px; opacity:0.8; margin-bottom:15px; }
 
-/* TEXTO */
-.whats-box h3{
-  color:var(--gold);
-  margin-bottom:10px;
-}
-
-.whats-box p{
-  font-size:14px;
-  opacity:0.8;
-  margin-bottom:15px;
-}
-
-/* BOTÓN PRO */
 .btn-whats-pro{
   width:100%;
   padding:18px;
@@ -200,84 +144,19 @@ section{
   transition:0.3s;
   box-shadow:0 10px 25px rgba(37,211,102,0.5);
 }
-
 .btn-whats-pro:hover{
   transform:scale(1.08);
   box-shadow:0 15px 40px rgba(37,211,102,0.8);
 }
 
 /* URGENCIA */
-.urgencia-whats{
-  display:block;
-  margin-top:10px;
-  font-size:12px;
-  color:#ff6b6b;
-  font-weight:bold;
-}
+.urgencia-whats{ display:block; margin-top:10px; font-size:12px; color:#ff6b6b; font-weight:bold; }
 
 /* MOBILE */
 @media (max-width:768px){
-  section{
-    padding:40px 15px;
-  }
-
-  .hero h1{
-    font-size:1.8rem;
-  }
-
-  /* 🔥 LOGO MOBILE */
-  .logo img{
-    height:35px;
-  }
-}
-
-/* ========================= */
-/* 🔥 MODO PDF */
-/* ========================= */
-
-@media print {
-
-  body{
-    background:white !important;
-    color:black !important;
-    padding-top:0 !important;
-  }
-
-  .hero,
-  .calculadora button,
-  .navbar{
-    display:none !important;
-  }
-
-  .dieta-card{
-    background:white !important;
-    color:black !important;
-    box-shadow:none !important;
-    border:none !important;
-  }
-
-  .card-meal{
-    background:white !important;
-    border:1px solid #ccc !important;
-    page-break-inside: avoid;
-  }
-
-  h1, h2, h3, h4{
-    page-break-after: avoid;
-  }
-
-  *{
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-}
-
-/* evitar cortes */
-.no-break{
-  page-break-inside: avoid;
-}
-
-/* salto de página opcional */
-.page-break{
-  page-break-before: always;
+  section{ padding:40px 15px; }
+  .hero h1{ font-size:1.8rem; }
+  .logo img{ height:35px; }
+  .menu-toggle{ display:block; }
+  .nav-links{ display:none; flex-direction:column; gap:10px; }
 }
