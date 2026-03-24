@@ -321,24 +321,17 @@ function mostrarDieta(dieta){
 }
   
 
-async function descargarPDF(){
-  const nombre = document.getElementById("nombreCliente").value || "cliente";
-  const elemento = document.getElementById("resultadoPRO");
+function descargarPDF(){
+  const { jsPDF } = window.jspdf;
 
-  if(!elemento.innerHTML.trim()){
+  const nombre = document.getElementById("nombreCliente").value || "cliente";
+  const dietaHTML = document.getElementById("resultadoPRO");
+
+  if(!dietaHTML.innerText.trim()){
     alert("Primero genera la dieta bro 🔥");
     return;
   }
-
-  // 🔥 Crear copia limpia
-  let copia = elemento.cloneNode(true);
-
-  copia.style.background = "#ffffff";
-  copia.style.color = "#000000";
-  copia.style.padding = "20px";
-  copia.style.width = "800px";
-
-  // 🔥 FORZAR colores (CLAVE)async function descargarPDF(){
+function descargarPDF(){
   const { jsPDF } = window.jspdf;
 
   const nombre = document.getElementById("nombreCliente").value || "cliente";
@@ -356,7 +349,7 @@ async function descargarPDF(){
   // 🔥 HEADER PRO
   doc.setFont("helvetica","bold");
   doc.setFontSize(18);
-  doc.text("CHarly Fitness", 105, y, {align:"center"});
+  doc.text("Charly Fitness", 105, y, {align:"center"});
 
   y += 8;
 
@@ -397,10 +390,6 @@ async function descargarPDF(){
 
   doc.save(`dieta-${nombre}.pdf`);
 }
-
-
-
-
 
 function enviarWhats(){
   let nombre = document.getElementById("nombreCliente").value || "Cliente";
