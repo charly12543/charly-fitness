@@ -45,7 +45,9 @@
 </div>
 </section>
 
-
+<button onclick="enviarWhats()" class="btn-whats">
+📲 Enviar dieta por WhatsApp
+</button>
 
 
 <!------ SECCION DE JS  SCRIPTS ------>
@@ -336,50 +338,113 @@ async function descargarPDF(){
   copia.style.padding = "20px";
   copia.style.width = "800px";
 
-  // 🔥 FORZAR colores (CLAVE)
-  copia.querySelectorAll("*").forEach(el=>{
-    el.style.color = "#000";
-    el.style.backgroundColor = "transparent";
-  });
-
-  // 🔥 Contenedor oculto
-  let contenedor = document.createElement("div");
-  contenedor.style.position = "fixed";
-  contenedor.style.left = "-9999px";
-  contenedor.appendChild(copia);
-  document.body.appendChild(contenedor);
-
-  // 🔥 Convertir a imagen
-  const canvas = await html2canvas(copia, {
-    scale: 3,
-    useCORS: true
-  });
-
-  const imgData = canvas.toDataURL("image/jpeg", 1.0);
-
+  // 🔥 FORZAR colores (CLAVE)async function descargarPDF(){
   const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF("p", "mm", "a4");
 
-  const imgWidth = 210;
-  const pageHeight = 297;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  const nombre = document.getElementById("nombreCliente").value || "cliente";
+  const dietaHTML = document.getElementById("resultadoPRO");
 
-  let heightLeft = imgHeight;
-  let position = 0;
-
-  pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-  heightLeft -= pageHeight;
-
-  while (heightLeft > 0) {
-    position = heightLeft - imgHeight;
-    pdf.addPage();
-    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+  if(!dietaHTML.innerText.trim()){
+    alert("Primero genera la dieta bro 🔥");
+    return;
   }
 
-  pdf.save(`dieta-${nombre}.pdf`);
+  const doc = new jsPDF();
 
-  document.body.removeChild(contenedor);
+  let y = 15;
+
+  // 🔥 HEADER PRO
+  doc.setFont("helvetica","bold");
+  doc.setFontSize(18);
+  doc.text("CHarly Fitness", 105, y, {align:"center"});
+
+  y += 8;
+
+  doc.setFontSize(11);
+  doc.setFont("helvetica","normal");
+  doc.text("Plan nutricional personalizado", 105, y, {align:"center"});
+
+  y += 10;
+
+  doc.line(20, y, 190, y);
+  y += 10;
+
+  // 🔥 CLIENTE
+  doc.setFontSize(12);
+  doc.text(`Cliente: ${nombre}`, 20, y);
+
+  y += 8;
+
+  const fecha = new Date().toLocaleDateString();
+  doc.text(`Fecha: ${fecha}`, 20, y);
+
+  y += 12;
+
+  // 🔥 CONTENIDO
+  doc.setFontSize(11);
+
+  const texto = dietaHTML.innerText;
+  const lineas = doc.splitTextToSize(texto, 170);
+
+  lineas.forEach(line=>{
+    if(y > 280){
+      doc.addPage();
+      y = 20;
+    }
+    doc.text(line, 20, y);
+    y += 6;
+  });
+
+  doc.save(`dieta-${nombre}.pdf`);
+}
+
+
+
+
+
+function enviarWhats(){
+  let nombre = document.getElementById("nombreCliente").value || "Cliente";
+  let dieta = document.getElementById("resultadoPRO").innerText;
+
+  if(!dieta.trim()){
+    alert("Genera la dieta primero bro 🔥");
+    return;
+  }
+
+  let mensaje = `🔥 DIETA PERSONALIZADA 🔥
+
+Cliente: ${nombre}
+
+${dieta}
+
+💪 Generado por Charly Fitness`;
+
+  let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
+
+  window.open(url, "_blank");
+}
+
+
+  function guardarCliente(){
+  let nombre = document.getElementById("nombreCliente").value;
+  let dieta = document.getElementById("resultadoPRO").innerText;
+
+  if(!nombre || !dieta.trim()){
+    alert("Falta info bro 🔥");
+    return;
+  }
+
+  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+
+  clientes.push({
+    nombre,
+    dieta,
+    fecha: new Date().toLocaleDateString()
+  });
+
+  localStorage.setItem("clientes", JSON.stringify(clientes));
+
+  alert("Cliente guardado 🔥");
 }
 
   
