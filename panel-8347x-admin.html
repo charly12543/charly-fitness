@@ -329,115 +329,6 @@ function mostrarDieta(dieta){
   document.getElementById("resultadoPRO").innerHTML = html;
 }
 
-
-async function descargarPDF(){
-  const { jsPDF } = window.jspdf;
-
-  const nombre = document.getElementById("nombreCliente").value || "Cliente";
-  const fecha = new Date().toLocaleDateString();
-
-  const dieta = document.getElementById("resultadoPRO").innerText;
-
-  if(!dieta.trim()){
-    alert("Primero genera la dieta bro 🔥");
-    return;
-  }
-
-  const pdf = new jsPDF("p","mm","a4");
-
-  // 🔥 FONDO MODERNO
-  pdf.setFillColor(245,245,245);
-  pdf.rect(0,0,210,297,"F");
-
-  // 🔥 HEADER DORADO
-  pdf.setFillColor(212,175,55);
-  pdf.rect(0,0,210,15,"F");
-
-  // 🔥 TITULO
-  pdf.setFont("helvetica","bold");
-  pdf.setFontSize(20);
-  pdf.setTextColor(0,0,0);
-  pdf.text("Charly Fitness", 105, 25, {align:"center"});
-
-  pdf.setFontSize(11);
-  pdf.setFont("helvetica","normal");
-  pdf.text("Plan Nutricional Personalizado", 105, 32, {align:"center"});
-
-  // 🔥 INFO CLIENTE
-  pdf.setFontSize(10);
-  pdf.text(`Nombre: ${nombre}`, 20, 45);
-  pdf.text(`Fecha: ${fecha}`, 150, 45);
-
-  // 🔥 CAJA RESUMEN
-  pdf.setFillColor(255,255,255);
-  pdf.roundedRect(20,50,170,25,5,5,"F");
-
-  pdf.setFontSize(11);
-  pdf.text("Consumo diario:", 25, 60);
-
-  // 🔥 TEXTO DIETA
-  let y = 80;
-
-  const lineas = pdf.splitTextToSize(dieta, 170);
-
-  lineas.forEach(line=>{
-    if(y > 250){
-      pdf.addPage();
-      y = 20;
-    }
-    pdf.text(line, 20, y);
-    y += 6;
-  });
-
-  // 🔥 RECOMENDACIONES
-  y += 10;
-
-  pdf.setFont("helvetica","bold");
-  pdf.text("Recomendaciones:", 20, y);
-
-  pdf.setFont("helvetica","normal");
-  y += 6;
-
-  const recomendaciones = [
-    "Consumir mínimo 2-3 litros de agua al día",
-    "Evitar alimentos ultra procesados",
-    "Mantener horarios constantes de comida",
-    "Priorizar sueño y recuperación"
-  ];
-
-  recomendaciones.forEach(r=>{
-    pdf.text("- " + r, 20, y);
-    y += 6;
-  });
-
-  // 🔥 SUPLEMENTOS
-  y += 5;
-
-  pdf.setFont("helvetica","bold");
-  pdf.text("Suplementación:", 20, y);
-
-  pdf.setFont("helvetica","normal");
-  y += 6;
-
-  const suplementos = [
-    "Creatina: 5g antes y después de entrenar",
-    "Proteína whey: 1-2 scoops post entrenamiento",
-    "Omega 3: 2 cápsulas al día",
-    "Multivitamínico: 1 cápsula diaria"
-  ];
-
-  suplementos.forEach(s=>{
-    pdf.text("- " + s, 20, y);
-    y += 6;
-  });
-
-  // 🔥 FOOTER
-  pdf.setFontSize(8);
-  pdf.text("Charly Fitness | WhatsApp: 7341771575", 105, 290, {align:"center"});
-
-  pdf.save(`dieta-${nombre}.pdf`);
-}
-
 async function descargarPDF(){
   const { jsPDF } = window.jspdf;
 
@@ -450,6 +341,7 @@ async function descargarPDF(){
   }
 
   let fecha = new Date().toLocaleDateString();
+  let planID = "CF-" + Math.floor(Math.random()*9000 + 1000);
 
   // 🔥 EXTRAER DATOS LIMPIOS
   let comidas = [];
@@ -465,85 +357,100 @@ async function descargarPDF(){
   let resumen = elemento.querySelector("div[style*='background']")?.innerText
     .replace(/🔥|🥩|🍚|🥑/g,"") || "";
 
-  // 🔥 CREAR DISEÑO CLÍNICO
+  // 🔥 CONTENEDOR PRINCIPAL
   let contenedor = document.createElement("div");
-
   contenedor.style.width = "800px";
   contenedor.style.padding = "30px";
   contenedor.style.fontFamily = "Arial, sans-serif";
-  contenedor.style.background = "#f4f4f4";
-  contenedor.style.color = "#000";
+  contenedor.style.background = "#f2f2f2";
 
   contenedor.innerHTML = `
-    <div style="background:white; padding:25px; border-radius:10px;">
+  <div style="background:white; padding:25px; border-radius:12px;">
 
-      <!-- HEADER -->
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <img src="imagenes/logoGitHub.png" style="height:60px;">
-        
-        <div style="text-align:right;">
-          <h2 style="margin:0;">Charly Fitness</h2>
-          <p style="margin:0; font-size:12px;">Nutrición & Entrenamiento</p>
-        </div>
+    <!-- HEADER -->
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <img src="imagenes/logoGitHub.png" style="height:60px;">
+      
+      <div style="text-align:right;">
+        <h1 style="margin:0; font-size:20px;">Charly Fitness</h1>
+        <p style="margin:0; font-size:12px;">
+          Nutrición, Suplementación y Entrenamiento
+        </p>
       </div>
+    </div>
 
-      <hr style="margin:15px 0; border:1px solid #ddd;">
+    <hr style="margin:15px 0; border:1px solid #ddd;">
 
-      <!-- INFO -->
-      <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-        <p><strong>Nombre:</strong> ${nombre}</p>
-        <p><strong>Fecha:</strong> ${fecha}</p>
+    <!-- INFO -->
+    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+      <div>
+        <strong>Nombre:</strong> ${nombre}
       </div>
-
-      <!-- RESUMEN -->
-      <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:20px;">
-        <strong>Consumo diario:</strong><br>
-        ${resumen}
+      <div>
+        <strong>Fecha:</strong> ${fecha}<br>
+        <strong>Plan:</strong> ${planID}
       </div>
+    </div>
+
+    <!-- RESUMEN -->
+    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:20px;">
+      <strong>CONSUMO DIARIO:</strong><br><br>
+      ${resumen}
+    </div>
   `;
 
-  // 🔥 COMIDAS (FORMATO NUTRIÓLOGO)
+  // 🔥 COMIDAS GRANDES ESTILO CLÍNICA
   comidas.forEach(c=>{
     contenedor.innerHTML += `
-      <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:15px;">
-        <strong>${c.titulo.toUpperCase()}</strong><br>
+      <div style="background:#eaeaea; padding:18px; border-radius:10px; margin-bottom:15px;">
+        <strong style="font-size:14px;">${c.titulo.toUpperCase()}</strong><br><br>
         ${c.items.join("<br>")}
       </div>
     `;
   });
 
-  // 🔥 RECOMENDACIONES
+  // 🔥 RECOMENDACIONES PRO
   contenedor.innerHTML += `
-    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:15px;">
-      <strong>Recomendaciones:</strong><br>
-      - Beber mínimo 2-3 litros de agua al día<br>
-      - Puedes añadir verduras libres entre comidas<br>
-      - Evitar azúcar refinada<br>
-      - Cocinar con aceite de oliva o spray
+    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-top:10px;">
+      <strong>RECOMENDACIONES:</strong><br><br>
+      • En caso de hambre puedes añadir verduras libres (pepino, jícama, lechuga)<br>
+      • Consumir mínimo 2-3 litros de agua al día<br>
+      • Evitar azúcares refinados<br>
+      • Cocinar con aceite de oliva o spray<br>
+      • Mantener horarios consistentes de comida
     </div>
   `;
 
-  // 🔥 SUPLEMENTOS
+  // 🔥 SUPLEMENTACIÓN PRO (tipo nutriólogo real)
   contenedor.innerHTML += `
-    <div style="background:#eaeaea; padding:15px; border-radius:8px;">
-      <strong>Suplementación:</strong><br>
-      - Proteína: 1 scoop post-entreno<br>
-      - Creatina: 5g diarios<br>
-      - Multivitamínico: 1 cápsula diaria<br>
-      - Omega 3: 1-2 cápsulas
+    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-top:15px;">
+      <strong>SUPLEMENTACIÓN:</strong><br><br>
+      • Creatina: 5g antes o después de entrenar<br>
+      • Proteína: 1 scoop post-entreno<br>
+      • Multivitamínico: 1 cápsula diaria<br>
+      • Omega 3: 1-2 cápsulas al día<br>
+      • Magnesio: antes de dormir
+    </div>
+  `;
+
+  // 🔥 FOOTER CLÍNICO
+  contenedor.innerHTML += `
+    <div style="margin-top:20px; font-size:11px; text-align:center; color:#666;">
+      Charly Fitness | Plan personalizado<br>
+      WhatsApp: 7341771575
     </div>
   `;
 
   contenedor.innerHTML += `</div>`;
 
-  // 🔥 OCULTAR EN DOM
+  // 🔥 RENDER OCULTO
   let wrapper = document.createElement("div");
   wrapper.style.position = "fixed";
   wrapper.style.left = "-9999px";
   wrapper.appendChild(contenedor);
   document.body.appendChild(wrapper);
 
-  // 🔥 CANVAS (ESTABLE)
+  // 🔥 GENERAR PDF (ESTABLE)
   const canvas = await html2canvas(contenedor, {
     scale: 2,
     useCORS: true
@@ -564,6 +471,7 @@ async function descargarPDF(){
 
   document.body.removeChild(wrapper);
 }
+
 
 
 
