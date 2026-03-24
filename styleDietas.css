@@ -152,6 +152,105 @@ section{ padding:60px 20px; max-width:800px; margin:auto; }
 /* URGENCIA */
 .urgencia-whats{ display:block; margin-top:10px; font-size:12px; color:#ff6b6b; font-weight:bold; }
 
+
+
+/* ===== ARREGLO SECCIÓN PRO ===== */
+
+/* Contenedor principal */
+.lead-box {
+  background: var(--card-bg);
+  padding: 30px 20px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* Título principal */
+.lead-box h2 {
+  font-size: 1.9rem;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+/* Textos descriptivos */
+.lead-box p {
+  margin-bottom: 15px;
+  opacity: 0.85;
+  font-size: 1rem;
+}
+
+/* Inputs de contacto */
+.lead-box input[type="text"] {
+  width: 100%;
+  margin: 8px 0;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: #111;
+  color: var(--text-light);
+  font-size: 16px;
+}
+
+/* Contador de usuarios */
+.lead-box .contador {
+  font-weight: bold;
+  color: var(--gold-bright);
+  margin: 10px 0 15px;
+  font-size: 1.1rem;
+}
+
+/* Info bloque PRO */
+.pro-info {
+  background: linear-gradient(135deg,#1c1c1c,#0b0b0b);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* Título dentro del bloque PRO */
+.pro-info h3 {
+  margin-bottom: 10px;
+  color: var(--gold);
+}
+
+/* Urgencia */
+.urgencia {
+  font-size: 0.98rem;
+  color: #ff6b6b;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+/* ----- RESPONSIVE ----- */
+@media (max-width:768px){
+  .lead-box {
+    padding: 25px 15px;
+  }
+
+  .lead-box h2 {
+    font-size: 1.6rem;
+  }
+
+  .lead-box p {
+    font-size: 0.95rem;
+  }
+
+  .lead-box input[type="text"] {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .pro-info h3 {
+    font-size: 1.2rem;
+  }
+}
+
+
+
+
+
 /* MOBILE */
 @media (max-width:768px){
   section{ padding:40px 15px; }
