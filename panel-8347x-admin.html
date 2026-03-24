@@ -87,162 +87,149 @@ function usarPro(){
   mostrarDieta(dieta);
 }
 
-/* ===================== GENERAR DIETA PRO CON SNACKS Y BATIDOS ===================== */
+/* ===================== FUNCIÓN GENERAR DIETA ===================== */
 function generarDietaPRO(datos){
-  const {peso, altura, edad, objetivo, tipo} = datos;
-  let bmr = 10*peso + 6.25*altura*100 - 5*edad + 5;
+  let {peso, altura, edad, objetivo, tipo} = datos;
+  if(altura>3) altura /= 100;
+  
+  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
   let calorias = Math.round(bmr * 1.55);
-  if(objetivo==="definicion") calorias -= 400;
-  if(objetivo==="volumen") calorias += 300;
+  if(objetivo==="definicion") calorias -=400;
+  if(objetivo==="volumen") calorias +=300;
 
-  let proteinaTotal = Math.round(peso*2);
-  let grasaTotal = Math.round(calorias*0.25/9);
-  let carbosTotal = Math.round((calorias - (proteinaTotal*4 + grasaTotal*9))/4);
+  let proteina = Math.round(peso*2);
+  let grasa = Math.round((calorias*0.25)/9);
+  let carbos = Math.round((calorias-(proteina*4+grasa*9))/4);
 
-  let protePorComida = Math.round(proteinaTotal/5);
-  let carbosPorComida = Math.round(carbosTotal/5);
-  let grasaPorComida = Math.round(grasaTotal/5);
+  let comidas = ["Desayuno","Comida","Pre-entreno","Cena"];
+  let listaComidas = [];
 
-  const proteinas = ["Pollo","Pescado","Huevo","Carne magra","Atún","Whey"];
-  const carbos = ["Arroz hervido","Puré de papa","Puré de plátano macho","Avena","Pan árabe"];
+  // OPCIONES DE ALIMENTOS
+  const proteinas = ["Pollo","Pescado","Huevo","Carne res magra"];
+  const carbosOpc = ["Arroz hervido","Purée de papa","Plátano macho","Avena","Rebanadas de pan árabe"];
+  const grasasOpc = ["Aguacate","Aceite de oliva","Nueces"];
   const frutasDef = ["Melón","Papaya","Manzana verde"];
-  const frutasVol = ["Fresas","Manzana roja","Sandía"];
-  const grasas = ["Aguacate","Aceite de oliva","Nueces"];
-  const snacks = ["Yogurt griego","Requesón","Hummus con zanahoria","Batido de proteína con nueces"];
+  const frutasVol = ["Manzana roja","Plátano","Mango","Sandía"];
 
-  const comidasNombres = ["Desayuno","Comida","Pre-entreno","Cena","Snack opcional"];
-  let comidasArray = [];
+  function elegir(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
-  function elegirProteina(){ return proteinas[Math.floor(Math.random()*proteinas.length)]; }
-  function elegirCarbo(){ return carbos[Math.floor(Math.random()*carbos.length)]; }
-  function elegirFruta(){ return objetivo==="definicion" ? frutasDef[Math.floor(Math.random()*frutasDef.length)] : frutasVol[Math.floor(Math.random()*frutasVol.length)]; }
-  function elegirGrasa(){ return grasas[Math.floor(Math.random()*grasas.length)]; }
-  function elegirSnack(){ return snacks[Math.floor(Math.random()*snacks.length)]; }
+  comidas.forEach(c=>{
+    let prot = elegir(proteinas);
+    let carb = elegir(carbosOpc);
+    let grasaItem = elegir(grasasOpc);
+    let fruta = objetivo==="definicion"?elegir(frutasDef):elegir(frutasVol);
 
-  comidasNombres.forEach((nombre,i)=>{
-    let prote = nombre==="Snack opcional"? "" : elegirProteina();
-    let carbo = nombre==="Snack opcional"? "" : elegirCarbo();
-    let fruta = nombre==="Snack opcional"? "" : elegirFruta();
-    let grasa = nombre==="Snack opcional"? "" : elegirGrasa();
-    let snack = nombre==="Snack opcional"? elegirSnack() : "";
-
-    let protecion = prote ? `${protePorComida}g de ${prote}` : "";
-    let carboPorcion = carbo ? (carbo==="Arroz hervido"||carbo==="Puré de papa"||carbo==="Puré de plátano macho"? "1 taza de "+carbo : "2 rebanadas de "+carbo) : "";
-    let grasaPorcion = grasa ? (grasa==="Aceite de oliva"? "1 cucharada de "+grasa : "30g de "+grasa) : "";
-
-    comidasArray.push({
-      nombre,
-      proteina: protecion,
-      carbo: carboPorcion,
-      grasa: grasaPorcion,
-      fruta: fruta,
-      snack: snack
+    listaComidas.push({
+      nombre:c,
+      proteina:`200g ${prot}`,
+      carbos: carb==="Arroz hervido"?"1 taza de arroz":
+              carb==="Purée de papa"?"200g puré de papa":
+              carb==="Plátano macho"?"1 plátano macho":
+              carb==="Avena"?"1 taza de avena":
+              carb==="Rebanadas de pan árabe"?"2 rebanadas pan árabe":"",
+      grasa:`${grasaItem==="Aguacate"?"1/2 aguacate":grasaItem==="Aceite de oliva"?"1 cucharada aceite":grasaItem==="Nueces"?"20g nueces":""}`,
+      fruta:fruta
     });
   });
 
-  return {
-    calorias,
-    proteina: proteinaTotal,
-    carbos: carbosTotal,
-    grasa: grasaTotal,
-    comidas: comidasArray
-  };
+  return {calorias,proteina,carbos,grasa,comidas:listaComidas};
 }
 
 /* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
-  let nombre = document.getElementById("nombreCliente").value || "Cliente";
+  let nombre = document.getElementById("nombreCliente").value;
   let fecha = new Date().toLocaleDateString();
-  let html = `<div class="dieta-card">
+
+  let html=`<div class="dieta-card">
     <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
       <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
       <p>Plan Nutricional Personalizado</p>
-      <p style="font-size:12px;">Sistema inteligente de nutrición</p>
     </div>
-
     <div style="text-align:center; margin-bottom:25px;">
-      <h2>${nombre}</h2>
+      <h2>${nombre||"Cliente"}</h2>
       <p>📅 ${fecha}</p>
     </div>
-
     <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px;">
-      <p>
-        🔥 ${dieta.calorias} kcal<br>
-        🥩 ${dieta.proteina}g proteína<br>
-        🍚 ${dieta.carbos}g carbohidratos<br>
-        🥑 ${dieta.grasa}g grasas
-      </p>
+      <p>🔥 ${dieta.calorias} kcal<br>
+      🥩 ${dieta.proteina}g proteína<br>
+      🍚 ${dieta.carbos}g carbohidratos<br>
+      🥑 ${dieta.grasa}g grasas</p>
     </div>`;
 
   dieta.comidas.forEach(c=>{
-    html += `<div class="card-meal no-break">
+    html+=`<div class="card-meal no-break">
       <h4>🍽️ ${c.nombre}</h4>
-      <ul>`;
-    if(c.proteina) html += `<li>🥩 ${c.proteina}</li>`;
-    if(c.carbo) html += `<li>🍚 ${c.carbo}</li>`;
-    if(c.grasa) html += `<li>🥑 ${c.grasa}</li>`;
-    if(c.fruta) html += `<li>🍏 Fruta: ${c.fruta}</li>`;
-    if(c.snack) html += `<li>🍪 Snack: ${c.snack}</li>`;
-    html += `</ul>
+      <ul>
+        <li>🥩 ${c.proteina}</li>
+        <li>🍚 ${c.carbos}</li>
+        <li>🥑 ${c.grasa}</li>
+        <li>🍏 Fruta: ${c.fruta}</li>
+      </ul>
     </div>`;
   });
-
-  html += `</div>`;
-  document.getElementById("resultadoPRO").innerHTML = html;
+  html+=`</div>`;
+  document.getElementById("resultadoPRO").innerHTML=html;
 }
 
 /* ===================== RUTINA PRO ===================== */
 function generarRutina(){
   let nombre = document.getElementById("nombreCliente").value || "Cliente";
   let sexo = document.getElementById("sexo").value;
-  let dias = parseInt(document.getElementById("diasGym").value) || 3;
+  let dias = parseInt(document.getElementById("diasGym").value)||3;
 
-  let rutina = [];
-  const ejerciciosHombre = {
-    Pecho: ["Press banca 4x10", "Aperturas mancuernas 3x12", "Fondos 3x15"],
-    Espalda: ["Remo barra 4x10", "Jalón polea 3x12", "Peso muerto 3x8"],
-    Hombros: ["Press militar 4x10", "Elevaciones laterales 3x12", "Facepull 3x15"],
-    Bíceps: ["Curl barra 4x12", "Curl martillo 3x12"],
-    Tríceps: ["Press francés 4x12", "Fondos 3x15"],
-    Pierna: ["Sentadillas 4x10", "Prensa 3x12", "Curl femoral 3x12", "Gemelos 4x15"]
+  let rutina=[];
+
+  const ejerciciosHombre={
+    Pecho:["Press banca 4x10","Aperturas mancuernas 3x12","Fondos 3x15"],
+    Espalda:["Remo barra 4x10","Jalón polea 3x12","Peso muerto 3x8"],
+    Hombros:["Press militar 4x10","Elevaciones laterales 3x12","Facepull 3x15"],
+    Bíceps:["Curl barra 4x12","Curl martillo 3x12"],
+    Tríceps:["Press francés 4x12","Fondos 3x15"],
+    Pierna:["Sentadillas 4x10","Prensa 3x12","Curl femoral 3x12","Gemelos 4x15"]
   };
-  const ejerciciosMujer = {
-    Pierna: ["Sentadillas 4x12", "Hip thrust 4x12", "Prensa 3x15", "Gemelos 3x20"],
-    Glúteo: ["Patada glúteo 3x15", "Abducción 3x20"],
-    Core: ["Plancha 3x60s", "Crunch 3x20", "Russian twist 3x20"],
-    Espalda: ["Remo mancuerna 4x12", "Jalón polea 3x12"],
-    Hombros: ["Elevaciones laterales 3x12", "Press militar 3x10"],
-    Brazos: ["Curl bíceps 3x12", "Extensión tríceps 3x12"]
+
+  const ejerciciosMujer={
+    Pierna:["Sentadillas 4x12","Hip thrust 4x12","Prensa 3x15","Gemelos 3x20"],
+    Glúteo:["Patada glúteo 3x15","Abducción 3x20"],
+    Core:["Plancha 3x60s","Crunch 3x20","Russian twist 3x20"],
+    Espalda:["Remo mancuerna 4x12","Jalón polea 3x12"],
+    Hombros:["Elevaciones laterales 3x12","Press militar 3x10"],
+    Brazos:["Curl bíceps 3x12","Extensión tríceps 3x12"]
   };
-  let pool = sexo==="hombre"? ejerciciosHombre : ejerciciosMujer;
+
+  let pool = sexo==="hombre"?ejerciciosHombre:ejerciciosMujer;
   let grupos = Object.keys(pool);
 
   for(let i=0;i<dias;i++){
-    let diaNombre = `Día ${i+1}`;
-    let ejeDia = [];
+    let diaNombre=`Día ${i+1}`;
+    let ejeDia=[];
     for(let j=0;j<3;j++){
-      let idx = (i+j)%grupos.length;
-      ejeDia.push({grupo: grupos[idx], ejercicios: pool[grupos[idx]]});
+      let idx=(i+j)%grupos.length;
+      ejeDia.push({grupo:grupos[idx],ejercicios:pool[grupos[idx]]});
     }
-    rutina.push({dia: diaNombre, bloques: ejeDia});
+    rutina.push({dia:diaNombre,bloques:ejeDia});
   }
 
-  let html = `<div class="dieta-card">
+  let html=`<div class="dieta-card">
     <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
       <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
       <p>Plan de Entrenamiento Personalizado</p>
     </div>`;
+
   rutina.forEach(d=>{
-    html += `<div class="card-meal no-break"><h4>🏋️ ${d.dia}</h4>`;
+    html+=`<div class="card-meal no-break"><h4>🏋️ ${d.dia}</h4>`;
     d.bloques.forEach(b=>{
-      html += `<strong>${b.grupo}</strong><ul>`;
-      b.ejercicios.forEach(e=>{html += `<li>${e}</li>`;});
-      html += `</ul>`;
+      html+=`<strong>${b.grupo}</strong><ul>`;
+      b.ejercicios.forEach(e=>{
+        html+=`<li>${e}</li>`;
+      });
+      html+=`</ul>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   });
-  html += `</div>`;
-  document.getElementById("resultadoPRO").innerHTML = html;
+
+  html+=`</div>`;
+  document.getElementById("resultadoPRO").innerHTML=html;
 }
 
 /* ===================== DESCARGAR PDF ===================== */
@@ -253,12 +240,16 @@ async function descargarPDF(tipo){
     alert("Primero genera la " + tipo + " bro 🔥");
     return;
   }
+
   const nombre = document.getElementById("nombreCliente").value || "Cliente";
-  let canvas = await html2canvas(elemento, {scale:2, useCORS:true, backgroundColor:"#ffffff"});
+  let fecha = new Date().toLocaleDateString();
+  let planID = "CF-"+Math.floor(Math.random()*9000+1000);
+
+  let canvas = await html2canvas(elemento,{scale:2,useCORS:true,backgroundColor:"#ffffff"});
   let imgData = canvas.toDataURL("image/jpeg",1.0);
   let pdf = new jsPDF("p","mm","a4");
-  const imgWidth = 210;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  const imgWidth=210;
+  const imgHeight=(canvas.height*imgWidth)/canvas.width;
   pdf.addImage(imgData,"JPEG",0,10,imgWidth,imgHeight>280?280:imgHeight);
   pdf.save(`${tipo}-${nombre}.pdf`);
 }
@@ -279,9 +270,9 @@ function enviarWhats(){
     return;
   }
 
-  let mensaje = `🔥 QUIERO MI PLAN PRO 🔥%0A%0ANombre: ${nombre}%0APeso: ${peso}%0AAltura: ${altura}%0AEdad: ${edad}%0ASexo: ${sexo}%0AObjetivo: ${objetivo}%0ADías por semana: ${dias}%0ATipo de dieta: ${tipo}%0A%0A💰 DETALLES DE PAGO:%0A➤ Cuenta AZTECA: 6774 0164 4103 34%0A➤ CLABE: 1275 5200 1644 1033 40%0A➤ Banco: BANCO AZTECA México%0A%0A➡️ Estoy listo para pagar y recibir mi plan.`;
+  let mensaje=`🔥 QUIERO MI PLAN PRO 🔥%0A%0ANombre: ${nombre}%0APeso: ${peso}%0AAltura: ${altura}%0AEdad: ${edad}%0ASexo: ${sexo}%0AObjetivo: ${objetivo}%0ADías por semana: ${dias}%0ATipo de dieta: ${tipo}%0A%0A💰 DETALLES DE PAGO:%0A➤ Cuenta AZTECA: 6774 0164 4103 34%0A➤ CLABE: 1275 5200 1644 1033 40%0A➤ Banco: BANCO AZTECA México%0A%0A➡️ Estoy listo para pagar y recibir mi plan.`;
 
-  let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
+  let url=`https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
   window.open(url,"_blank");
 }
 </script>
