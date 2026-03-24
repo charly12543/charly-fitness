@@ -18,70 +18,85 @@
     </a>
 
     <!-- BOTÓN HAMBURGUESA -->
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      ☰
+    </div>
 
     <!-- LINKS -->
     <ul class="nav-links" id="navLinks">
       <li><a href="index.html" class="back-btn">⬅ Volver</a></li>
       <li><a href="index.html">Inicio</a></li>
-      <li><a href="#dieta">Dieta Gratis</a></li>
-      <li><a href="#pro">Dieta PRO</a></li>
+      <li><a href="#dieta">Dieta</a></li>
+      <li><a href="#pro">PRO</a></li>
     </ul>
 
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <h1>🥗 Genera tu dieta personalizada</h1>
   <p>Basada en tu cuerpo y objetivo</p>
-  <a href="#pro" class="btn-whats-pro" style="margin-top:20px;">🟢 Lleva tu dieta al siguiente nivel</a>
 </section>
 
 <!-- DIETA GRATIS -->
 <section id="dieta">
   <h2>🔥 Dieta base automática</h2>
+
   <div class="calculadora">
     <input type="number" id="pesoDieta" placeholder="Peso (kg)">
     <input type="number" step="0.01" id="alturaDieta" placeholder="Altura (1.80 o 180)">
     <input type="number" id="edadDieta" placeholder="Edad">
+
     <select id="objetivoDieta">
       <option value="definicion">Definición</option>
       <option value="volumen">Volumen</option>
     </select>
+
     <button onclick="generarDieta()">Generar dieta</button>
+
     <div id="resultadoDieta" class="dieta-card"></div>
   </div>
 </section>
 
 <!-- DIETA PRO -->
 <section class="lead-box" id="pro">
-  <h2>🔥 Lleva tu dieta al siguiente nivel</h2>
-  <p>Te hago tu dieta EXACTA + seguimiento personalizado</p>
+  <h2>🔥 Dieta PRO – Plan Profesional (Con costo 💵 y resultados reales)</h2>
+  <p>Obtén tu plan personalizado en PDF completo y seguimiento real. (Este plan tiene costo y no es gratuito)</p>
 
-  <div class="pro-form">
-    <input type="text" id="nombreLead" placeholder="Tu nombre">
-    <input type="text" id="whatsLead" placeholder="Tu WhatsApp">
-  </div>
+  <input type="text" id="nombreLead" placeholder="Tu nombre">
+  <input type="text" id="whatsLead" placeholder="Tu WhatsApp">
 
   <p class="contador">🔥 Más de <span id="contadorUsuarios">147</span> personas ya generaron su dieta</p>
 
+  <!-- BLOQUE PRO DETALLADO -->
   <div class="pro-info">
-    <h3>🔥 Dieta PRO – Plan Premium</h3>
+    <h3>🔥 Qué incluye tu Dieta PRO</h3>
     <ul>
-      <li>📊 Cálculo de macros y distribución de alimentos detallada</li>
-      <li>🍽️ Receta personalizada en PDF lista para usar</li>
-      <li>💪 Ajustes semanales según tus progresos</li>
-      <li>⚡ Atención rápida: respuesta en menos de 10 minutos</li>
+      <li>📊 Cálculo profesional de macros según tu cuerpo</li>
+      <li>🍽️ PDF listo para imprimir y usar</li>
+      <li>💬 Ajustes semanales según tus progresos</li>
+      <li>📲 Soporte real por WhatsApp</li>
+      <li>💎 Plan exclusivo (NO es gratuito)</li>
     </ul>
-    <button class="btn-whats-pro" onclick="enviarWhatsPro()">🟢 Solicitar Dieta PRO</button>
+
+    <!-- BLOQUE DE PRECIO -->
+    <div class="precio-pro" style="margin:15px 0; font-weight:bold; color:var(--gold);">
+      💡 Inversión: $299 MXN (pago único)<br>
+      📩 Te envío tu plan en PDF al WhatsApp + ajustes GRATIS 7 días
+    </div>
+
+    <button class="btn-whats-pro" onclick="enviarWhatsPro()">🟢 Pagar & recibir mi plan</button>
   </div>
 
-  <p class="urgencia">⚠️ Solo quedan <span id="cupos">3</span> cupos para dieta personalizada hoy</p>
+  <p class="urgencia">
+    ⚠️ Solo quedan <span id="cupos">3</span> cupos para dieta personalizada hoy
+  </p>
+  <p style="font-size:12px; color:#aaa; margin-top:10px;">
+    📲 Respuesta en menos de 10 minutos
+  </p>
 </section>
 
 <!-- SCRIPTS -->
-
 <script>     
 function generarDieta(){
   let peso = parseFloat(document.getElementById("pesoDieta").value);
@@ -95,6 +110,7 @@ function generarDieta(){
   }
 
   if(altura > 3){ altura = altura / 100; }
+
   let contenedor = document.getElementById("resultadoDieta");
   contenedor.innerHTML = `<div class="loading">🔥 Calculando tu dieta...</div>`;
 
@@ -102,6 +118,7 @@ function generarDieta(){
     let proteina = peso * 2;
     let calorias = peso * 30;
     if(objetivo === "definicion"){ calorias -= 400; } else { calorias += 300; }
+
     let grasa = (calorias * 0.25) / 9;
     let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
 
@@ -161,14 +178,14 @@ function enviarWhatsPro(){
                 `WhatsApp: ${whats}%0A%0A` +
                 `📊 MIS DATOS:%0A` +
                 `Peso:%0AAltura:%0AEdad:%0AObjetivo:%0ANivel de actividad:%0A` +
-                `🍽️ RESTRICCIONES:%0A` +
-                `⏰ HORARIOS:%0A` +
-                `💪 OBJETIVO REAL:%0A%0A` +
+                `🍽️ RESTRICCIONES:(Alimentos que no comes)%0A` +
+                `⏰ HORARIOS:(Horas en las que puedes comer)%0A` +
+                `💪 OBJETIVO REAL:(Ej: bajar grasa, subir músculo)%0A%0A` +
                 `💰 DETALLES DE PAGO:%0A` +
                 `➤ Cuenta AZTECA: 6774 0164 4103 34%0A` +
                 `➤ CLABE: 1275 5200 1644 1033 40%0A` +
                 `➤ Banco: BANCO AZTECA México%0A%0A` +
-                `➡️ Estoy listo para realizar el pago y recibir mi dieta.`;
+                `➡️ Estoy listo para pagar el plan PRO y recibir mi dieta en PDF por WhatsApp.`;
 
   let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
