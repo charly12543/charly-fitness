@@ -341,27 +341,30 @@ async function descargarPDF(){
     return;
   }
 
-  // 🔥 CLON BASE
+  // 🔥 CLON
   let copia = elemento.cloneNode(true);
 
   copia.style.background = "#ffffff";
-  copia.style.color = "#111";
-  copia.style.padding = "50px";
+  copia.style.color = "#000";
+  copia.style.padding = "40px";
   copia.style.width = "750px";
   copia.style.fontFamily = "Arial, sans-serif";
 
-  // 🔥 LIMPIEZA TOTAL
+  // 🔥 LIMPIAR TODO (incluye estilos inline)
   copia.querySelectorAll("*").forEach(el=>{
     el.innerHTML = el.innerHTML
       .replace(/🔥|🥩|🍚|🥑|📅/g,"");
 
     el.style.color = "#000";
     el.style.background = "transparent";
+    el.style.boxShadow = "none";
   });
 
-  // 🔥 RESUMEN (TOP)
-  let resumen = copia.querySelector("div[style*='background']");
-  if(resumen){
+  // 🔥 FORZAR RESUMEN (PRIMER BLOQUE)
+  let bloques = copia.querySelectorAll("div");
+  if(bloques.length > 2){
+    let resumen = bloques[2]; // el primero después del header
+
     resumen.style.background = "#eaeaea";
     resumen.style.padding = "15px";
     resumen.style.borderRadius = "10px";
@@ -373,21 +376,22 @@ async function descargarPDF(){
     `;
   }
 
-  // 🔥 BLOQUES COMIDAS (TIPO NUTRIOLOGO)
+  // 🔥 NORMALIZAR TODAS LAS CARDS (MISMO TAMAÑO)
   copia.querySelectorAll(".card-meal").forEach(card=>{
     card.style.background = "#f5f5f5";
-    card.style.padding = "12px";
+    card.style.padding = "15px";
     card.style.borderRadius = "10px";
-    card.style.marginBottom = "10px";
-    card.style.fontSize = "12px";
+    card.style.marginBottom = "12px";
+    card.style.fontSize = "13px";
+    card.style.minHeight = "70px"; // 👈 clave para que no se vean chiquitas
   });
 
-  // 🔥 HEADER PREMIUM
+  // 🔥 HEADER PRO + TU LOGO LOCAL
   let header = document.createElement("div");
   header.innerHTML = `
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
       
-      <img src="https://i.imgur.com/4NZ6uLY.png" style="height:65px;">
+      <img src="imagenes/logoGitHub.png" style="height:60px;">
 
       <div style="text-align:right;">
         <h1 style="margin:0; font-size:20px;">CHARLY FITNESS</h1>
@@ -407,7 +411,7 @@ async function descargarPDF(){
 
   copia.prepend(header);
 
-  // 🔥 SUPLEMENTOS PRO (EDITABLE)
+  // 🔥 SUPLEMENTOS
   let suplementos = document.createElement("div");
   suplementos.innerHTML = `
     <div style="margin-top:20px; background:#f0f0f0; padding:15px; border-radius:10px;">
@@ -422,21 +426,7 @@ async function descargarPDF(){
   `;
   copia.appendChild(suplementos);
 
-  // 🔥 RECOMENDACIONES (ESTILO REAL)
-  let recomendaciones = document.createElement("div");
-  recomendaciones.innerHTML = `
-    <div style="margin-top:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
-      <strong>RECOMENDACIONES:</strong><br><br>
-
-      • Consumir mínimo 2-3 litros de agua al día<br>
-      • Evitar alimentos ultra procesados<br>
-      • Mantener horarios constantes de comida<br>
-      • Priorizar descanso y sueño de calidad
-    </div>
-  `;
-  copia.appendChild(recomendaciones);
-
-  // 🔥 FOOTER PRO
+  // 🔥 FOOTER
   let footer = document.createElement("div");
   footer.innerHTML = `
     <div style="margin-top:25px; font-size:10px; text-align:center; color:#777;">
@@ -452,7 +442,7 @@ async function descargarPDF(){
   contenedor.appendChild(copia);
   document.body.appendChild(contenedor);
 
-  // 🔥 CANVAS
+  // 🔥 RENDER
   const canvas = await html2canvas(copia, {
     scale: 2,
     useCORS: true
@@ -465,7 +455,7 @@ async function descargarPDF(){
   const imgWidth = 210;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-  // 🔥 FONDO BLANCO + HEADER DORADO
+  // 🔥 FONDO
   pdf.setFillColor(255,255,255);
   pdf.rect(0,0,210,297,"F");
 
@@ -480,7 +470,6 @@ async function descargarPDF(){
 
   document.body.removeChild(contenedor);
 }
-
 
 
 
