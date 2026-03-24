@@ -334,103 +334,127 @@ function mostrarDieta(dieta){
   
 
   
-function descargarPDF(){
+async function descargarPDF(){
   const { jsPDF } = window.jspdf;
 
-  const nombre = document.getElementById("nombreCliente").value || "Cliente";
-  const dieta = document.getElementById("resultadoPRO");
+  const nombre = document.getElementById("nombreCliente").value || "cliente";
+  const elemento = document.getElementById("resultadoPRO");
 
-  if(!dieta.innerText.trim()){
+  if(!elemento.innerText.trim()){
     alert("Primero genera la dieta bro 🔥");
     return;
   }
 
-  const doc = new jsPDF();
+  // 🔥 CLON LIMPIO
+  let copia = elemento.cloneNode(true);
 
-  let y = 20;
+  copia.style.background = "#ffffff";
+  copia.style.color = "#111";
+  copia.style.padding = "40px";
+  copia.style.width = "800px";
+  copia.style.fontFamily = "Arial, sans-serif";
 
-  // 🔥 HEADER (TÍTULO PRO)
-  doc.setFillColor(212,175,55); // dorado
-  doc.rect(0, 0, 210, 25, "F");
+  // 🔥 LIMPIAR ICONOS
+  copia.querySelectorAll("*").forEach(el=>{
+    el.innerHTML = el.innerHTML
+      .replace(/🔥/g,"")
+      .replace(/🥩/g,"")
+      .replace(/🍚/g,"")
+      .replace(/🥑/g,"")
+      .replace(/📅/g,"");
 
-  doc.setTextColor(0,0,0);
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(18);
-  doc.text("CHARLY FITNESS", 105, 15, {align:"center"});
-
-  // 🔥 SUBTÍTULO
-  doc.setFontSize(11);
-  doc.setFont("helvetica","normal");
-  doc.text("Plan Nutricional Personalizado", 105, 22, {align:"center"});
-
-  y = 35;
-
-  // 🔥 INFO CLIENTE
-  doc.setTextColor(0,0,0);
-  doc.setFontSize(12);
-
-  const fecha = new Date().toLocaleDateString();
-
-  doc.text(`Cliente: ${nombre}`, 20, y);
-  y += 8;
-  doc.text(`Fecha: ${fecha}`, 20, y);
-
-  y += 10;
-
-  // 🔥 CAJA DE MACROS
-  doc.setFillColor(240,240,240);
-  doc.rect(20, y, 170, 25, "F");
-
-  const texto = dieta.innerText;
-
-  const calorias = texto.match(/(\d+)\s*kcal/i);
-  const prote = texto.match(/(\d+)g proteína/i);
-  const carbos = texto.match(/(\d+)g carbohidratos/i);
-  const grasa = texto.match(/(\d+)g grasas/i);
-
-  doc.setFont("helvetica","bold");
-  doc.text("Resumen Nutricional", 25, y + 8);
-
-  doc.setFont("helvetica","normal");
-
-  doc.text(`Calorías: ${calorias ? calorias[1] : "-"}`, 25, y + 16);
-  doc.text(`Proteína: ${prote ? prote[1] : "-"} g`, 80, y + 16);
-  doc.text(`Carbohidratos: ${carbos ? carbos[1] : "-"} g`, 25, y + 22);
-  doc.text(`Grasas: ${grasa ? grasa[1] : "-"} g`, 120, y + 22);
-
-  y += 35;
-
-  // 🔥 COMIDAS
-  doc.setFont("helvetica","bold");
-  doc.setFontSize(13);
-  doc.text("Plan de Comidas", 20, y);
-
-  y += 10;
-
-  doc.setFont("helvetica","normal");
-  doc.setFontSize(11);
-
-  const lineas = doc.splitTextToSize(texto, 170);
-
-  lineas.forEach(line=>{
-    // ❌ evitar emojis (rompen PDF)
-    if(line.includes("🔥") || line.includes("🍽️") || line.includes("🥩")) return;
-
-    if(y > 280){
-      doc.addPage();
-      y = 20;
-    }
-
-    doc.text(line, 20, y);
-    y += 6;
+    el.style.color = "#111";
+    el.style.background = "transparent";
   });
 
-  // 🔥 FOOTER
-  doc.setFontSize(9);
-  doc.setTextColor(100);
-  doc.text("Plan generado por Charly Fitness", 105, 290, {align:"center"});
+  // 🔥 HEADER PRO (CLÍNICA)
+  let header = document.createElement("div");
+  header.innerHTML = `
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:25px;">
+      
+      <!-- LOGO -->
+      <div>
+        <img src="https://i.imgur.com/4NZ6uLY.png" style="height:50px;">
+      </div>
 
-  doc.save(`dieta-${nombre}.pdf`);
+      <!-- INFO -->
+      <div style="text-align:right;">
+        <h1 style="margin:0; font-size:20px; letter-spacing:1px;">
+          CHARLY FITNESS
+        </h1>
+        <p style="margin:2px 0; font-size:11px;">
+          Nutrición & Transformación Física
+        </p>
+      </div>
+
+    </div>
+
+    <hr style="border:none; border-top:2px solid #d4af37; margin-bottom:20px;">
+  `;
+
+  copia.prepend(header);
+
+  // 🔥 FOOTER
+  let footer = document.createElement("div");
+  footer.innerHTML = `
+    <div style="margin-top:30px; font-size:10px; text-align:center; color:#777;">
+      © Charly Fitness - Plan personalizado | WhatsApp: 7341771575
+    </div>
+  `;
+  copia.appendChild(footer);
+
+  // 🔥 CONTENEDOR OCULTO
+  let contenedor = document.createElement("div");
+  contenedor.style.position = "fixed";
+  contenedor.style.left = "-9999px";
+  contenedor.appendChild(copia);
+  document.body.appendChild(contenedor);
+
+  // 🔥 CANVAS (ALTA CALIDAD)
+  const canvas = await html2canvas(copia, {
+    scale: 2,
+    useCORS: true
+  });
+
+  const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+  const pdf = new jsPDF("p","mm","a4");
+
+  const imgWidth = 210;
+  const pageHeight = 297;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  let heightLeft = imgHeight;
+  let position = 0;
+
+  // 🔥 FONDO PREMIUM (BLANCO + BARRA DORADA)
+  pdf.setFillColor(255,255,255);
+  pdf.rect(0,0,210,297,"F");
+
+  pdf.setFillColor(212,175,55); // dorado
+  pdf.rect(0,0,210,10,"F");
+
+  pdf.addImage(imgData,"JPEG",0,position,imgWidth,imgHeight);
+  heightLeft -= pageHeight;
+
+  while(heightLeft > 0){
+    position = heightLeft - imgHeight;
+    pdf.addPage();
+
+    // fondo en cada hoja
+    pdf.setFillColor(255,255,255);
+    pdf.rect(0,0,210,297,"F");
+
+    pdf.setFillColor(212,175,55);
+    pdf.rect(0,0,210,10,"F");
+
+    pdf.addImage(imgData,"JPEG",0,position,imgWidth,imgHeight);
+    heightLeft -= pageHeight;
+  }
+
+  pdf.save(`dieta-${nombre}.pdf`);
+
+  document.body.removeChild(contenedor);
 }
 
 
