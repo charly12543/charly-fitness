@@ -412,3 +412,55 @@ h2{
   50%{opacity:1;}
   100%{opacity:0.4;}
 }
+/* ===== MODO PDF / PRINT PRO ===== */
+@media print {
+
+  body{
+    background:white !important;
+    color:black !important;
+    padding-top:0 !important;
+  }
+
+  /* ocultar elementos web */
+  .hero,
+  .calculadora button,
+  .navbar,
+  .menu-toggle,
+  .lead-box {
+    display:none !important;
+  }
+
+  /* limpiar diseño */
+  .dieta-card{
+    background:white !important;
+    color:black !important;
+    box-shadow:none !important;
+    border:none !important;
+  }
+
+  .card-meal{
+    background:white !important;
+    box-shadow:none !important;
+    border:1px solid #ccc !important;
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3, h4{
+    page-break-after: avoid;
+  }
+
+  *{
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* evitar cortes incluso fuera de print */
+.no-break{
+  page-break-inside: avoid;
+}
+
+/* salto de página manual (opcional PRO) */
+.page-break{
+  page-break-before: always;
+}
