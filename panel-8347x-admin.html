@@ -344,7 +344,7 @@ async function descargarPDF(){
   let fecha = new Date().toLocaleDateString();
   let planID = "CF-" + Math.floor(Math.random()*9000 + 1000);
 
-  // 🔥 EXTRAER DATOS
+  // 🔥 EXTRAER DATOS BIEN
   let comidas = [];
   elemento.querySelectorAll(".card-meal").forEach(card=>{
     let titulo = card.querySelector("h4")?.innerText.replace("🍽️","").trim();
@@ -355,10 +355,18 @@ async function descargarPDF(){
     comidas.push({titulo, items});
   });
 
-  let resumen = elemento.querySelector("div[style*='background']")?.innerText
-    .replace(/🔥|🥩|🍚|🥑/g,"") || "";
+  // 🔥 EXTRAER MACROS (SIN FALLAR)
+  let textoCompleto = elemento.innerText.replace(/🔥|🥩|🍚|🥑/g,"");
+  let lineas = textoCompleto.split("\n");
 
-  // 🔥 CREAR CONTENEDOR
+  let resumen = lineas.filter(l => 
+    l.includes("kcal") || 
+    l.includes("proteína") || 
+    l.includes("carbohidratos") || 
+    l.includes("grasas")
+  ).join("<br>");
+
+  // 🔥 CONTENEDOR
   let contenedor = document.createElement("div");
 
   contenedor.style.position = "absolute";
@@ -368,7 +376,6 @@ async function descargarPDF(){
   contenedor.style.padding = "30px";
   contenedor.style.background = "#f2f2f2";
   contenedor.style.fontFamily = "Arial, sans-serif";
-  contenedor.style.zIndex = "9999";
 
   contenedor.innerHTML = `
     <div style="background:white; padding:25px; border-radius:12px;">
@@ -379,7 +386,7 @@ async function descargarPDF(){
         <div style="text-align:right;">
           <h1 style="margin:0; font-size:20px;">Charly Fitness</h1>
           <p style="margin:0; font-size:12px;">
-            Nutrición y Entrenamiento
+            Plan Nutricional Personalizado
           </p>
         </div>
       </div>
@@ -413,7 +420,7 @@ async function descargarPDF(){
     <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-top:10px;">
       <strong>RECOMENDACIONES:</strong><br><br>
       • 2-3 litros de agua diarios<br>
-      • Verduras libres entre comidas<br>
+      • Verduras libres<br>
       • Evitar azúcar refinada
     </div>
 
@@ -421,7 +428,7 @@ async function descargarPDF(){
       <strong>SUPLEMENTACIÓN:</strong><br><br>
       • Creatina 5g<br>
       • Proteína post-entreno<br>
-      • Multivitamínico diario
+      • Multivitamínico
     </div>
 
     <div style="margin-top:15px; font-size:11px; text-align:center;">
@@ -432,13 +439,13 @@ async function descargarPDF(){
 
   document.body.appendChild(contenedor);
 
-  // 🔥 ESPERAR RENDER REAL + IMÁGENES
-  await new Promise(resolve => setTimeout(resolve, 500));
+  // 🔥 ESPERAR RENDER
+  await new Promise(resolve => setTimeout(resolve, 300));
 
   const canvas = await html2canvas(contenedor, {
     scale: 2,
     useCORS: true,
-    allowTaint: true
+    backgroundColor: "#ffffff" // 💥 SOLUCION BLANCO
   });
 
   const imgData = canvas.toDataURL("image/jpeg", 1.0);
