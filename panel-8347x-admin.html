@@ -334,141 +334,108 @@ async function descargarPDF(){
   const { jsPDF } = window.jspdf;
 
   const nombre = document.getElementById("nombreCliente").value || "Cliente";
-  const elemento = document.getElementById("resultadoPRO");
+  const fecha = new Date().toLocaleDateString();
 
-  if(!elemento.innerText.trim()){
+  const dieta = document.getElementById("resultadoPRO").innerText;
+
+  if(!dieta.trim()){
     alert("Primero genera la dieta bro 🔥");
     return;
   }
 
-  // 🔥 CLON
-  let copia = elemento.cloneNode(true);
-
-  copia.style.background = "#ffffff";
-  copia.style.color = "#000";
-  copia.style.padding = "40px";
-  copia.style.width = "750px";
-  copia.style.fontFamily = "Arial, sans-serif";
-
-  // 🔥 LIMPIAR TODO (incluye estilos inline)
-  copia.querySelectorAll("*").forEach(el=>{
-    el.innerHTML = el.innerHTML
-      .replace(/🔥|🥩|🍚|🥑|📅/g,"");
-
-    el.style.color = "#000";
-    el.style.background = "transparent";
-    el.style.boxShadow = "none";
-  });
-
-  // 🔥 FORZAR RESUMEN (PRIMER BLOQUE)
-  let bloques = copia.querySelectorAll("div");
-  if(bloques.length > 2){
-    let resumen = bloques[2]; // el primero después del header
-
-    resumen.style.background = "#eaeaea";
-    resumen.style.padding = "15px";
-    resumen.style.borderRadius = "10px";
-    resumen.style.marginBottom = "15px";
-
-    resumen.innerHTML = `
-      <strong>CONSUMO DIARIO:</strong><br><br>
-      ${resumen.innerHTML}
-    `;
-  }
-
-  // 🔥 NORMALIZAR TODAS LAS CARDS (MISMO TAMAÑO)
-  copia.querySelectorAll(".card-meal").forEach(card=>{
-    card.style.background = "#f5f5f5";
-    card.style.padding = "15px";
-    card.style.borderRadius = "10px";
-    card.style.marginBottom = "12px";
-    card.style.fontSize = "13px";
-    card.style.minHeight = "70px"; // 👈 clave para que no se vean chiquitas
-  });
-
-  // 🔥 HEADER PRO + TU LOGO LOCAL
-  let header = document.createElement("div");
-  header.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-      
-      <img src="imagenes/logoGitHub.png" style="height:60px;">
-
-      <div style="text-align:right;">
-        <h1 style="margin:0; font-size:20px;">CHARLY FITNESS</h1>
-        <p style="margin:0; font-size:12px;">
-          Nutrición • Suplementación • Entrenamiento
-        </p>
-      </div>
-    </div>
-
-    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:15px;">
-      <div><strong>Nombre:</strong> ${nombre}</div>
-      <div><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</div>
-    </div>
-
-    <hr style="border:none; border-top:2px solid #d4af37; margin-bottom:20px;">
-  `;
-
-  copia.prepend(header);
-
-  // 🔥 SUPLEMENTOS
-  let suplementos = document.createElement("div");
-  suplementos.innerHTML = `
-    <div style="margin-top:20px; background:#f0f0f0; padding:15px; border-radius:10px;">
-      <strong>SUPLEMENTACIÓN:</strong><br><br>
-
-      • Creatina: 5g antes y después de entrenar<br>
-      • Proteína whey: 1-2 scoops post entrenamiento<br>
-      • Omega 3: 2 cápsulas al día<br>
-      • Multivitamínico: 1 cápsula diaria<br>
-      • Magnesio: antes de dormir
-    </div>
-  `;
-  copia.appendChild(suplementos);
-
-  // 🔥 FOOTER
-  let footer = document.createElement("div");
-  footer.innerHTML = `
-    <div style="margin-top:25px; font-size:10px; text-align:center; color:#777;">
-      © Charly Fitness | WhatsApp: 7341771575
-    </div>
-  `;
-  copia.appendChild(footer);
-
-  // 🔥 CONTENEDOR OCULTO
-  let contenedor = document.createElement("div");
-  contenedor.style.position = "fixed";
-  contenedor.style.left = "-9999px";
-  contenedor.appendChild(copia);
-  document.body.appendChild(contenedor);
-
-  // 🔥 RENDER
-  const canvas = await html2canvas(copia, {
-    scale: 2,
-    useCORS: true
-  });
-
-  const imgData = canvas.toDataURL("image/jpeg", 1.0);
-
   const pdf = new jsPDF("p","mm","a4");
 
-  const imgWidth = 210;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-  // 🔥 FONDO
-  pdf.setFillColor(255,255,255);
+  // 🔥 FONDO MODERNO
+  pdf.setFillColor(245,245,245);
   pdf.rect(0,0,210,297,"F");
 
+  // 🔥 HEADER DORADO
   pdf.setFillColor(212,175,55);
-  pdf.rect(0,0,210,8,"F");
+  pdf.rect(0,0,210,15,"F");
 
-  let finalHeight = imgHeight > 280 ? 280 : imgHeight;
+  // 🔥 TITULO
+  pdf.setFont("helvetica","bold");
+  pdf.setFontSize(20);
+  pdf.setTextColor(0,0,0);
+  pdf.text("Charly Fitness", 105, 25, {align:"center"});
 
-  pdf.addImage(imgData,"JPEG",0,10,imgWidth,finalHeight);
+  pdf.setFontSize(11);
+  pdf.setFont("helvetica","normal");
+  pdf.text("Plan Nutricional Personalizado", 105, 32, {align:"center"});
+
+  // 🔥 INFO CLIENTE
+  pdf.setFontSize(10);
+  pdf.text(`Nombre: ${nombre}`, 20, 45);
+  pdf.text(`Fecha: ${fecha}`, 150, 45);
+
+  // 🔥 CAJA RESUMEN
+  pdf.setFillColor(255,255,255);
+  pdf.roundedRect(20,50,170,25,5,5,"F");
+
+  pdf.setFontSize(11);
+  pdf.text("Consumo diario:", 25, 60);
+
+  // 🔥 TEXTO DIETA
+  let y = 80;
+
+  const lineas = pdf.splitTextToSize(dieta, 170);
+
+  lineas.forEach(line=>{
+    if(y > 250){
+      pdf.addPage();
+      y = 20;
+    }
+    pdf.text(line, 20, y);
+    y += 6;
+  });
+
+  // 🔥 RECOMENDACIONES
+  y += 10;
+
+  pdf.setFont("helvetica","bold");
+  pdf.text("Recomendaciones:", 20, y);
+
+  pdf.setFont("helvetica","normal");
+  y += 6;
+
+  const recomendaciones = [
+    "Consumir mínimo 2-3 litros de agua al día",
+    "Evitar alimentos ultra procesados",
+    "Mantener horarios constantes de comida",
+    "Priorizar sueño y recuperación"
+  ];
+
+  recomendaciones.forEach(r=>{
+    pdf.text("- " + r, 20, y);
+    y += 6;
+  });
+
+  // 🔥 SUPLEMENTOS
+  y += 5;
+
+  pdf.setFont("helvetica","bold");
+  pdf.text("Suplementación:", 20, y);
+
+  pdf.setFont("helvetica","normal");
+  y += 6;
+
+  const suplementos = [
+    "Creatina: 5g antes y después de entrenar",
+    "Proteína whey: 1-2 scoops post entrenamiento",
+    "Omega 3: 2 cápsulas al día",
+    "Multivitamínico: 1 cápsula diaria"
+  ];
+
+  suplementos.forEach(s=>{
+    pdf.text("- " + s, 20, y);
+    y += 6;
+  });
+
+  // 🔥 FOOTER
+  pdf.setFontSize(8);
+  pdf.text("Charly Fitness | WhatsApp: 7341771575", 105, 290, {align:"center"});
 
   pdf.save(`dieta-${nombre}.pdf`);
-
-  document.body.removeChild(contenedor);
 }
 
 
