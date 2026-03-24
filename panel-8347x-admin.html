@@ -356,16 +356,29 @@ async function descargarPDF(){
 
   // 🔥 LIMPIAR ICONOS
   copia.querySelectorAll("*").forEach(el=>{
-    el.innerHTML = el.innerHTML
-      .replace(/🔥/g,"")
-      .replace(/🥩/g,"")
-      .replace(/🍚/g,"")
-      .replace(/🥑/g,"")
-      .replace(/📅/g,"");
+  el.innerHTML = el.innerHTML
+    .replace(/🔥/g,"")
+    .replace(/🥩/g,"")
+    .replace(/🍚/g,"")
+    .replace(/🥑/g,"")
+    .replace(/📅/g,"");
 
-    el.style.color = "#111";
-    el.style.background = "transparent";
-  });
+  // 🔥 FORZAR TEXTO NEGRO
+  el.style.color = "#000";
+
+  // 🔥 ELIMINAR FONDOS OSCUROS
+  el.style.background = "transparent";
+  el.style.backgroundColor = "transparent";
+});
+
+// 🔥 CORREGIR CARDS OSCURAS
+copia.querySelectorAll(".card-meal").forEach(card=>{
+  card.style.background = "#f5f5f5"; // gris elegante
+  card.style.color = "#000";
+  card.style.padding = "10px";
+  card.style.borderRadius = "8px";
+  card.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
+});  
 
   // 🔥 HEADER PRO (CLÍNICA)
   let header = document.createElement("div");
