@@ -345,12 +345,12 @@ async function descargarPDF(){
   let copia = elemento.cloneNode(true);
 
   copia.style.background = "#ffffff";
-  copia.style.color = "#111";
+  copia.style.color = "#000";
   copia.style.padding = "30px";
   copia.style.width = "700px";
   copia.style.fontFamily = "Arial, sans-serif";
 
-  // 🔥 LIMPIAR ICONOS Y FONDOS NEGROS
+  // 🔥 LIMPIAR ICONOS + RESET GENERAL
   copia.querySelectorAll("*").forEach(el=>{
     el.innerHTML = el.innerHTML
       .replace(/🔥/g,"")
@@ -359,23 +359,29 @@ async function descargarPDF(){
       .replace(/🥑/g,"")
       .replace(/📅/g,"");
 
-    el.style.color = "#111";
-
-    // ❌ eliminar fondos negros
-    if(el.style.background === "rgb(17, 17, 17)" || el.style.background === "#111"){
-      el.style.background = "#f5f5f5";
-      el.style.padding = "10px";
-      el.style.borderRadius = "8px";
-    }
+    el.style.color = "#000";
+    el.style.background = "transparent";
   });
 
-  // 🔥 AGREGAR TITULO A LA PRIMERA CARD (RESUMEN)
+  // 🔥 ARREGLAR CARDS DE COMIDAS
+  copia.querySelectorAll(".card-meal").forEach(card=>{
+    card.style.background = "#f5f5f5";
+    card.style.color = "#000";
+    card.style.padding = "10px";
+    card.style.borderRadius = "8px";
+    card.style.marginBottom = "10px";
+  });
+
+  // 🔥 ARREGLAR RESUMEN (PRIMER BLOQUE)
   let resumen = copia.querySelector("div[style*='background']");
   if(resumen){
+    resumen.style.background = "#f5f5f5";
+    resumen.style.color = "#000";
+    resumen.style.padding = "12px";
+    resumen.style.borderRadius = "8px";
+
     resumen.innerHTML = `
-      <h3 style="margin-bottom:10px; color:#000;">
-        Resumen nutricional diario
-      </h3>
+      <h3 style="margin-bottom:10px;">Resumen nutricional diario</h3>
       ${resumen.innerHTML}
     `;
   }
@@ -415,7 +421,7 @@ async function descargarPDF(){
   contenedor.appendChild(copia);
   document.body.appendChild(contenedor);
 
-  // 🔥 REDUCIR ESCALA PARA QUE TODO QUEPA EN 1 HOJA
+  // 🔥 CANVAS
   const canvas = await html2canvas(copia, {
     scale: 1.5,
     useCORS: true
@@ -428,71 +434,21 @@ async function descargarPDF(){
   const imgWidth = 210;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-  // 🔥 FONDO PREMIUM
+  // 🔥 FONDO
   pdf.setFillColor(255,255,255);
   pdf.rect(0,0,210,297,"F");
 
   pdf.setFillColor(212,175,55);
   pdf.rect(0,0,210,8,"F");
 
-  // 🔥 AJUSTE AUTOMÁTICO A UNA HOJA
-  let finalHeight = imgHeight;
-
-  if(imgHeight > 280){
-    finalHeight = 280;
-  }
+  // 🔥 AJUSTE A UNA HOJA
+  let finalHeight = imgHeight > 280 ? 280 : imgHeight;
 
   pdf.addImage(imgData,"JPEG",0,10,imgWidth,finalHeight);
 
   pdf.save(`dieta-${nombre}.pdf`);
 
   document.body.removeChild(contenedor);
-}
-  
-
-function enviarWhats(){
-  let nombre = document.getElementById("nombreCliente").value || "Cliente";
-  let dieta = document.getElementById("resultadoPRO").innerText;
-
-  if(!dieta.trim()){
-    alert("Genera la dieta primero bro 🔥");
-    return;
-  }
-
-  let mensaje = `🔥 DIETA PERSONALIZADA 🔥
-
-Cliente: ${nombre}
-
-${dieta}
-
-💪 Generado por Charly Fitness`;
-
-  let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
-
-  window.open(url, "_blank");
-}
-
-
-  function guardarCliente(){
-  let nombre = document.getElementById("nombreCliente").value;
-  let dieta = document.getElementById("resultadoPRO").innerText;
-
-  if(!nombre || !dieta.trim()){
-    alert("Falta info bro 🔥");
-    return;
-  }
-
-  let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-
-  clientes.push({
-    nombre,
-    dieta,
-    fecha: new Date().toLocaleDateString()
-  });
-
-  localStorage.setItem("clientes", JSON.stringify(clientes));
-
-  alert("Cliente guardado 🔥");
 }
 
   
