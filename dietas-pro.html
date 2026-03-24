@@ -36,6 +36,11 @@
 </div>
 </section>
 
+
+
+
+
+
 <script>
 function usarPro(){
   let datos = {
@@ -116,32 +121,40 @@ function generarDietaPRO(datos){
   return { calorias, proteina, carbos, grasa, comidas };
 }
 
+  
+
 function mostrarDieta(dieta){
   let nombre = document.getElementById("nombreCliente").value;
   let fecha = new Date().toLocaleDateString();
 
   let html = `
-  <div style="background:#fff; color:#000; padding:20px;">
-    <div style="background:#fff; padding:25px;">
+  <div class="dieta-card">
+    
+    <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
+      <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
+      <p>Plan Nutricional Personalizado</p>
+      <p style="font-size:12px;">Sistema inteligente de nutrición</p>
+    </div>
 
-      <h1 style="text-align:center; color:#d4af37;">🔥 Charly Fitness</h1>
-      <p style="text-align:center;">Plan Nutricional Personalizado</p>
+    <div style="text-align:center; margin-bottom:25px;">
+      <h2>${nombre || "Cliente"}</h2>
+      <p>📅 ${fecha}</p>
+    </div>
 
-      <h2 style="text-align:center;">${nombre || "Cliente"}</h2>
-      <p style="text-align:center;">📅 ${fecha}</p>
-
-      <div style="background:#f5f5f5; padding:15px; margin:20px 0;">
+    <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px;">
+      <p>
         🔥 ${dieta.calorias} kcal<br>
         🥩 ${dieta.proteina}g proteína<br>
         🍚 ${dieta.carbos}g carbohidratos<br>
         🥑 ${dieta.grasa}g grasas
-      </div>
+      </p>
+    </div>
   `;
 
   dieta.comidas.forEach((c,i)=>{
     html += `
-      <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
-        <strong>Comida ${i+1}</strong>
+      <div class="card-meal no-break">
+        <h4>🍽️ Comida ${i+1}</h4>
         <ul>
           <li>${c.proteina}</li>
           <li>${c.carbos}</li>
@@ -151,19 +164,63 @@ function mostrarDieta(dieta){
     `;
   });
 
-  html += `</div></div>`;
+  html += `</div>`;
 
   document.getElementById("resultadoPRO").innerHTML = html;
 }
+  
 
 function descargarPDF(){
   const elemento = document.getElementById("resultadoPRO");
+  const nombre = document.getElementById("nombreCliente").value || "cliente";
 
-  html2pdf().from(elemento).save("dieta.pdf");
+  if(!elemento.innerHTML.trim()){
+    alert("Primero genera la dieta bro 🔥");
+    return;
+  }
+
+  let copia = elemento.cloneNode(true);
+
+  // 🔥 MODO PDF LIMPIO
+  copia.style.background = "#ffffff";
+  copia.style.color = "#000000";
+  copia.style.padding = "20px";
+  copia.style.width = "800px";
+
+  // 🔥 FORZAR colores visibles
+  copia.querySelectorAll("*").forEach(el=>{
+    el.style.setProperty("color","#000","important");
+    el.style.setProperty("background","#fff","important");
+  });
+
+  // evitar cortes
+  copia.querySelectorAll('.card-meal').forEach(el=>{
+    el.style.pageBreakInside = "avoid";
+  });
+
+  // 🔥 IMPORTANTE: hacerlo visible (NO hidden)
+  document.body.appendChild(copia);
+
+  html2pdf().set({
+    margin: 10,
+    filename: `dieta-${nombre}.pdf`,
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  })
+  .from(copia)
+  .save()
+  .then(()=>{
+    document.body.removeChild(copia);
+  });
 }
+
+  
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </body>
 </html>
