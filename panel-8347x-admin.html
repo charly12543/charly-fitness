@@ -329,6 +329,7 @@ function mostrarDieta(dieta){
   document.getElementById("resultadoPRO").innerHTML = html;
 }
 
+
 async function descargarPDF(){
   const { jsPDF } = window.jspdf;
 
@@ -343,7 +344,7 @@ async function descargarPDF(){
   let fecha = new Date().toLocaleDateString();
   let planID = "CF-" + Math.floor(Math.random()*9000 + 1000);
 
-  // 🔥 EXTRAER DATOS LIMPIOS
+  // 🔥 EXTRAER DATOS
   let comidas = [];
   elemento.querySelectorAll(".card-meal").forEach(card=>{
     let titulo = card.querySelector("h4")?.innerText.replace("🍽️","").trim();
@@ -357,103 +358,87 @@ async function descargarPDF(){
   let resumen = elemento.querySelector("div[style*='background']")?.innerText
     .replace(/🔥|🥩|🍚|🥑/g,"") || "";
 
-  // 🔥 CONTENEDOR PRINCIPAL
+  // 🔥 CREAR CONTENEDOR
   let contenedor = document.createElement("div");
+
+  contenedor.style.position = "absolute";
+  contenedor.style.top = "0";
+  contenedor.style.left = "0";
   contenedor.style.width = "800px";
   contenedor.style.padding = "30px";
-  contenedor.style.fontFamily = "Arial, sans-serif";
   contenedor.style.background = "#f2f2f2";
+  contenedor.style.fontFamily = "Arial, sans-serif";
+  contenedor.style.zIndex = "9999";
 
   contenedor.innerHTML = `
-  <div style="background:white; padding:25px; border-radius:12px;">
+    <div style="background:white; padding:25px; border-radius:12px;">
 
-    <!-- HEADER -->
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <img src="imagenes/logoGitHub.png" style="height:60px;">
-      
-      <div style="text-align:right;">
-        <h1 style="margin:0; font-size:20px;">Charly Fitness</h1>
-        <p style="margin:0; font-size:12px;">
-          Nutrición, Suplementación y Entrenamiento
-        </p>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <img src="imagenes/logoGitHub.png" style="height:60px;">
+        
+        <div style="text-align:right;">
+          <h1 style="margin:0; font-size:20px;">Charly Fitness</h1>
+          <p style="margin:0; font-size:12px;">
+            Nutrición y Entrenamiento
+          </p>
+        </div>
       </div>
-    </div>
 
-    <hr style="margin:15px 0; border:1px solid #ddd;">
+      <hr style="margin:15px 0; border:1px solid #ddd;">
 
-    <!-- INFO -->
-    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-      <div>
-        <strong>Nombre:</strong> ${nombre}
+      <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+        <div><strong>Nombre:</strong> ${nombre}</div>
+        <div>
+          <strong>Fecha:</strong> ${fecha}<br>
+          <strong>Plan:</strong> ${planID}
+        </div>
       </div>
-      <div>
-        <strong>Fecha:</strong> ${fecha}<br>
-        <strong>Plan:</strong> ${planID}
-      </div>
-    </div>
 
-    <!-- RESUMEN -->
-    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:20px;">
-      <strong>CONSUMO DIARIO:</strong><br><br>
-      ${resumen}
-    </div>
+      <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:20px;">
+        <strong>CONSUMO DIARIO:</strong><br><br>
+        ${resumen}
+      </div>
   `;
 
-  // 🔥 COMIDAS GRANDES ESTILO CLÍNICA
   comidas.forEach(c=>{
     contenedor.innerHTML += `
-      <div style="background:#eaeaea; padding:18px; border-radius:10px; margin-bottom:15px;">
-        <strong style="font-size:14px;">${c.titulo.toUpperCase()}</strong><br><br>
+      <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:10px;">
+        <strong>${c.titulo.toUpperCase()}</strong><br><br>
         ${c.items.join("<br>")}
       </div>
     `;
   });
 
-  // 🔥 RECOMENDACIONES PRO
   contenedor.innerHTML += `
     <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-top:10px;">
       <strong>RECOMENDACIONES:</strong><br><br>
-      • En caso de hambre puedes añadir verduras libres (pepino, jícama, lechuga)<br>
-      • Consumir mínimo 2-3 litros de agua al día<br>
-      • Evitar azúcares refinados<br>
-      • Cocinar con aceite de oliva o spray<br>
-      • Mantener horarios consistentes de comida
+      • 2-3 litros de agua diarios<br>
+      • Verduras libres entre comidas<br>
+      • Evitar azúcar refinada
     </div>
-  `;
 
-  // 🔥 SUPLEMENTACIÓN PRO (tipo nutriólogo real)
-  contenedor.innerHTML += `
-    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-top:15px;">
+    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-top:10px;">
       <strong>SUPLEMENTACIÓN:</strong><br><br>
-      • Creatina: 5g antes o después de entrenar<br>
-      • Proteína: 1 scoop post-entreno<br>
-      • Multivitamínico: 1 cápsula diaria<br>
-      • Omega 3: 1-2 cápsulas al día<br>
-      • Magnesio: antes de dormir
+      • Creatina 5g<br>
+      • Proteína post-entreno<br>
+      • Multivitamínico diario
+    </div>
+
+    <div style="margin-top:15px; font-size:11px; text-align:center;">
+      Charly Fitness | WhatsApp: 7341771575
+    </div>
     </div>
   `;
 
-  // 🔥 FOOTER CLÍNICO
-  contenedor.innerHTML += `
-    <div style="margin-top:20px; font-size:11px; text-align:center; color:#666;">
-      Charly Fitness | Plan personalizado<br>
-      WhatsApp: 7341771575
-    </div>
-  `;
+  document.body.appendChild(contenedor);
 
-  contenedor.innerHTML += `</div>`;
+  // 🔥 ESPERAR RENDER REAL + IMÁGENES
+  await new Promise(resolve => setTimeout(resolve, 500));
 
-  // 🔥 RENDER OCULTO
-  let wrapper = document.createElement("div");
-  wrapper.style.position = "fixed";
-  wrapper.style.left = "-9999px";
-  wrapper.appendChild(contenedor);
-  document.body.appendChild(wrapper);
-
-  // 🔥 GENERAR PDF (ESTABLE)
   const canvas = await html2canvas(contenedor, {
     scale: 2,
-    useCORS: true
+    useCORS: true,
+    allowTaint: true
   });
 
   const imgData = canvas.toDataURL("image/jpeg", 1.0);
@@ -469,9 +454,8 @@ async function descargarPDF(){
 
   pdf.save(`dieta-${nombre}.pdf`);
 
-  document.body.removeChild(wrapper);
+  document.body.removeChild(contenedor);
 }
-
 
 
 
