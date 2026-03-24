@@ -45,9 +45,18 @@
 </div>
 </section>
 
-<button onclick="enviarWhats()" class="btn-whats">
-📲 Enviar dieta por WhatsApp
-</button>
+  
+<!-- BOTTON WHATS  -->  
+<div class="whats-box">
+  <h3>🔥 ¿Listo para tu plan personalizado?</h3>
+  <p>Recibe tu dieta + seguimiento directo conmigo</p>
+  <button onclick="enviarWhats()" class="btn-whats-pro">
+    📲 Obtener dieta por WhatsApp
+  </button>
+<span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
+</div>
+
+  
 
 
 <!------ SECCION DE JS  SCRIPTS ------>
@@ -321,16 +330,7 @@ function mostrarDieta(dieta){
 }
   
 
-function descargarPDF(){
-  const { jsPDF } = window.jspdf;
-
-  const nombre = document.getElementById("nombreCliente").value || "cliente";
-  const dietaHTML = document.getElementById("resultadoPRO");
-
-  if(!dietaHTML.innerText.trim()){
-    alert("Primero genera la dieta bro 🔥");
-    return;
-  }
+  
 function descargarPDF(){
   const { jsPDF } = window.jspdf;
 
