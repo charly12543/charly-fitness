@@ -406,9 +406,6 @@ h2{
   font-weight:bold;
 }
 
-.dieta-card *{
-  color:#000 !important;
-}
 
 /* ANIMACIONES */
 @keyframes pulse{
@@ -467,4 +464,10 @@ h2{
 /* salto de página manual (opcional PRO) */
 .page-break{
   page-break-before: always;
+}
+/* SOLO para impresión (no afecta tu web) */
+@media print {
+  .dieta-card *{
+    color:#000 !important;
+  }
 }
