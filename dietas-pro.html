@@ -171,35 +171,66 @@ function mostrarDieta(dieta){
   
 
 async function descargarPDF(){
-  const { jsPDF } = window.jspdf;
-
   const nombre = document.getElementById("nombreCliente").value || "cliente";
-  const contenido = document.getElementById("resultadoPRO").innerText;
+  const elemento = document.getElementById("resultadoPRO");
 
-  if(!contenido.trim()){
+  if(!elemento.innerHTML.trim()){
     alert("Primero genera la dieta bro 🔥");
     return;
   }
 
-  const doc = new jsPDF();
+  // 🔥 Crear copia limpia
+  let copia = elemento.cloneNode(true);
 
-  // 🔥 CONFIGURACIÓN TEXTO
-  let y = 10;
-  const lineHeight = 7;
-  const maxWidth = 180;
+  copia.style.background = "#ffffff";
+  copia.style.color = "#000000";
+  copia.style.padding = "20px";
+  copia.style.width = "800px";
 
-  const lines = doc.splitTextToSize(contenido, maxWidth);
-
-  lines.forEach(line => {
-    if (y > 280) {
-      doc.addPage();
-      y = 10;
-    }
-    doc.text(line, 10, y);
-    y += lineHeight;
+  // 🔥 FORZAR colores (CLAVE)
+  copia.querySelectorAll("*").forEach(el=>{
+    el.style.color = "#000";
+    el.style.backgroundColor = "transparent";
   });
 
-  doc.save(`dieta-${nombre}.pdf`);
+  // 🔥 Contenedor oculto
+  let contenedor = document.createElement("div");
+  contenedor.style.position = "fixed";
+  contenedor.style.left = "-9999px";
+  contenedor.appendChild(copia);
+  document.body.appendChild(contenedor);
+
+  // 🔥 Convertir a imagen
+  const canvas = await html2canvas(copia, {
+    scale: 2,
+    useCORS: true
+  });
+
+  const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const imgWidth = 210;
+  const pageHeight = 297;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  let heightLeft = imgHeight;
+  let position = 0;
+
+  pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+  heightLeft -= pageHeight;
+
+  while (heightLeft > 0) {
+    position = heightLeft - imgHeight;
+    pdf.addPage();
+    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+  }
+
+  pdf.save(`dieta-${nombre}.pdf`);
+
+  document.body.removeChild(contenedor);
 }
 
   
@@ -207,9 +238,6 @@ async function descargarPDF(){
 
 
 
-
-  
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>  
 </body>
 </html>
