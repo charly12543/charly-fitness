@@ -333,7 +333,7 @@ function mostrarDieta(dieta){
 async function descargarPDF(){
   const { jsPDF } = window.jspdf;
 
-  const nombre = document.getElementById("nombreCliente").value || "cliente";
+  const nombre = document.getElementById("nombreCliente").value || "Cliente";
   const elemento = document.getElementById("resultadoPRO");
 
   if(!elemento.innerText.trim()){
@@ -341,75 +341,106 @@ async function descargarPDF(){
     return;
   }
 
-  // 🔥 CLON
+  // 🔥 CLON BASE
   let copia = elemento.cloneNode(true);
 
   copia.style.background = "#ffffff";
-  copia.style.color = "#000";
-  copia.style.padding = "30px";
-  copia.style.width = "700px";
+  copia.style.color = "#111";
+  copia.style.padding = "50px";
+  copia.style.width = "750px";
   copia.style.fontFamily = "Arial, sans-serif";
 
-  // 🔥 LIMPIAR ICONOS + RESET GENERAL
+  // 🔥 LIMPIEZA TOTAL
   copia.querySelectorAll("*").forEach(el=>{
     el.innerHTML = el.innerHTML
-      .replace(/🔥/g,"")
-      .replace(/🥩/g,"")
-      .replace(/🍚/g,"")
-      .replace(/🥑/g,"")
-      .replace(/📅/g,"");
+      .replace(/🔥|🥩|🍚|🥑|📅/g,"");
 
     el.style.color = "#000";
     el.style.background = "transparent";
   });
 
-  // 🔥 ARREGLAR CARDS DE COMIDAS
-  copia.querySelectorAll(".card-meal").forEach(card=>{
-    card.style.background = "#f5f5f5";
-    card.style.color = "#000";
-    card.style.padding = "10px";
-    card.style.borderRadius = "8px";
-    card.style.marginBottom = "10px";
-  });
-
-  // 🔥 ARREGLAR RESUMEN (PRIMER BLOQUE)
+  // 🔥 RESUMEN (TOP)
   let resumen = copia.querySelector("div[style*='background']");
   if(resumen){
-    resumen.style.background = "#f5f5f5";
-    resumen.style.color = "#000";
-    resumen.style.padding = "12px";
-    resumen.style.borderRadius = "8px";
+    resumen.style.background = "#eaeaea";
+    resumen.style.padding = "15px";
+    resumen.style.borderRadius = "10px";
+    resumen.style.marginBottom = "15px";
 
     resumen.innerHTML = `
-      <h3 style="margin-bottom:10px;">Resumen nutricional diario</h3>
+      <strong>CONSUMO DIARIO:</strong><br><br>
       ${resumen.innerHTML}
     `;
   }
 
-  // 🔥 HEADER PRO
+  // 🔥 BLOQUES COMIDAS (TIPO NUTRIOLOGO)
+  copia.querySelectorAll(".card-meal").forEach(card=>{
+    card.style.background = "#f5f5f5";
+    card.style.padding = "12px";
+    card.style.borderRadius = "10px";
+    card.style.marginBottom = "10px";
+    card.style.fontSize = "12px";
+  });
+
+  // 🔥 HEADER PREMIUM
   let header = document.createElement("div");
   header.innerHTML = `
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
       
-      <img src="https://i.imgur.com/4NZ6uLY.png" style="height:45px;">
+      <img src="https://i.imgur.com/4NZ6uLY.png" style="height:65px;">
 
       <div style="text-align:right;">
-        <h2 style="margin:0;">Charly Fitness</h2>
-        <p style="margin:0; font-size:11px;">Nutrición & Transformación Física</p>
+        <h1 style="margin:0; font-size:20px;">CHARLY FITNESS</h1>
+        <p style="margin:0; font-size:12px;">
+          Nutrición • Suplementación • Entrenamiento
+        </p>
       </div>
-
     </div>
 
-    <hr style="border:none; border-top:2px solid #d4af37; margin-bottom:15px;">
+    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:15px;">
+      <div><strong>Nombre:</strong> ${nombre}</div>
+      <div><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</div>
+    </div>
+
+    <hr style="border:none; border-top:2px solid #d4af37; margin-bottom:20px;">
   `;
 
   copia.prepend(header);
 
-  // 🔥 FOOTER
+  // 🔥 SUPLEMENTOS PRO (EDITABLE)
+  let suplementos = document.createElement("div");
+  suplementos.innerHTML = `
+    <div style="margin-top:20px; background:#f0f0f0; padding:15px; border-radius:10px;">
+      <strong>SUPLEMENTACIÓN:</strong><br><br>
+
+      • Creatina: 5g antes y después de entrenar<br>
+      • Proteína whey: 1-2 scoops post entrenamiento<br>
+      • Omega 3: 2 cápsulas al día<br>
+      • Multivitamínico: 1 cápsula diaria<br>
+      • Magnesio: antes de dormir
+    </div>
+  `;
+  copia.appendChild(suplementos);
+
+  // 🔥 RECOMENDACIONES (ESTILO REAL)
+  let recomendaciones = document.createElement("div");
+  recomendaciones.innerHTML = `
+    <div style="margin-top:15px; background:#f9f9f9; padding:15px; border-radius:10px;">
+      <strong>RECOMENDACIONES:</strong><br><br>
+
+      • Consumir mínimo 2-3 litros de agua al día<br>
+      • Evitar alimentos ultra procesados<br>
+      • Mantener horarios constantes de comida<br>
+      • Priorizar descanso y sueño de calidad
+    </div>
+  `;
+  copia.appendChild(recomendaciones);
+
+  // 🔥 FOOTER PRO
   let footer = document.createElement("div");
   footer.innerHTML = `
-    <div style="margin-top:20px; font-size:10px; text-align:center; color:#777;">
-      Plan personalizado | WhatsApp: 7341771575
+    <div style="margin-top:25px; font-size:10px; text-align:center; color:#777;">
+      © Charly Fitness | WhatsApp: 7341771575
     </div>
   `;
   copia.appendChild(footer);
@@ -423,7 +454,7 @@ async function descargarPDF(){
 
   // 🔥 CANVAS
   const canvas = await html2canvas(copia, {
-    scale: 1.5,
+    scale: 2,
     useCORS: true
   });
 
@@ -434,14 +465,13 @@ async function descargarPDF(){
   const imgWidth = 210;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-  // 🔥 FONDO
+  // 🔥 FONDO BLANCO + HEADER DORADO
   pdf.setFillColor(255,255,255);
   pdf.rect(0,0,210,297,"F");
 
   pdf.setFillColor(212,175,55);
   pdf.rect(0,0,210,8,"F");
 
-  // 🔥 AJUSTE A UNA HOJA
   let finalHeight = imgHeight > 280 ? 280 : imgHeight;
 
   pdf.addImage(imgData,"JPEG",0,10,imgWidth,finalHeight);
@@ -451,10 +481,13 @@ async function descargarPDF(){
   document.body.removeChild(contenedor);
 }
 
+
+
+
+
+
   
 </script>
-
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>  
 </body>
