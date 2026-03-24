@@ -142,7 +142,7 @@ function mostrarDieta(dieta){
 
   dieta.comidas.forEach((c,i)=>{
     html += `
-      <div class="card-meal" style="background:#ffffff; color:#000; border:1px solid #ddd; box-shadow:0 5px 15px rgba(0,0,0,0.1); padding:10px; margin-bottom:10px;">
+      <div class="card-meal no-break" style="background:#ffffff; color:#000; border:1px solid #ddd; box-shadow:0 5px 15px rgba(0,0,0,0.1); padding:10px; margin-bottom:10px;">
         <h4>🍽️ Comida ${i+1}</h4>
         <ul style="color:#000;">
           <li>🥩 ${c.proteina}</li>
@@ -211,29 +211,55 @@ function descargarPDF(){
   const elemento = document.getElementById("resultadoPRO");
   const nombre = document.getElementById("nombreCliente").value || "cliente";
 
-  if(!elemento.innerHTML.trim()){ alert("Primero genera la dieta bro 🔥"); return; }
+  if(!elemento.innerHTML.trim()){
+    alert("Primero genera la dieta bro 🔥");
+    return;
+  }
 
+  // 🔥 Clonar contenido
   let copia = elemento.cloneNode(true);
-  copia.style.padding = "20px";
+
+  // 🔥 Estilos tipo documento A4
   copia.style.background = "#ffffff";
   copia.style.color = "#000000";
   copia.style.fontFamily = "Arial, sans-serif";
-  copia.style.width = "800px";
+  copia.style.padding = "20px";
+  copia.style.width = "210mm";
+  copia.style.maxWidth = "210mm";
 
-  document.body.appendChild(copia);
+  // 🔥 Evitar cortes en comidas
+  copia.querySelectorAll('.card-meal').forEach(el=>{
+    el.style.pageBreakInside = "avoid";
+  });
 
-  setTimeout(() => {
-    html2pdf().set({
-      margin: 10,
-      filename: `dieta-${nombre}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    })
-    .from(copia)
-    .save()
-    .then(() => { document.body.removeChild(copia); });
-  }, 500);
+  // 🔥 Contenedor aislado (CLAVE)
+  let contenedorPDF = document.createElement("div");
+  contenedorPDF.style.position = "fixed";
+  contenedorPDF.style.left = "-9999px";
+  contenedorPDF.appendChild(copia);
+
+  document.body.appendChild(contenedorPDF);
+
+  html2pdf().set({
+    margin: 10,
+    filename: `dieta-${nombre}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+      scale: 3,
+      letterRendering: true,
+      useCORS: true
+    },
+    jsPDF: { 
+      unit: 'mm', 
+      format: 'a4', 
+      orientation: 'portrait' 
+    }
+  })
+  .from(copia)
+  .save()
+  .then(() => {
+    document.body.removeChild(contenedorPDF);
+  });
 }
 </script>
 
