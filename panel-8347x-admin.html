@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dietas PRO</title>
+<title>Dietas y Rutinas PRO</title>
 <link rel="stylesheet" href="styleDietas.css">
 </head>
 
@@ -11,464 +11,198 @@
 
 <section class="hero">
   <h1>🔥 Calculadora PRO (Privada)</h1>
-  <p>Solo para generar dietas personalizadas</p>
+  <p>Genera dieta + rutina personalizada</p>
   <h3>⚠️ Solo uso interno</h3>
 </section>
 
 <section>
 <div class="calculadora">
-<input type="text" id="nombreCliente" placeholder="Nombre del cliente">
-<input type="number" id="peso" placeholder="Peso (kg)">
-<input type="number" step="0.01" id="altura" placeholder="Altura (1.80 o 180)">
-<input type="number" id="edad" placeholder="Edad">
+  <input type="text" id="nombreCliente" placeholder="Nombre del cliente">
+  <input type="number" id="peso" placeholder="Peso (kg)">
+  <input type="number" step="0.01" id="altura" placeholder="Altura (1.80 o 180)">
+  <input type="number" id="edad" placeholder="Edad">
 
-<!-- OBJETIVO -->
-<label>🎯 Objetivo</label>  
-<select id="objetivo">
-  <option value="definicion">Definición</option>
-  <option value="volumen">Volumen</option>
-</select>
+  <!-- SEXO -->
+  <label>🧍 Sexo</label>
+  <select id="sexo">
+    <option value="hombre">Hombre</option>
+    <option value="mujer">Mujer</option>
+  </select>
 
-<!-- TIPO DE DIETA -->
+  <!-- OBJETIVO -->
+  <label>🎯 Objetivo</label>  
+  <select id="objetivo">
+    <option value="definicion">Definición</option>
+    <option value="volumen">Volumen</option>
+  </select>
+
+  <!-- TIPO DE DIETA -->
   <label>⚡ Tipo de dieta</label>
-<select id="tipoDieta">
-  <option value="normal">Dieta normal</option>
-  <option value="keto">Keto</option>
-  <option value="godin">Godín</option>
-  <option value="runner">Runner</option>
-</select>
-<button onclick="usarPro()">🔥 Generar dieta PRO</button>
-<div id="resultadoPRO"></div>
-<button onclick="descargarPDF()" style="margin-top:15px;">
-📄 Descargar PDF
-</button>
+  <select id="tipoDieta">
+    <option value="normal">Normal</option>
+    <option value="keto">Keto</option>
+    <option value="godin">Godín</option>
+    <option value="runner">Runner</option>
+  </select>
+
+  <!-- DÍAS ENTRENAMIENTO -->
+  <label>📅 Días por semana</label>
+  <input type="number" id="diasGym" min="2" max="7" placeholder="Ej: 3">
+
+  <button onclick="usarPro()">🔥 Generar Dieta PRO</button>
+  <button onclick="generarRutina()" style="margin-top:10px;">🏋️‍♂️ Generar Rutina PRO</button>
+
+  <div id="resultadoPRO"></div>
+  <button onclick="descargarPDF('dieta')" style="margin-top:15px;">📄 Descargar PDF Dieta</button>
+  <button onclick="descargarPDF('rutina')" style="margin-top:5px;">📄 Descargar PDF Rutina</button>
 </div>
 </section>
 
-  
-<!-- BOTTON WHATS  -->  
+<!-- BOTON WHATS -->  
 <div class="whats-box">
-  <h3>🔥 ¿Listo para tu plan personalizado?</h3>
-  <p>Recibe tu dieta + seguimiento directo conmigo</p>
+  <h3>🔥 Listo para tu plan personalizado?</h3>
+  <p>Recibe dieta + rutina directamente en WhatsApp</p>
   <button onclick="enviarWhats()" class="btn-whats-pro">
-    📲 Obtener dieta por WhatsApp
+    📲 Obtener plan PRO
   </button>
 <span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
 </div>
 
-  
+<!-- SCRIPTS -->
 
-
-<!------ SECCION DE JS  SCRIPTS ------>
-
-<!-- USARPRO -->  
 <script>
+/* ===================== DIETA PRO ===================== */
 function usarPro(){
  let datos = {
   peso: parseFloat(document.getElementById("peso").value),
   altura: parseFloat(document.getElementById("altura").value),
   edad: parseFloat(document.getElementById("edad").value),
+  sexo: document.getElementById("sexo").value,
   objetivo: document.getElementById("objetivo").value,
   tipo: document.getElementById("tipoDieta").value
-};
-
+ };
   if(!datos.peso || !datos.altura || !datos.edad){
     alert("Completa todos los datos bro 🔥");
     return;
   }
-
   let dieta = generarDietaPRO(datos);
   mostrarDieta(dieta);
 }
 
-function redondear5(x){
-  return Math.round(x/5)*5;
-}
+/* ===================== RUTINA PRO ===================== */
+function generarRutina(){
+  let nombre = document.getElementById("nombreCliente").value || "Cliente";
+  let sexo = document.getElementById("sexo").value;
+  let dias = parseInt(document.getElementById("diasGym").value) || 3;
 
+  let rutina = [];
 
+  // Ejercicios específicos por sexo
+  const ejerciciosHombre = {
+    Pecho: ["Press banca 4x10", "Aperturas mancuernas 3x12", "Fondos 3x15"],
+    Espalda: ["Remo barra 4x10", "Jalón polea 3x12", "Peso muerto 3x8"],
+    Hombros: ["Press militar 4x10", "Elevaciones laterales 3x12", "Facepull 3x15"],
+    Bíceps: ["Curl barra 4x12", "Curl martillo 3x12"],
+    Tríceps: ["Press francés 4x12", "Fondos 3x15"],
+    Pierna: ["Sentadillas 4x10", "Prensa 3x12", "Curl femoral 3x12", "Gemelos 4x15"]
+  };
 
-function generarDietaPRO(datos){
-  let {peso, altura, edad, objetivo, tipo} = datos;
+  const ejerciciosMujer = {
+    Pierna: ["Sentadillas 4x12", "Hip thrust 4x12", "Prensa 3x15", "Gemelos 3x20"],
+    Glúteo: ["Patada glúteo 3x15", "Abducción 3x20"],
+    Core: ["Plancha 3x60s", "Crunch 3x20", "Russian twist 3x20"],
+    Espalda: ["Remo mancuerna 4x12", "Jalón polea 3x12"],
+    Hombros: ["Elevaciones laterales 3x12", "Press militar 3x10"],
+    Brazos: ["Curl bíceps 3x12", "Extensión tríceps 3x12"]
+  };
 
-  if(altura > 3) altura = altura / 100;
+  let pool = sexo === "hombre" ? ejerciciosHombre : ejerciciosMujer;
+  let grupos = Object.keys(pool);
 
-  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
-  let calorias = Math.round(bmr * 1.55);
+  for(let i=0;i<dias;i++){
+    let diaNombre = `Día ${i+1}`;
+    let ejeDia = [];
 
-  if(objetivo === "definicion") calorias -= 400;
-  if(objetivo === "volumen") calorias += 300;
-
-  // 🔥 MACROS SEGÚN TIPO
-  let proteina, grasa, carbos;
-
-  if(tipo === "keto"){
-    proteina = Math.round(peso * 2);
-    grasa = Math.round((calorias * 0.65) / 9);
-    carbos = Math.round((calorias * 0.10) / 4);
-  }
-  else if(tipo === "runner"){
-    proteina = Math.round(peso * 1.8);
-    grasa = Math.round((calorias * 0.20) / 9);
-    carbos = Math.round((calorias * 0.60) / 4);
-  }
-  else if(tipo === "godin"){
-    proteina = Math.round(peso * 2);
-    grasa = Math.round((calorias * 0.25) / 9);
-    carbos = Math.round((calorias * 0.40) / 4);
-  }
-  else{
-    proteina = Math.round(peso * 2);
-    grasa = Math.round((calorias * 0.25) / 9);
-    carbos = Math.round((calorias - (proteina*4 + grasa*9)) / 4);
-  }
-
-  let protePorComida = Math.round(proteina / 4);
-  let carbosPorComida = Math.round(carbos / 4);
-  let grasaPorComida = Math.round(grasa / 4);
-
-  // 🔥 NOMBRES PRO
-  const nombresComida = ["Desayuno", "Comida", "Pre-entreno", "Cena"];
-
-  // 🔥 BASE SEGÚN TIPO
-  let proteinas, carbosLista, grasasLista;
-
-  if(tipo === "keto"){
-    proteinas = [
-      {nombre:"carne", prote:26},
-      {nombre:"pollo", prote:31},
-      {nombre:"huevo", prote:6}
-    ];
-
-    carbosLista = [
-      {nombre:"verduras", carbos:5},
-      {nombre:"espinaca", carbos:4}
-    ];
-
-    grasasLista = [
-      {nombre:"aguacate", grasa:15},
-      {nombre:"aceite de oliva", grasa:10},
-      {nombre:"nueces", grasa:14}
-    ];
-  }
-
-  else if(tipo === "godin"){
-    proteinas = [
-      {nombre:"pollo", prote:31},
-      {nombre:"atún", prote:25},
-      {nombre:"jamón", prote:18}
-    ];
-
-    carbosLista = [
-      {nombre:"tortillas", carbos:15},
-      {nombre:"pan", carbos:12},
-      {nombre:"arroz", carbos:28}
-    ];
-
-    grasasLista = [
-      {nombre:"aguacate", grasa:15},
-      {nombre:"nueces", grasa:14}
-    ];
-  }
-
-  else if(tipo === "runner"){
-    proteinas = [
-      {nombre:"pollo", prote:31},
-      {nombre:"huevo", prote:6}
-    ];
-
-    carbosLista = [
-      {nombre:"arroz", carbos:28},
-      {nombre:"avena", carbos:60},
-      {nombre:"pasta", carbos:30},
-      {nombre:"plátano", carbos:23}
-    ];
-
-    grasasLista = [
-      {nombre:"aceite de oliva", grasa:10},
-      {nombre:"aguacate", grasa:15}
-    ];
-  }
-
-  else{
-    proteinas = [
-      {nombre:"pollo", prote:31},
-      {nombre:"carne", prote:26},
-      {nombre:"atún", prote:25},
-      {nombre:"huevo", prote:6},
-      {nombre:"claras", prote:3.5}
-    ];
-
-    carbosLista = [
-      {nombre:"arroz", carbos:28},
-      {nombre:"avena", carbos:60},
-      {nombre:"papa", carbos:20},
-      {nombre:"tortillas", carbos:15},
-      {nombre:"pan", carbos:12}
-    ];
-
-    grasasLista = [
-      {nombre:"aguacate", grasa:15},
-      {nombre:"aceite de oliva", grasa:10},
-      {nombre:"nueces", grasa:14}
-    ];
-  }
-
-  function random(arr){
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
-
-  function proteMix(gramos){
-    let claras = Math.round(gramos * 0.6 / 3.5);
-    let huevos = Math.round(gramos * 0.4 / 6);
-    return `${claras} claras + ${huevos} huevo(s)`;
-  }
-
-  function calcularProte(p, gramos){
-    if(p.nombre === "huevo" || p.nombre === "claras"){
-      return proteMix(gramos);
-    } else {
-      let g = Math.round((gramos / p.prote) * 100);
-      return `${g}g ${p.nombre}`;
+    // Elegir 3 grupos musculares distintos por día
+    for(let j=0;j<3;j++){
+      let idx = (i+j) % grupos.length;
+      ejeDia.push({grupo: grupos[idx], ejercicios: pool[grupos[idx]]});
     }
+
+    rutina.push({dia: diaNombre, bloques: ejeDia});
   }
 
-  function calcularCarbos(c, gramos){
-    if(c.nombre === "tortillas"){
-      let piezas = Math.round(gramos / c.carbos);
-      return `${piezas} tortillas`;
-    }
-    if(c.nombre === "pan"){
-      let piezas = Math.round(gramos / c.carbos);
-      return `${piezas} rebanadas de pan`;
-    }
-    if(c.nombre === "arroz"){
-      return `1 taza de arroz`;
-    }
-    if(c.nombre === "avena"){
-      return `1 taza de avena`;
-    }
-    if(c.nombre === "plátano"){
-      return `1 plátano`;
-    }
-    let g = Math.round((gramos / c.carbos) * 100);
-    return `${g}g ${c.nombre}`;
-  }
-
-  function calcularGrasa(g, gramos){
-    if(g.nombre === "aceite de oliva"){
-      let cucharadas = Math.round(gramos / g.grasa);
-      return `${cucharadas} cucharada de aceite de oliva`;
-    }
-    let gReal = Math.round((gramos / g.grasa) * 100);
-    return `${gReal}g ${g.nombre}`;
-  }
-
-  let comidas = [];
-
-  for(let i=0;i<4;i++){
-    let p = random(proteinas);
-    let c = random(carbosLista);
-    let g = random(grasasLista);
-
-    comidas.push({
-      nombre: nombresComida[i],
-      proteina: calcularProte(p, protePorComida),
-      carbos: calcularCarbos(c, carbosPorComida),
-      grasa: calcularGrasa(g, grasaPorComida)
-    });
-  }
-
-  return { calorias, proteina, carbos, grasa, comidas };
-}
-
-  
-
-function mostrarDieta(dieta){
-  let nombre = document.getElementById("nombreCliente").value;
-  let fecha = new Date().toLocaleDateString();
-
-  let html = `
-  <div class="dieta-card">
-    
+  // Mostrar en card
+  let html = `<div class="dieta-card">
     <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
       <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
-      <p>Plan Nutricional Personalizado</p>
-      <p style="font-size:12px;">Sistema inteligente de nutrición</p>
-    </div>
+      <p>Plan de Entrenamiento Personalizado</p>
+    </div>`;
 
-    <div style="text-align:center; margin-bottom:25px;">
-      <h2>${nombre || "Cliente"}</h2>
-      <p>📅 ${fecha}</p>
-    </div>
-
-    <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px;">
-      <p>
-        🔥 ${dieta.calorias} kcal<br>
-        🥩 ${dieta.proteina}g proteína<br>
-        🍚 ${dieta.carbos}g carbohidratos<br>
-        🥑 ${dieta.grasa}g grasas
-      </p>
-    </div>
-  `;
-
-  dieta.comidas.forEach((c,i)=>{
-  html += `
-    <div class="card-meal no-break">
-      <h4>🍽️ ${c.nombre}</h4>
-      <ul>
-        <li>🥩 ${c.proteina}</li>
-        <li>🍚 ${c.carbos}</li>
-        <li>🥑 ${c.grasa}</li>
-      </ul>
-    </div>
-  `;
-});
+  rutina.forEach(d=>{
+    html += `<div class="card-meal no-break">
+      <h4>🏋️ ${d.dia}</h4>`;
+    d.bloques.forEach(b=>{
+      html += `<strong>${b.grupo}</strong><ul>`;
+      b.ejercicios.forEach(e=>{
+        html += `<li>${e}</li>`;
+      });
+      html += `</ul>`;
+    });
+    html += `</div>`;
+  });
 
   html += `</div>`;
-
   document.getElementById("resultadoPRO").innerHTML = html;
 }
 
-
-async function descargarPDF(){
+/* ===================== DESCARGAR PDF ===================== */
+async function descargarPDF(tipo){
   const { jsPDF } = window.jspdf;
-
-  const nombre = document.getElementById("nombreCliente").value || "Cliente";
   const elemento = document.getElementById("resultadoPRO");
-
   if(!elemento.innerText.trim()){
-    alert("Primero genera la dieta bro 🔥");
+    alert("Primero genera la " + tipo + " bro 🔥");
     return;
   }
 
+  const nombre = document.getElementById("nombreCliente").value || "Cliente";
   let fecha = new Date().toLocaleDateString();
   let planID = "CF-" + Math.floor(Math.random()*9000 + 1000);
 
-  // 🔥 EXTRAER DATOS BIEN
-  let comidas = [];
-  elemento.querySelectorAll(".card-meal").forEach(card=>{
-    let titulo = card.querySelector("h4")?.innerText.replace("🍽️","").trim();
-    let items = [...card.querySelectorAll("li")].map(li =>
-      li.innerText.replace(/🥩|🍚|🥑/g,"").trim()
-    );
-
-    comidas.push({titulo, items});
-  });
-
-  // 🔥 EXTRAER MACROS (SIN FALLAR)
-  let textoCompleto = elemento.innerText.replace(/🔥|🥩|🍚|🥑/g,"");
-  let lineas = textoCompleto.split("\n");
-
-  let resumen = lineas.filter(l => 
-    l.includes("kcal") || 
-    l.includes("proteína") || 
-    l.includes("carbohidratos") || 
-    l.includes("grasas")
-  ).join("<br>");
-
-  // 🔥 CONTENEDOR
-  let contenedor = document.createElement("div");
-
-  contenedor.style.position = "absolute";
-  contenedor.style.top = "0";
-  contenedor.style.left = "0";
-  contenedor.style.width = "800px";
-  contenedor.style.padding = "30px";
-  contenedor.style.background = "#f2f2f2";
-  contenedor.style.fontFamily = "Arial, sans-serif";
-
-  contenedor.innerHTML = `
-    <div style="background:white; padding:25px; border-radius:12px;">
-
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <img src="imagenes/logoGitHub.png" style="height:60px;">
-        
-        <div style="text-align:right;">
-          <h1 style="margin:0; font-size:20px;">Charly Fitness</h1>
-          <p style="margin:0; font-size:12px;">
-            Plan Nutricional Personalizado
-          </p>
-        </div>
-      </div>
-
-      <hr style="margin:15px 0; border:1px solid #ddd;">
-
-      <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-        <div><strong>Nombre:</strong> ${nombre}</div>
-        <div>
-          <strong>Fecha:</strong> ${fecha}<br>
-          <strong>Plan:</strong> ${planID}
-        </div>
-      </div>
-
-      <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:20px;">
-        <strong>CONSUMO DIARIO:</strong><br><br>
-        ${resumen}
-      </div>
-  `;
-
-  comidas.forEach(c=>{
-    contenedor.innerHTML += `
-      <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-bottom:10px;">
-        <strong>${c.titulo.toUpperCase()}</strong><br><br>
-        ${c.items.join("<br>")}
-      </div>
-    `;
-  });
-
-  contenedor.innerHTML += `
-    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-top:10px;">
-      <strong>RECOMENDACIONES:</strong><br><br>
-      • 2-3 litros de agua diarios<br>
-      • Verduras libres<br>
-      • Evitar azúcar refinada
-    </div>
-
-    <div style="background:#eaeaea; padding:15px; border-radius:8px; margin-top:10px;">
-      <strong>SUPLEMENTACIÓN:</strong><br><br>
-      • Creatina 5g<br>
-      • Proteína post-entreno<br>
-      • Multivitamínico
-    </div>
-
-    <div style="margin-top:15px; font-size:11px; text-align:center;">
-      Charly Fitness | WhatsApp: 7341771575
-    </div>
-    </div>
-  `;
-
-  document.body.appendChild(contenedor);
-
-  // 🔥 ESPERAR RENDER
-  await new Promise(resolve => setTimeout(resolve, 300));
-
-  const canvas = await html2canvas(contenedor, {
-    scale: 2,
-    useCORS: true,
-    backgroundColor: "#ffffff" // 💥 SOLUCION BLANCO
-  });
-
-  const imgData = canvas.toDataURL("image/jpeg", 1.0);
-
-  const pdf = new jsPDF("p","mm","a4");
-
+  let canvas = await html2canvas(elemento, {scale:2, useCORS:true, backgroundColor:"#ffffff"});
+  let imgData = canvas.toDataURL("image/jpeg",1.0);
+  let pdf = new jsPDF("p","mm","a4");
   const imgWidth = 210;
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-  let finalHeight = imgHeight > 280 ? 280 : imgHeight;
-
-  pdf.addImage(imgData,"JPEG",0,10,imgWidth,finalHeight);
-
-  pdf.save(`dieta-${nombre}.pdf`);
-
-  document.body.removeChild(contenedor);
+  pdf.addImage(imgData,"JPEG",0,10,imgWidth,imgHeight>280?280:imgHeight);
+  pdf.save(`${tipo}-${nombre}.pdf`);
 }
 
+/* ===================== WHATSAPP ===================== */
+function enviarWhats(){
+  let nombre = document.getElementById("nombreCliente").value;
+  let peso = document.getElementById("peso").value;
+  let altura = document.getElementById("altura").value;
+  let edad = document.getElementById("edad").value;
+  let sexo = document.getElementById("sexo").value;
+  let objetivo = document.getElementById("objetivo").value;
+  let dias = document.getElementById("diasGym").value;
+  let tipo = document.getElementById("tipoDieta").value;
 
+  if(!nombre || !peso || !altura || !edad){
+    alert("Completa tus datos bro 🔥");
+    return;
+  }
 
-  
+  let mensaje = `🔥 QUIERO MI PLAN PRO 🔥%0A%0ANombre: ${nombre}%0APeso: ${peso}%0AAltura: ${altura}%0AEdad: ${edad}%0ASexo: ${sexo}%0AObjetivo: ${objetivo}%0ADías por semana: ${dias}%0ATipo de dieta: ${tipo}%0A%0A💰 DETALLES DE PAGO:%0A➤ Cuenta AZTECA: 6774 0164 4103 34%0A➤ CLABE: 1275 5200 1644 1033 40%0A➤ Banco: BANCO AZTECA México%0A%0A➡️ Estoy listo para pagar y recibir mi plan.`;
+
+  let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
+  window.open(url,"_blank");
+}
 </script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </body>
 </html>
