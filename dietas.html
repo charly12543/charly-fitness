@@ -171,56 +171,44 @@ setInterval(() => {
 function enviarWhatsPro(){
   let nombre = document.getElementById("nombreLead").value;
   let whats = document.getElementById("whatsLead").value;
-  if(!nombre || !whats){ alert("Completa tus datos bro 🔥"); return; }
+
+  if(!nombre || !whats){ 
+    alert("Completa tus datos bro 🔥"); 
+    return; 
+  }
 
   let mensaje = 
-`🔥 *QUIERO MI DIETA PRO* 🔥%0A%0A` +
+`🔥 *QUIERO MI DIETA PERSONALIZADA* 🔥
 
-`👤 *DATOS PERSONALES*%0A` +
-`• Nombre: ${nombre}%0A` +
-`• WhatsApp: ${whats}%0A%0A` +
+Hola, quiero mi plan nutricional y rutina 💪
 
-`📊 *INFORMACIÓN FÍSICA*%0A` +
-`• Peso:%0A` +
-`• Altura:%0A` +
-`• Edad:%0A` +
-`• Nivel de actividad:%0A%0A` +
+👤 *MIS DATOS:*
+• Nombre completo: ${nombre}
+• WhatsApp: ${whats}
+• Edad:
+• Sexo:
 
-`🎯 *OBJETIVO*%0A` +
-`• Objetivo principal:%0A%0A` +
+📊 *DATOS FÍSICOS:*
+• Peso (kg):
+• Altura (cm):
 
-`🍽️ *RESTRICCIONES*%0A` +
-`(Alimentos que no consumes)%0A%0A` +
+🏋️ *ENTRENAMIENTO:*
+• Nivel: (Novato / Intermedio / Avanzado / Competidor)
+• Días que entrenas por semana:
 
-`⏰ *HORARIOS DE COMIDA*%0A` +
-`(Horas disponibles para comer)%0A%0A` +
+🎯 *OBJETIVO:*
+• (Definición / Volumen / Recomposición)
 
-`💪 *OBJETIVO REAL*%0A` +
-`(Ej: bajar grasa, subir músculo)%0A%0A` +
+💳 *PAGO:*
+➤ Banco: AZTECA
+➤ Cuenta: 6774 0164 4103 34
+➤ CLABE: 1275 5200 1644 1033 40
 
-`💰 *DETALLES DE PAGO*%0A` +
-`➤ Cuenta AZTECA: 6774 0164 4103 34%0A` +
-`➤ CLABE: 1275 5200 1644 1033 40%0A` +
-`➤ Banco: BANCO AZTECA México%0A%0A` +
-
-`🚀 *CONFIRMACIÓN*%0A` +
-`Estoy listo para pagar el plan PRO y recibir mi dieta en PDF por WhatsApp.`;
+📌 En cuanto realice el pago envío comprobante para recibir mi dieta en PDF.`;
 
   let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
 }
-</script>
-
-<script>
-function toggleMenu(){
-  const nav = document.getElementById("navLinks");
-  nav.classList.toggle("active");
-}
-document.querySelectorAll("#navLinks a").forEach(link => {
-  link.addEventListener("click", () => {
-    document.getElementById("navLinks").classList.remove("active");
-  });
-});
 </script>
 
 </body>
