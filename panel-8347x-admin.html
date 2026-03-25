@@ -68,6 +68,30 @@
 </div>
 
 <script>
+
+<script>
+/* ===================== USAR PRO (FIX PRINCIPAL) ===================== */
+function usarPro(){
+  let datos = {
+    peso: parseFloat(document.getElementById("peso").value),
+    altura: parseFloat(document.getElementById("altura").value),
+    edad: parseFloat(document.getElementById("edad").value),
+    sexo: document.getElementById("sexo").value,
+    objetivo: document.getElementById("objetivo").value
+  };
+
+  if(!datos.peso || !datos.altura || !datos.edad){
+    alert("Completa todos los datos bro 🔥");
+    return;
+  }
+
+  let dieta = generarDietaPRO(datos);
+  mostrarDieta(dieta);
+}
+
+
+
+  
 /* ===================== DIETA PRO ===================== */
 function generarDietaPRO(datos){
 
