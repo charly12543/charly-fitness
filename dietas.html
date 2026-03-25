@@ -173,19 +173,38 @@ function enviarWhatsPro(){
   let whats = document.getElementById("whatsLead").value;
   if(!nombre || !whats){ alert("Completa tus datos bro 🔥"); return; }
 
-  let mensaje = `🔥 QUIERO MI DIETA PRO 🔥%0A%0A` +
-                `Nombre: ${nombre}%0A` +
-                `WhatsApp: ${whats}%0A%0A` +
-                `📊 MIS DATOS:%0A` +
-                `Peso:%0AAltura:%0AEdad:%0AObjetivo:%0ANivel de actividad:%0A` +
-                `🍽️ RESTRICCIONES:(Alimentos que no comes)%0A` +
-                `⏰ HORARIOS:(Horas en las que puedes comer)%0A` +
-                `💪 OBJETIVO REAL:(Ej: bajar grasa, subir músculo)%0A%0A` +
-                `💰 DETALLES DE PAGO:%0A` +
-                `➤ Cuenta AZTECA: 6774 0164 4103 34%0A` +
-                `➤ CLABE: 1275 5200 1644 1033 40%0A` +
-                `➤ Banco: BANCO AZTECA México%0A%0A` +
-                `➡️ Estoy listo para pagar el plan PRO y recibir mi dieta en PDF por WhatsApp.`;
+  let mensaje = 
+`🔥 *QUIERO MI DIETA PRO* 🔥%0A%0A` +
+
+`👤 *DATOS PERSONALES*%0A` +
+`• Nombre: ${nombre}%0A` +
+`• WhatsApp: ${whats}%0A%0A` +
+
+`📊 *INFORMACIÓN FÍSICA*%0A` +
+`• Peso:%0A` +
+`• Altura:%0A` +
+`• Edad:%0A` +
+`• Nivel de actividad:%0A%0A` +
+
+`🎯 *OBJETIVO*%0A` +
+`• Objetivo principal:%0A%0A` +
+
+`🍽️ *RESTRICCIONES*%0A` +
+`(Alimentos que no consumes)%0A%0A` +
+
+`⏰ *HORARIOS DE COMIDA*%0A` +
+`(Horas disponibles para comer)%0A%0A` +
+
+`💪 *OBJETIVO REAL*%0A` +
+`(Ej: bajar grasa, subir músculo)%0A%0A` +
+
+`💰 *DETALLES DE PAGO*%0A` +
+`➤ Cuenta AZTECA: 6774 0164 4103 34%0A` +
+`➤ CLABE: 1275 5200 1644 1033 40%0A` +
+`➤ Banco: BANCO AZTECA México%0A%0A` +
+
+`🚀 *CONFIRMACIÓN*%0A` +
+`Estoy listo para pagar el plan PRO y recibir mi dieta en PDF por WhatsApp.`;
 
   let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
