@@ -126,6 +126,11 @@ function generarDietaPRO(datos){
 
   let comidas = [];
 
+  // 🔥 AJUSTES INTELIGENTES
+  let carbosNoche = objetivo === "definicion" ? "1-2 tazas de verduras" : "1/2 taza de arroz";
+  let porcionArroz = sexo === "mujer" ? "3/4 taza de arroz" : "1 taza de arroz";
+  let porcionAvena = sexo === "mujer" ? "1/2 taza de avena" : "1 taza de avena";
+
   /* ================= NOVATO ================= */
   if(nivel === "novato"){
     comidas = [
@@ -140,7 +145,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Comida",
         proteina:"150g pechuga de pollo",
-        carbos:"1 taza de arroz",
+        carbos:porcionArroz,
         grasa:"1 cucharadita aceite de aguacate",
         verdura:"1 taza de verduras",
         fruta:""
@@ -148,7 +153,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Cena",
         proteina:"120g atún o pollo",
-        carbos:"2 tostadas horneadas",
+        carbos:carbosNoche,
         grasa:"1/4 de aguacate",
         verdura:"1 taza de verduras",
         fruta:""
@@ -162,7 +167,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Desayuno",
         proteina:"4 claras + 1 huevo entero",
-        carbos:"1/2 taza de avena",
+        carbos:porcionAvena,
         grasa:"1 cucharadita aceite de coco",
         verdura:"",
         fruta:"1 fruta"
@@ -170,7 +175,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Comida",
         proteina:"150g pollo o carne magra",
-        carbos:"1 taza de arroz",
+        carbos:porcionArroz,
         grasa:"1 cucharadita aceite de aguacate",
         verdura:"1 taza de verduras",
         fruta:""
@@ -178,7 +183,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Cena",
         proteina:"150g pescado o pollo",
-        carbos:"1/2 taza de arroz",
+        carbos:carbosNoche,
         grasa:"10 almendras",
         verdura:"1 taza de verduras",
         fruta:""
@@ -192,7 +197,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Desayuno",
         proteina:"5 claras + 1 huevo entero",
-        carbos:"1 taza de avena",
+        carbos:porcionAvena,
         grasa:"1 cucharadita aceite de coco",
         verdura:"",
         fruta:"1 fruta"
@@ -200,7 +205,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Comida",
         proteina:"180g pollo",
-        carbos:"1 taza de arroz",
+        carbos:porcionArroz,
         grasa:"1 cucharadita aceite de aguacate",
         verdura:"1 taza de verduras",
         fruta:""
@@ -216,7 +221,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Cena",
         proteina:"150g pescado",
-        carbos: objetivo === "definicion" ? "1-2 tazas de verduras" : "1/2 taza de arroz",
+        carbos:carbosNoche,
         grasa:"1 cucharadita aceite de oliva",
         verdura:"1 taza de verduras",
         fruta:""
@@ -230,7 +235,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Desayuno",
         proteina:"6 claras + 1 huevo entero",
-        carbos:"1/2 taza avena",
+        carbos: objetivo === "definicion" ? "1/2 taza avena" : porcionAvena,
         grasa:"5 almendras",
         verdura:"",
         fruta:""
@@ -238,7 +243,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Comida",
         proteina:"180g pollo",
-        carbos:"1 taza arroz",
+        carbos:porcionArroz,
         grasa:"1 cucharadita aceite de coco",
         verdura:"1 taza verduras",
         fruta:""
@@ -254,7 +259,7 @@ function generarDietaPRO(datos){
       {
         nombre:"Cena",
         proteina:"180g pescado",
-        carbos:"1-2 tazas verduras",
+        carbos:carbosNoche,
         grasa:"",
         verdura:"ensalada libre",
         fruta:""
@@ -264,7 +269,6 @@ function generarDietaPRO(datos){
 
   return { calorias, proteina, carbos, grasa, comidas };
 }
-
 /* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
   let nombre = document.getElementById("nombreCliente").value;
