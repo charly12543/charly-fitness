@@ -92,109 +92,67 @@ function usarPro(){
 /* ===================== DIETA PRO ===================== */
 function generarDietaPRO(datos){
   let {peso, altura, edad, objetivo, sexo, nivel} = datos;
-  let dias = parseInt(document.getElementById("diasGym").value) || 3;
 
   if(altura > 3) altura = altura / 100;
 
-  // 🔥 BMR
-  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo === "mujer" ? -161 : 5);
-
-  // 🔥 Factor actividad
-  let factorActividad = dias<=3 ? 1.4 : dias<=5 ? 1.55 : 1.7;
+  // 🔥 Calorías
+  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo === "mujer"? -161: 5);
+  let factorActividad = 1.55; // base
   let calorias = Math.round(bmr * factorActividad);
 
   if(objetivo === "definicion") calorias -= 400;
   if(objetivo === "volumen") calorias += 300;
 
-  function random(arr){
-    return arr[Math.floor(Math.random()*arr.length)];
-  }
-
-  // 🔥 Proteína base según nivel
-  let proteBase = { novato:1.6, intermedio:1.8, avanzado:2, competidor:2.2 };
+  // 🔥 Proteínas
+  const proteBase = { novato:1.6, intermedio:1.8, avanzado:2, competidor:2.2 };
   let proteina = Math.round(peso * proteBase[nivel]);
 
-  // 🔥 Opciones de alimentos
-  const proteinas = ["150g pollo","180g pescado","150g carne magra","4 claras + 1 huevo","1 scoop proteína whey"];
-  const carbosNovato = ["2 tortillas de maíz","1 taza arroz","1 pan árabe","1 taza avena"];
-  const carbosPro = ["1 taza arroz","2 tortillas","1/2 pan árabe","1/2 taza avena"];
-  const grasas = ["1 cucharada aceite de oliva","1/4 aguacate","10 almendras"];
-  const verduras = ["1 taza ensalada","1 taza verduras al vapor"];
-  const frutasDef = ["1 taza papaya","1 taza melón","1 manzana verde"];
-  const frutasVol = ["1 plátano","1 manzana roja"];
+  // 🔥 Listas de alimentos
+  const proteinas = ["5 claras + 1 huevo","150g pollo","180g pescado","150g carne magra","1 scoop whey"];
+  const carbos = ["1 taza arroz","1/2 taza avena","2 tortillas de maíz","1 pan árabe","1/2 taza quinoa"];
+  const grasas = ["1 cucharadita aceite de coco","1 cucharadita aceite de oliva","1/4 aguacate","10 almendras"];
+  const verduras = ["1 taza verduras al vapor","1 taza ensalada","Brócoli","Espinaca","Calabaza"];
+  const frutasDef = ["Toronja","Manzana verde","Papaya","Fresas","Kiwi"];
+  const frutasVol = ["Naranja","Manzana roja","Plátano","Mango","Pera"];
 
-  let carbosLista = (nivel === "novato") ? carbosNovato : carbosPro;
-  let frutasLista = (objetivo === "definicion") ? frutasDef : frutasVol;
+  function random(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+  // 🔥 Número de comidas según objetivo
+  let numComidas = (objetivo==="volumen") ? 6 : 5;
 
   let comidas = [];
 
-  // 🔥 Novato fijo
-  if(nivel === "novato"){
-    comidas.push({
-      nombre:"Desayuno",
-      proteina:"Huevos con jamón",
-      carbos:"2 tortillas de maíz",
-      grasa:"1/4 aguacate",
-      verdura:"",
-      fruta:"1 taza papaya"
-    });
-    comidas.push({
-      nombre:"Comida",
-      proteina:"150g pollo",
-      carbos:"1 taza arroz",
-      grasa:"1 cucharada aceite oliva",
-      verdura:"1 taza ensalada",
-      fruta:""
-    });
-    comidas.push({
-      nombre:"Cena",
-      proteina:"Atún o pollo",
-      carbos:"2 tostadas",
-      grasa:"1/4 aguacate",
-      verdura:"Verduras libres",
-      fruta:""
-    });
-  } 
-  else { // Intermedio / Avanzado / Competidor
-    comidas.push({
-      nombre:"Desayuno",
-      proteina: random(proteinas),
-      carbos: random(carbosLista),
-      grasa: random(grasas),
-      verdura:"",
-      fruta: random(frutasLista)
-    });
-    comidas.push({
-      nombre:"Comida",
-      proteina: random(proteinas),
-      carbos: random(carbosLista),
-      grasa: random(grasas),
-      verdura: random(verduras),
-      fruta:""
-    });
-    comidas.push({
-      nombre:"Pre-entreno",
-      proteina:"1 scoop proteína whey",
-      carbos: (nivel==="competidor")?"1/2 taza avena":"1 plátano",
-      grasa:"5 almendras",
-      verdura:"",
-      fruta:""
-    });
-    comidas.push({
-      nombre:"Cena",
-      proteina: random(proteinas),
-      carbos: (nivel==="competidor")?"1 taza verduras":random(carbosLista),
-      grasa: random(grasas),
-      verdura: random(verduras),
-      fruta:""
-    });
+  for(let i=0; i<numComidas; i++){
+    let comida = {};
+
+    if(i === numComidas-1){ // Última comida whey
+      comida = {
+        nombre:"Post-entreno",
+        proteina:"1 scoop proteína whey",
+        carbos: objetivo==="volumen"? random(carbos) : "1 plátano",
+        grasa: objetivo==="volumen"? random(grasas) : "5 almendras",
+        verdura:"",
+        fruta:""
+      };
+    } else {
+      comida = {
+        nombre: `Comida ${i+1}`,
+        proteina: random(proteinas),
+        carbos: random(carbos),
+        grasa: random(grasas),
+        verdura: random(verduras),
+        fruta: objetivo==="definicion"? random(frutasDef) : random(frutasVol)
+      };
+    }
+
+    comidas.push(comida);
   }
 
   return {
     calorias,
     proteina,
     carbos: Math.round(calorias/4),
-    grasa: Math.round((calorias*0.25)/9),
+    grasa: Math.round(calorias*0.25/9),
     comidas
   };
 }
