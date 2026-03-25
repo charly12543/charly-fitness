@@ -69,7 +69,7 @@
 
 
 <script>
-/* ===================== USAR PRO (FIX PRINCIPAL) ===================== */
+/* ===================== USAR PRO ===================== */
 function usarPro(){
   let datos = {
     peso: parseFloat(document.getElementById("peso").value),
@@ -119,27 +119,21 @@ function generarDietaPRO(datos){
   let proteina = Math.round(peso * proteBase[nivel]);
 
   let grasa = Math.round((calorias * 0.25) / 9);
-  let caloriasProte = proteina * 4;
-  let caloriasGrasa = grasa * 9;
-  let caloriasRestantes = calorias - (caloriasProte + caloriasGrasa);
-  let carbos = Math.round(caloriasRestantes / 4);
+  let carbos = Math.round((calorias - (proteina*4 + grasa*9)) / 4);
 
-  let comidas = [];
-
-  // 🔥 AJUSTES INTELIGENTES
   let carbosNoche = objetivo === "definicion" ? "1-2 tazas de verduras" : "1/2 taza de arroz";
   let porcionArroz = sexo === "mujer" ? "3/4 taza de arroz" : "1 taza de arroz";
   let porcionAvena = sexo === "mujer" ? "1/2 taza de avena" : "1 taza de avena";
 
-  /* ================= NOVATO ================= */
+  let comidas = [];
+
   if(nivel === "novato"){
     comidas = [
       {
         nombre:"Desayuno",
-        proteina:"3 claras + 1 huevo entero con 40g jamón",
+        proteina:"3 claras + 1 huevo entero con jamón",
         carbos:"2 tortillas de maíz",
         grasa:"1/4 de aguacate",
-        verdura:"",
         fruta:"1 fruta"
       },
       {
@@ -147,59 +141,51 @@ function generarDietaPRO(datos){
         proteina:"150g pechuga de pollo",
         carbos:porcionArroz,
         grasa:"1 cucharadita aceite de aguacate",
-        verdura:"1 taza de verduras",
-        fruta:""
+        verdura:"1 taza de verduras"
       },
       {
         nombre:"Cena",
         proteina:"120g atún o pollo",
         carbos:carbosNoche,
         grasa:"1/4 de aguacate",
-        verdura:"1 taza de verduras",
-        fruta:""
+        verdura:"1 taza de verduras"
       }
     ];
   }
 
-  /* ================= INTERMEDIO ================= */
   else if(nivel === "intermedio"){
     comidas = [
       {
         nombre:"Desayuno",
-        proteina:"4 claras + 1 huevo entero",
+        proteina:"4 claras + 1 huevo",
         carbos:porcionAvena,
         grasa:"1 cucharadita aceite de coco",
-        verdura:"",
         fruta:"1 fruta"
       },
       {
         nombre:"Comida",
-        proteina:"150g pollo o carne magra",
+        proteina:"150g carne o pollo",
         carbos:porcionArroz,
         grasa:"1 cucharadita aceite de aguacate",
-        verdura:"1 taza de verduras",
-        fruta:""
+        verdura:"1 taza verduras"
       },
       {
         nombre:"Cena",
-        proteina:"150g pescado o pollo",
+        proteina:"150g pescado",
         carbos:carbosNoche,
         grasa:"10 almendras",
-        verdura:"1 taza de verduras",
-        fruta:""
+        verdura:"1 taza verduras"
       }
     ];
   }
 
-  /* ================= AVANZADO ================= */
   else if(nivel === "avanzado"){
     comidas = [
       {
         nombre:"Desayuno",
-        proteina:"5 claras + 1 huevo entero",
+        proteina:"5 claras + 1 huevo",
         carbos:porcionAvena,
         grasa:"1 cucharadita aceite de coco",
-        verdura:"",
         fruta:"1 fruta"
       },
       {
@@ -207,139 +193,143 @@ function generarDietaPRO(datos){
         proteina:"180g pollo",
         carbos:porcionArroz,
         grasa:"1 cucharadita aceite de aguacate",
-        verdura:"1 taza de verduras",
-        fruta:""
+        verdura:"1 taza verduras"
       },
       {
         nombre:"Pre-entreno",
-        proteina:"1 scoop proteína whey",
+        proteina:"1 scoop whey",
         carbos:"1 plátano",
-        grasa:"5 almendras",
-        verdura:"",
-        fruta:""
+        grasa:"5 almendras"
       },
       {
         nombre:"Cena",
         proteina:"150g pescado",
         carbos:carbosNoche,
         grasa:"1 cucharadita aceite de oliva",
-        verdura:"1 taza de verduras",
-        fruta:""
+        verdura:"1 taza verduras"
       }
     ];
   }
 
-  /* ================= COMPETIDOR ================= */
   else {
     comidas = [
       {
         nombre:"Desayuno",
-        proteina:"6 claras + 1 huevo entero",
+        proteina:"6 claras + 1 huevo",
         carbos: objetivo === "definicion" ? "1/2 taza avena" : porcionAvena,
-        grasa:"5 almendras",
-        verdura:"",
-        fruta:""
+        grasa:"5 almendras"
       },
       {
         nombre:"Comida",
         proteina:"180g pollo",
         carbos:porcionArroz,
         grasa:"1 cucharadita aceite de coco",
-        verdura:"1 taza verduras",
-        fruta:""
+        verdura:"1 taza verduras"
       },
       {
         nombre:"Pre-entreno",
-        proteina:"1 scoop proteína whey",
-        carbos:"1 plátano",
-        grasa:"",
-        verdura:"",
-        fruta:""
+        proteina:"1 scoop whey",
+        carbos:"1 plátano"
       },
       {
         nombre:"Cena",
         proteina:"180g pescado",
         carbos:carbosNoche,
-        grasa:"",
-        verdura:"ensalada libre",
-        fruta:""
+        verdura:"ensalada libre"
       }
     ];
   }
 
   return { calorias, proteina, carbos, grasa, comidas };
 }
+
 /* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
   let nombre = document.getElementById("nombreCliente").value;
-  let fecha = new Date().toLocaleDateString();
 
-  let html = `<div class="dieta-card">
-    <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
-      <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
-      <p>Plan Nutricional Personalizado</p>
-    </div>
+  let html = `<div class="dieta-card">`;
 
-    <div style="text-align:center; margin-bottom:25px;">
-      <h2>${nombre || "Cliente"}</h2>
-      <p>📅 ${fecha}</p>
-    </div>
-
-    <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px;">
-      🔥 ${dieta.calorias} kcal<br>
-      🥩 ${dieta.proteina}g proteína<br>
-      🍚 ${dieta.carbos}g carbohidratos<br>
-      🥑 ${dieta.grasa}g grasas
-    </div>`;
+  html += `<h2>${nombre || "Cliente"}</h2>`;
+  html += `🔥 ${dieta.calorias} kcal<br>`;
+  html += `🥩 ${dieta.proteina}g proteína<br>`;
+  html += `🍚 ${dieta.carbos}g carbs<br>`;
+  html += `🥑 ${dieta.grasa}g grasas`;
 
   dieta.comidas.forEach(c=>{
-    html += `<div class="card-meal no-break">
-      <h4>🍽️ ${c.nombre}</h4>
-      <ul>
-        <li>🥩 ${c.proteina}</li>
-        <li>🍚 ${c.carbos}</li>
-        <li>🥑 ${c.grasa}</li>`;
+    html += `<h4>🍽️ ${c.nombre}</h4><ul>`;
+    html += `<li>🥩 ${c.proteina}</li>`;
+    if(c.carbos) html += `<li>🍚 ${c.carbos}</li>`;
+    if(c.grasa) html += `<li>🥑 ${c.grasa}</li>`;
     if(c.verdura) html += `<li>🥦 ${c.verdura}</li>`;
     if(c.fruta) html += `<li>🍎 ${c.fruta}</li>`;
-    html += `</ul></div>`;
+    html += `</ul>`;
   });
 
-  /* 🔥 BLOQUE PRO REAL */
   html += `
-  <div class="card-meal">
-    <h4>📌 Recomendaciones</h4>
-    <ul>
-      <li>✔ Cocinar con aceite de aguacate o coco</li>
-      <li>✔ Tomar 3-4 litros de agua diarios</li>
-      <li>✔ Agua de jamaica o limón con stevia</li>
-      <li>✔ Evitar azúcar y ultraprocesados</li>
-    </ul>
-  </div>
+  <h4>📌 Recomendaciones</h4>
+  <ul>
+  <li>✔ Cocinar con aceite de aguacate o coco</li>
+  <li>✔ 3-4L de agua</li>
+  <li>✔ Agua de jamaica o limón con stevia</li>
+  </ul>
 
-  <div class="card-meal">
-    <h4>🍽️ Si tienes hambre</h4>
-    <ul>
-      <li>✔ Pepino o jícama al gusto</li>
-      <li>✔ Verduras libres</li>
-      <li>✔ Gelatina light (1-2)</li>
-    </ul>
-  </div>
-
-  <div class="card-meal">
-    <h4>⚠️ Notas</h4>
-    <ul>
-      <li>✔ Constancia = resultados</li>
-      <li>✔ Ajustar cada 2-4 semanas</li>
-      <li>✔ Dormir 7-8 horas</li>
-    </ul>
-  </div>
+  <h4>🍽️ Hambre</h4>
+  <ul>
+  <li>✔ Pepino o jícama libre</li>
+  <li>✔ Gelatina light</li>
+  </ul>
   `;
 
   html += `</div>`;
   document.getElementById("resultadoPRO").innerHTML = html;
 }
-</script>
 
+/* ===================== RUTINA (ARREGLADA) ===================== */
+function generarRutina(){
+
+  let nivel = document.getElementById("nivel").value;
+
+  let rutina = {
+    novato: ["Full Body","Full Body","Full Body"],
+    intermedio: ["Pecho","Espalda","Pierna","Hombro"],
+    avanzado: ["Push","Pull","Pierna","Hombro","Pierna"],
+    competidor: ["Push","Pull","Pierna","Hombro","Pierna","Full Body"]
+  };
+
+  let html = `<div class="dieta-card"><h3>🏋️ Rutina</h3>`;
+
+  rutina[nivel].forEach((dia,i)=>{
+    html += `<p>🔥 Día ${i+1}: ${dia}</p>`;
+  });
+
+  html += `</div>`;
+
+  document.getElementById("resultadoPRO").innerHTML = html;
+}
+
+/* ===================== PDF (REGRESA) ===================== */
+async function descargarPDF(tipo){
+  const { jsPDF } = window.jspdf;
+  const elemento = document.getElementById("resultadoPRO");
+
+  let canvas = await html2canvas(elemento);
+  let img = canvas.toDataURL("image/png");
+
+  let pdf = new jsPDF();
+  pdf.addImage(img, 'PNG', 0, 0, 210, 297);
+  pdf.save(tipo+".pdf");
+}
+
+/* ===================== WHATS ===================== */
+function enviarWhats(){
+  let nombre=document.getElementById("nombreCliente").value;
+  let numero=prompt("Número cliente","52");
+
+  let msg=`Hola ${nombre} 🔥 Aquí tienes tu plan 💪`;
+
+  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`);
+}
+</script>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
