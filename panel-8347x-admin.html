@@ -6,6 +6,7 @@
 <title>Dietas y Rutinas PRO</title>
 <link rel="stylesheet" href="styleDietas.css">
 </head>
+
 <body>
 
 <section class="hero">
@@ -26,7 +27,6 @@
   <select id="sexo">
     <option value="hombre">Hombre</option>
     <option value="mujer">Mujer</option>
-    <option value="vegano">Vegano</option>
   </select>
 
   <!-- OBJETIVO -->
@@ -49,115 +49,172 @@
   <label>📅 Días por semana</label>
   <input type="number" id="diasGym" min="2" max="7" placeholder="Ej: 3">
 
-  <button onclick="usarPro()">🔥 Generar Dieta + Rutina</button>
-  <button onclick="enviarWhats()" style="margin-top:10px;">📲 Enviar al cliente por WhatsApp</button>
+  <button onclick="usarPro()">🔥 Generar Dieta PRO</button>
+  <button onclick="generarRutina()" style="margin-top:10px;">🏋️‍♂️ Generar Rutina PRO</button>
 
   <div id="resultadoPRO"></div>
+  <button onclick="descargarPDF('dieta')" style="margin-top:15px;">📄 Descargar PDF Dieta</button>
+  <button onclick="descargarPDF('rutina')" style="margin-top:5px;">📄 Descargar PDF Rutina</button>
 </div>
 </section>
 
+<!-- BOTON WHATS -->  
 <div class="whats-box">
   <h3>🔥 Listo para tu plan personalizado?</h3>
   <p>Recibe dieta + rutina directamente en WhatsApp</p>
-  <span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
+  <button onclick="enviarWhats()" class="btn-whats-pro">
+    📲 Enviar plan al cliente
+  </button>
+<span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
 </div>
 
+<!-- SCRIPTS -->
 <script>
 /* ===================== DIETA PRO ===================== */
 function usarPro(){
-  let datos = {
-    nombre: document.getElementById("nombreCliente").value || "Cliente",
-    peso: parseFloat(document.getElementById("peso").value),
-    altura: parseFloat(document.getElementById("altura").value),
-    edad: parseFloat(document.getElementById("edad").value),
-    sexo: document.getElementById("sexo").value,
-    objetivo: document.getElementById("objetivo").value,
-    tipo: document.getElementById("tipoDieta").value
-  };
-
+ let datos = {
+  peso: parseFloat(document.getElementById("peso").value),
+  altura: parseFloat(document.getElementById("altura").value),
+  edad: parseFloat(document.getElementById("edad").value),
+  sexo: document.getElementById("sexo").value,
+  objetivo: document.getElementById("objetivo").value,
+  tipo: document.getElementById("tipoDieta").value
+ };
   if(!datos.peso || !datos.altura || !datos.edad){
     alert("Completa todos los datos bro 🔥");
     return;
   }
-
   let dieta = generarDietaPRO(datos);
-  let rutina = generarRutina(datos);
-  mostrarResultados(dieta, rutina);
+  mostrarDieta(dieta);
 }
 
-/* ===================== GENERAR DIETA ===================== */
 function generarDietaPRO(datos){
-  let {peso, altura, edad, objetivo, tipo, sexo} = datos;
-
-  if(altura>3) altura/=100;
+  let {peso, altura, edad, objetivo, tipo} = datos;
+  if(altura > 3) altura = altura / 100;
 
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
-  let calorias = Math.round(bmr*1.55);
-  if(objetivo==="definicion") calorias-=400;
-  if(objetivo==="volumen") calorias+=300;
+  let calorias = Math.round(bmr * 1.55);
+  if(objetivo === "definicion") calorias -= 400;
+  if(objetivo === "volumen") calorias += 300;
 
-  let proteina = Math.round(peso*2);
-  let grasa = Math.round(calorias*0.25/9);
-  let carbos = Math.round((calorias-(proteina*4+grasa*9))/4);
+  // Macros según tipo
+  let proteina, grasa, carbos;
+  if(tipo === "keto"){
+    proteina = Math.round(peso*2);
+    grasa = Math.round((calorias*0.65)/9);
+    carbos = Math.round((calorias*0.10)/4);
+  } else if(tipo === "runner"){
+    proteina = Math.round(peso*1.8);
+    grasa = Math.round((calorias*0.20)/9);
+    carbos = Math.round((calorias*0.60)/4);
+  } else if(tipo === "godin"){
+    proteina = Math.round(peso*2);
+    grasa = Math.round((calorias*0.25)/9);
+    carbos = Math.round((calorias*0.40)/4);
+  } else{
+    proteina = Math.round(peso*2);
+    grasa = Math.round((calorias*0.25)/9);
+    carbos = Math.round((calorias-(proteina*4+grasa*9))/4);
+  }
 
-  let comidasNombres = ["Desayuno","Comida","Pre-entreno","Cena"];
+  let protePorComida = Math.round(proteina/4);
+  let carbosPorComida = Math.round(carbos/4);
+  let grasaPorComida = Math.round(grasa/4);
 
-  // 🔥 ALIMENTOS VARIADOS
-  let proteinas = sexo==="vegano" ? ["tofu","tempeh","legumbres","whey vegano"] : ["pollo","res magra","pescado","huevo"];
-  let carbosOpc = ["arroz","papa","plátano macho","avena","pasta","tortillas","galletas de arroz"];
-  let verdurasOpc = ["espinaca","jitomate","lechuga","calabaza","camote"];
-  let frutasVerdes = ["manzana verde","toronja","kiwi"];
-  let frutasRojas = ["manzana roja","fresa","papaya","melon"];
+  const nombresComida = ["Desayuno","Comida","Pre-entreno","Cena"];
 
-  let comidas=[];
+  // Listas de alimentos
+  const proteinas = [
+    {nombre:"Pollo", gr:25},
+    {nombre:"Pescado", gr:22},
+    {nombre:"Carne res magra", gr:25},
+    {nombre:"Huevo", gr:6},
+    {nombre:"Whey protein", gr:24}
+  ];
+  const carbosLista = [
+    {nombre:"Arroz hervido", gr:28},
+    {nombre:"Puré de papa", gr:20},
+    {nombre:"Purée de plátano macho", gr:23},
+    {nombre:"Avena cocida", gr:27},
+    {nombre:"Pan integral", gr:12},
+    {nombre:"Tortilla", gr:15},
+    {nombre:"Pasta cocida", gr:28}
+  ];
+  const verduras = [
+    "Lechuga","Jitomate","Espinaca","Camote","Pepino","Zanahoria"
+  ];
+  const frutasDef = ["Manzana verde","Papaya","Melón"];
+  const frutasVol = ["Manzana roja","Fresa","Naranja"];
+
+  function elegirRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+  function gramosAlimento(obj, gramos){
+    // gramos: proteína o carbo
+    let cant = Math.round(gramos * 100 / obj.gr);
+    return `${cant}g ${obj.nombre}`;
+  }
+
+  let comidas = [];
   for(let i=0;i<4;i++){
-    // Proteína 200g aprox (ajustado)
-    let prot = proteinas[Math.floor(Math.random()*proteinas.length)];
-    let gramosProt = Math.round(proteina/4*50/30); // ajustado 30g proteína aprox cada 100g
-    let proteinaTexto = `${gramosProt*100}g ${prot}`;
-
-    // Carbohidratos
-    let carb = carbosOpc[Math.floor(Math.random()*carbosOpc.length)];
-    let gramosCarb = Math.round(carbos/4);
-    let carbTexto = "";
-    switch(carb){
-      case "arroz": carbTexto="1 taza de arroz"; break;
-      case "pasta": carbTexto="1 taza de pasta"; break;
-      case "papa": carbTexto="1 taza de puré de papa"; break;
-      case "plátano macho": carbTexto="1 plátano macho"; break;
-      case "tortillas": carbTexto=Math.round(gramosCarb/15)+" tortillas"; break;
-      case "galletas de arroz": carbTexto=Math.round(gramosCarb/5)+" galletas de arroz"; break;
-      case "avena": carbTexto="1 taza de avena"; break;
-      default: carbTexto=gramosCarb+"g "+carb;
-    }
-
-    // Verduras
-    let verd = verdurasOpc[Math.floor(Math.random()*verdurasOpc.length)];
-    let verdTexto = "1 taza "+verd;
-
-    // Fruta
-    let fruta = objetivo==="definicion" ? frutasVerdes[Math.floor(Math.random()*frutasVerdes.length)]
-                                         : frutasRojas[Math.floor(Math.random()*frutasRojas.length)];
+    let prote = elegirRandom(proteinas);
+    let carbo = elegirRandom(carbosLista);
+    let verdura = elegirRandom(verduras);
+    let fruta = objetivo==="definicion"? elegirRandom(frutasDef):elegirRandom(frutasVol);
 
     comidas.push({
-      nombre: comidasNombres[i],
-      proteina: proteinaTexto,
-      carbos: carbTexto,
-      verdura: verdTexto,
-      fruta: fruta,
-      grasa: "10g aceite oliva/aguacate/nueces"
+      nombre: nombresComida[i],
+      proteina: gramosAlimento(prote, protePorComida),
+      carbos: gramosAlimento(carbo, carbosPorComida),
+      grasa: `${grasaPorComida*1}g Aceite de oliva`,
+      verdura: `50-80g ${verdura}`,
+      fruta: fruta
     });
   }
 
   return {calorias, proteina, carbos, grasa, comidas};
 }
 
-/* ===================== GENERAR RUTINA ===================== */
-function generarRutina(datos){
-  let {sexo, dias} = datos;
-  dias = parseInt(document.getElementById("diasGym").value) || 3;
+function mostrarDieta(dieta){
+  let nombre = document.getElementById("nombreCliente").value;
+  let fecha = new Date().toLocaleDateString();
+  let html = `<div class="dieta-card">
+    <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
+      <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
+      <p>Plan Nutricional Personalizado</p>
+      <p style="font-size:12px;">Sistema inteligente de nutrición</p>
+    </div>
+    <div style="text-align:center; margin-bottom:25px;">
+      <h2>${nombre||"Cliente"}</h2>
+      <p>📅 ${fecha}</p>
+    </div>
+    <div style="background:#111; padding:15px; border-radius:10px; margin-bottom:20px;">
+      <p>🔥 ${dieta.calorias} kcal<br>🥩 ${dieta.proteina}g proteína<br>🍚 ${dieta.carbos}g carbohidratos<br>🥑 ${dieta.grasa}g grasas</p>
+    </div>`;
 
-  let ejerciciosHombre = {
+  dieta.comidas.forEach(c=>{
+    html += `<div class="card-meal no-break">
+      <h4>🍽️ ${c.nombre}</h4>
+      <ul>
+        <li>🥩 ${c.proteina}</li>
+        <li>🍚 ${c.carbos}</li>
+        <li>🥑 ${c.grasa}</li>
+        <li>🥦 Verdura: ${c.verdura}</li>
+        <li>🍎 Fruta: ${c.fruta}</li>
+      </ul>
+    </div>`;
+  });
+
+  html += `</div>`;
+  document.getElementById("resultadoPRO").innerHTML = html;
+}
+
+/* ===================== RUTINA PRO ===================== */
+function generarRutina(){
+  let nombre = document.getElementById("nombreCliente").value||"Cliente";
+  let sexo = document.getElementById("sexo").value;
+  let dias = parseInt(document.getElementById("diasGym").value)||3;
+
+  const ejerciciosHombre = {
     Pecho:["Press banca 4x10","Aperturas mancuernas 3x12","Fondos 3x15"],
     Espalda:["Remo barra 4x10","Jalón polea 3x12","Peso muerto 3x8"],
     Hombros:["Press militar 4x10","Elevaciones laterales 3x12","Facepull 3x15"],
@@ -165,7 +222,8 @@ function generarRutina(datos){
     Tríceps:["Press francés 4x12","Fondos 3x15"],
     Pierna:["Sentadillas 4x10","Prensa 3x12","Curl femoral 3x12","Gemelos 4x15"]
   };
-  let ejerciciosMujer = {
+
+  const ejerciciosMujer = {
     Pierna:["Sentadillas 4x12","Hip thrust 4x12","Prensa 3x15","Gemelos 3x20"],
     Glúteo:["Patada glúteo 3x15","Abducción 3x20"],
     Core:["Plancha 3x60s","Crunch 3x20","Russian twist 3x20"],
@@ -173,88 +231,72 @@ function generarRutina(datos){
     Hombros:["Elevaciones laterales 3x12","Press militar 3x10"],
     Brazos:["Curl bíceps 3x12","Extensión tríceps 3x12"]
   };
-  let pool = (sexo==="hombre")? ejerciciosHombre : ejerciciosMujer;
+
+  let pool = sexo==="hombre"? ejerciciosHombre : ejerciciosMujer;
   let grupos = Object.keys(pool);
+  let rutina = [];
 
-  let rutina=[];
   for(let i=0;i<dias;i++){
-    let diaNombre=`Día ${i+1}`;
-    let bloques=[];
+    let diaNombre = `Día ${i+1}`;
+    let ejeDia = [];
     for(let j=0;j<3;j++){
-      let idx=(i+j)%grupos.length;
-      bloques.push({grupo: grupos[idx], ejercicios: pool[grupos[idx]]});
+      let idx = (i+j)%grupos.length;
+      ejeDia.push({grupo:grupos[idx], ejercicios: pool[grupos[idx]]});
     }
-    rutina.push({dia:diaNombre,bloques});
+    rutina.push({dia:diaNombre, bloques:ejeDia});
   }
-  return rutina;
-}
 
-/* ===================== MOSTRAR RESULTADOS ===================== */
-function mostrarResultados(dieta,rutina){
-  let html=`<div class="dieta-card">
+  let html = `<div class="dieta-card">
     <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
       <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
-      <p>Plan Nutricional + Rutina Personalizado</p>
+      <p>Plan de Entrenamiento Personalizado</p>
     </div>`;
 
-  // Dieta
-  dieta.comidas.forEach(c=>{
-    html+=`<div class="card-meal no-break">
-      <h4>🍽️ ${c.nombre}</h4>
-      <ul>
-        <li>🥩 ${c.proteina}</li>
-        <li>🍚 ${c.carbos}</li>
-        <li>🥬 ${c.verdura}</li>
-        <li>🍎 ${c.fruta}</li>
-        <li>🥑 ${c.grasa}</li>
-      </ul>
-    </div>`;
-  });
-
-  // Rutina
   rutina.forEach(d=>{
-    html+=`<div class="card-meal no-break">
+    html += `<div class="card-meal no-break">
       <h4>🏋️ ${d.dia}</h4>`;
     d.bloques.forEach(b=>{
-      html+=`<strong>${b.grupo}</strong><ul>`;
-      b.ejercicios.forEach(e=>{
-        html+=`<li>${e}</li>`;
-      });
-      html+=`</ul>`;
+      html += `<strong>${b.grupo}</strong><ul>`;
+      b.ejercicios.forEach(e=>{ html += `<li>${e}</li>` });
+      html += `</ul>`;
     });
-    html+=`</div>`;
+    html += `</div>`;
   });
 
-  document.getElementById("resultadoPRO").innerHTML=html;
+  html += `</div>`;
+  document.getElementById("resultadoPRO").innerHTML = html;
 }
 
-/* ===================== DESCARGAR PDF ===================== */
+/* ===================== PDF ===================== */
 async function descargarPDF(tipo){
   const { jsPDF } = window.jspdf;
-  const elemento=document.getElementById("resultadoPRO");
-  if(!elemento.innerText.trim()){ alert("Primero genera la " + tipo + " bro 🔥"); return; }
-  let nombre=document.getElementById("nombreCliente").value || "Cliente";
-  let canvas=await html2canvas(elemento,{scale:2,useCORS:true,backgroundColor:"#ffffff"});
-  let imgData=canvas.toDataURL("image/jpeg",1.0);
-  let pdf=new jsPDF("p","mm","a4");
-  const imgWidth=210;
-  const imgHeight=(canvas.height*imgWidth)/canvas.width;
+  const elemento = document.getElementById("resultadoPRO");
+  if(!elemento.innerText.trim()){
+    alert("Primero genera la " + tipo + " bro 🔥");
+    return;
+  }
+  const nombre = document.getElementById("nombreCliente").value||"Cliente";
+  let canvas = await html2canvas(elemento,{scale:2,useCORS:true,backgroundColor:"#ffffff"});
+  let imgData = canvas.toDataURL("image/jpeg",1.0);
+  let pdf = new jsPDF("p","mm","a4");
+  let imgWidth = 210;
+  let imgHeight = (canvas.height*imgWidth)/canvas.width;
   pdf.addImage(imgData,"JPEG",0,10,imgWidth,imgHeight>280?280:imgHeight);
   pdf.save(`${tipo}-${nombre}.pdf`);
 }
 
-/* ===================== WHATSAPP ===================== */
+/* ===================== WHATS ===================== */
 function enviarWhats(){
-  let nombre=document.getElementById("nombreCliente").value;
-  let mensaje=`🔥 Hola ${nombre}, gracias por tu compra. Aquí están tus planes:\n- Dieta PDF\n- Rutina PDF\n\nDescárgalos desde el enlace y disfruta tu entrenamiento!`;
-  let numero=prompt("Ingresa el número de WhatsApp del cliente (ej: 5273xxxxxxx):");
-  if(!numero){ alert("Debes ingresar un número"); return; }
-  let url=`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
+  let nombre = document.getElementById("nombreCliente").value;
+  let telefono = prompt("Ingresa el número de WhatsApp del cliente (52XXXXXXXXXX):");
+  if(!telefono){ alert("Debes ingresar un número"); return; }
+  let url = `https://wa.me/${telefono}?text=${encodeURIComponent(`🔥 Gracias por tu compra!\nAquí está tu dieta y rutina personalizada. Revisa los PDFs.`)}`;
   window.open(url,"_blank");
 }
-</script>
 
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </body>
 </html>
