@@ -247,42 +247,41 @@ function mostrarDieta(dieta){
 
 /* ===================== RUTINA ===================== */
 function generarRutina(){
-
   let sexo = document.getElementById("sexo").value;
   let dias = parseInt(document.getElementById("diasGym").value) || 3;
 
+  // 🔥 Define split según sexo y días
   function getSplit(){
     if(sexo === "mujer"){
-      if(dias <= 3){
-        return ["Pierna + glúteo","Tren superior","Pierna"];
-      }
-      if(dias == 4){
-        return ["Glúteo","Espalda","Pierna","Glúteo + abdomen"];
-      }
+      if(dias <= 3) return ["Pierna + glúteo","Tren superior","Pierna"];
+      if(dias === 4) return ["Glúteo","Espalda","Pierna","Glúteo + abdomen"];
       return ["Glúteo","Pierna","Espalda","Pierna","Glúteo"];
     } else {
-      if(dias <= 3){
-        return ["Pecho + tríceps","Espalda + bíceps","Pierna"];
-      }
-      if(dias == 4){
-        return ["Pecho","Espalda","Pierna","Hombro + brazos"];
-      }
+      if(dias <= 3) return ["Push","Pull","Pierna"];
+      if(dias === 4) return ["Pecho","Espalda","Pierna","Hombro + brazos"];
       return ["Push","Pull","Pierna","Hombro","Pierna"];
     }
   }
 
+  // 🔥 Ejercicios detallados por grupo
   const ejercicios = {
     "Pecho":["Press banca 4x10","Aperturas 3x12","Fondos 3x12"],
     "Espalda":["Remo barra 4x10","Jalón polea 3x12","Peso muerto 3x8"],
     "Pierna":["Sentadilla 4x10","Prensa 3x12","Femoral 3x12","Pantorrilla 4x15"],
-    "Hombro":["Press militar 4x10","Elevaciones laterales 3x12"],
+    "Hombro":["Press militar 4x10","Elevaciones laterales 3x12","Pájaros 3x12"],
     "Bíceps":["Curl barra 3x12","Curl martillo 3x12"],
     "Tríceps":["Fondos 3x12","Extensión polea 3x12"],
-    "Glúteo":["Hip thrust 4x12","Patada glúteo 3x15"],
-    "Tren superior":["Rutina completa tren superior"],
-    "Glúteo + abdomen":["Hip thrust","Plancha 3x60s"],
-    "Push":["Press banca","Press militar","Fondos"],
-    "Pull":["Remo","Curl bíceps"]
+    "Glúteo":["Hip thrust 4x12","Patada glúteo 3x15","Puente glúteo 3x15"],
+    "Abdomen":["Plancha 3x60s","Crunch 3x15","Elevación piernas 3x12"]
+  };
+
+  // 🔥 Mapear splits tipo Push/Pull a grupos musculares
+  const splitMap = {
+    "Push":["Pecho","Hombro","Tríceps"],
+    "Pull":["Espalda","Bíceps"],
+    "Hombro + brazos":["Hombro","Bíceps","Tríceps"],
+    "Tren superior":["Pecho","Espalda","Hombro","Bíceps","Tríceps"],
+    "Glúteo + abdomen":["Glúteo","Abdomen"]
   };
 
   let split = getSplit();
@@ -293,83 +292,28 @@ function generarRutina(){
       <p>Rutina PRO Personalizada</p>
     </div>`;
 
-  split.forEach((dia, i)=>{
+  split.forEach((dia,i)=>{
     html += `<div class="card-meal">
       <h4>🏋️ Día ${i+1} - ${dia}</h4>`;
 
-    let grupos = dia.split("+");
+    let grupos = splitMap[dia] || [dia]; // Push/Pull → grupos
 
-grupos.forEach(g=>{
-  let grupo = g.trim().toLowerCase();
-
-  // normalizar nombres
-  if(grupo === "bíceps") grupo = "Bíceps";
-  if(grupo === "tríceps") grupo = "Tríceps";
-  if(grupo === "pecho") grupo = "Pecho";
-  if(grupo === "espalda") grupo = "Espalda";
-  if(grupo === "pierna") grupo = "Pierna";
-  if(grupo === "hombro") grupo = "Hombro";
-  if(grupo === "glúteo") grupo = "Glúteo";
-
-  let lista = ejercicios[grupo] || ["Ejercicio base 3x12"];
-
-      html += `<strong>${grupo}</strong><ul>`;
+    grupos.forEach(g=>{
+      let lista = ejercicios[g] || ["Ejercicio base 3x12"];
+      html += `<strong>${g}</strong><ul>`;
       lista.forEach(e=>{
         html += `<li>${e}</li>`;
       });
       html += `</ul>`;
     });
 
-    html += `
-      <p>🔥 Cardio: 20-30 min</p>
-      <p>😴 Descanso: 60-90 seg</p>
+    html += `<p>🔥 Cardio: ${sexo==="mujer"? "20-30 min":"20-35 min"}</p>
+             <p>😴 Descanso: 60-90 seg</p>
     </div>`;
   });
 
   html += `</div>`;
-
   document.getElementById("resultadoPRO").innerHTML = html;
-}
-
-/* ===================== PDF ===================== */
-async function descargarPDF(tipo){
-  const { jsPDF } = window.jspdf;
-  const elemento = document.getElementById("resultadoPRO");
-
-  if(!elemento.innerText.trim()){
-    alert("Primero genera algo bro 🔥");
-    return;
-  }
-
-  let canvas = await html2canvas(elemento,{scale:2});
-  let img = canvas.toDataURL("image/jpeg",1.0);
-
-  let pdf = new jsPDF("p","mm","a4");
-  let width = 210;
-  let height = canvas.height * width / canvas.width;
-
-  let y=10;
-  while(height>0){
-    pdf.addImage(img,"JPEG",0,y,width,height);
-    height-=280;
-    if(height>0){
-      pdf.addPage();
-      y=0;
-    }
-  }
-
-  pdf.save(tipo+".pdf");
-}
-
-/* ===================== WHATS ===================== */
-function enviarWhats(){
-  let nombre=document.getElementById("nombreCliente").value;
-  let numero=prompt("Número cliente","52");
-
-  if(!numero) return;
-
-  let msg=`Hola ${nombre} 🔥 aquí tienes tu plan`;
-  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`);
 }
 </script>
 
