@@ -88,7 +88,7 @@ function usarPro(){
 
 // ---------------- GENERAR DIETA ----------------
 function generarDietaPRO(datos){
-  let {peso, altura, edad, objetivo, tipo} = datos;
+  let {peso, altura, edad, objetivo} = datos;
 
   if(altura > 3) altura = altura / 100;
 
@@ -102,40 +102,49 @@ function generarDietaPRO(datos){
   let grasa = Math.round((calorias * 0.25)/9);
   let carbos = Math.round((calorias - (proteina*4 + grasa*9))/4);
 
-  const nombresComida = ["Desayuno", "Comida", "Pre-entreno", "Cena"];
-
   function random(arr){
     return arr[Math.floor(Math.random()*arr.length)];
   }
 
-  // 🔥 PROTEINAS REALISTAS
-  const proteinas = [
-    "150g Pollo",
-    "180g Pescado",
-    "160g Carne magra",
-    "4 claras + 2 huevos",
-    "1.5 scoop Whey protein"
+  // 🔥 BASES SEGÚN OBJETIVO
+  const proteDef = [
+    "150g pollo",
+    "180g pescado",
+    "160g carne magra",
+    "4 claras + 1 huevo",
+    "1 scoop whey protein"
   ];
 
-  // 🔥 CARBOS REALISTAS
-  const carbosLista = [
+  const proteVol = [
+    "200g pollo",
+    "220g pescado",
+    "200g carne magra",
+    "5 claras + 2 huevos",
+    "1.5 scoop whey protein"
+  ];
+
+  const carbosDef = [
     "1 taza arroz",
-    "1.5 tazas arroz",
     "2 tortillas",
-    "1 taza pasta",
-    "1 taza puré de papa",
-    "1 taza plátano macho",
-    "1/2 pan árabe"
+    "1/2 pan árabe",
+    "1 taza avena",
+    "1 taza pasta"
   ];
 
-  // 🔥 GRASAS
-  const grasasLista = [
+  const carbosVol = [
+    "1.5 tazas arroz",
+    "2 tazas arroz",
+    "3 tortillas",
+    "1.5 tazas pasta",
+    "1 taza plátano macho"
+  ];
+
+  const grasas = [
     "1 cucharada aceite de oliva",
     "1/2 aguacate",
     "20g nueces"
   ];
 
-  // 🔥 VERDURAS (NO TODAS LAS COMIDAS)
   const verduras = [
     "lechuga y jitomate",
     "espinaca",
@@ -144,40 +153,71 @@ function generarDietaPRO(datos){
     "pepino"
   ];
 
-  // 🔥 FRUTA SOLO EN MOMENTOS CLAVE
-  const frutas = [
+  const frutasDef = [
     "manzana verde",
-    "manzana roja",
     "papaya",
-    "melón",
-    "plátano"
+    "melón"
   ];
+
+  const frutasVol = [
+    "plátano",
+    "manzana roja",
+    "mango"
+  ];
+
+  let proteinas = objetivo === "definicion" ? proteDef : proteVol;
+  let carbosLista = objetivo === "definicion" ? carbosDef : carbosVol;
+  let frutas = objetivo === "definicion" ? frutasDef : frutasVol;
 
   let comidas = [];
 
-  for(let i=0;i<4;i++){
+  // 🥞 DESAYUNO
+  comidas.push({
+    nombre: "Desayuno",
+    proteina: random([
+      "4 claras + 1 huevo con espinaca",
+      "Hotcakes de avena con miel ligera",
+      "1 scoop whey protein en agua"
+    ]),
+    carbos: random(carbosLista),
+    grasa: random(grasas),
+    verdura: "",
+    fruta: random(frutas)
+  });
 
-    let comida = {
-      nombre: nombresComida[i],
-      proteina: random(proteinas),
-      carbos: random(carbosLista),
-      grasa: random(grasasLista),
-      verdura: "",
-      fruta: ""
-    };
+  // 🍗 COMIDA FUERTE
+  comidas.push({
+    nombre: "Comida",
+    proteina: random(proteinas),
+    carbos: random(carbosLista),
+    grasa: random(grasas),
+    verdura: random(verduras),
+    fruta: ""
+  });
 
-    // 🥦 Verduras SOLO comida fuerte
-    if(i === 1 || i === 3){
-      comida.verdura = random(verduras);
-    }
+  // 🥤 PRE ENTRENO (tipo nutriólogo)
+  comidas.push({
+    nombre: "Pre-entreno",
+    proteina: "1 scoop whey protein",
+    carbos: random([
+      "1 taza avena",
+      "1 plátano",
+      "2 cucharadas de miel con avena"
+    ]),
+    grasa: "10g nueces",
+    verdura: "",
+    fruta: random(frutas)
+  });
 
-    // 🍎 Fruta SOLO desayuno o pre
-    if(i === 0 || i === 2){
-      comida.fruta = random(frutas);
-    }
-
-    comidas.push(comida);
-  }
+  // 🍽️ CENA LIMPIA
+  comidas.push({
+    nombre: "Cena",
+    proteina: random(proteinas),
+    carbos: random(carbosLista),
+    grasa: random(grasas),
+    verdura: random(verduras),
+    fruta: ""
+  });
 
   return {calorias, proteina, carbos, grasa, comidas};
 }
