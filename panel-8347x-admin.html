@@ -120,18 +120,17 @@ function generarDietaPRO(datos){
   ];
 
   const carbosDef = [
-    "1 taza arroz",
+    "1 taza arroz blanco",
     "2 tortillas de maíz",
     "1/2 pan árabe",
-    "1 taza avena"
+    "1 taza avena cocida"
   ];
 
   const carbosVol = [
-    "1.5 tazas arroz",
+    "1.5 tazas arroz blanco",
     "3 tortillas de maíz",
     "1 pan árabe",
-    "1.5 tazas avena",
-    "1 taza pasta"
+    "1 taza pasta cocida"
   ];
 
   const grasas = [
@@ -142,7 +141,7 @@ function generarDietaPRO(datos){
   ];
 
   const verduras = [
-    "1 taza ensalada (lechuga + jitomate)",
+    "1 taza lechuga + jitomate",
     "1 taza espinaca",
     "1 taza brócoli",
     "1 taza calabaza",
@@ -162,7 +161,7 @@ function generarDietaPRO(datos){
   ];
 
   let carbosLista = objetivo === "definicion" ? carbosDef : carbosVol;
-  let frutas = objetivo === "definicion" ? frutasDef : frutasVol;
+  let frutasLista = objetivo === "definicion" ? frutasDef : frutasVol;
 
   let comidas = [];
 
@@ -172,12 +171,12 @@ function generarDietaPRO(datos){
     proteina: random([
       "4 claras + 1 huevo",
       "1 scoop proteína whey",
-      "Hotcakes de avena (2 piezas)"
+      "Hotcakes de avena (2 medianos)"
     ]),
     carbos: random(carbosLista),
     grasa: random(grasas),
     verdura: "",
-    fruta: random(frutas)
+    fruta: random(frutasLista)
   });
 
   // COMIDA
@@ -190,14 +189,14 @@ function generarDietaPRO(datos){
     fruta: ""
   });
 
-  // PRE
+  // PRE ENTRENAMIENTO
   comidas.push({
     nombre: "Pre-entreno",
     proteina: "1 scoop proteína whey",
     carbos: random([
       "1/2 taza avena",
       "1 plátano",
-      "1 cucharada miel"
+      "1 cucharada miel de abeja"
     ]),
     grasa: "5 almendras",
     verdura: "",
@@ -210,14 +209,21 @@ function generarDietaPRO(datos){
     proteina: random(proteinas),
     carbos: random([
       "1/2 taza arroz",
-      "1 tortilla de maíz"
+      "1 tortilla de maíz",
+      "verduras libres"
     ]),
     grasa: random(grasas),
     verdura: random(verduras),
     fruta: ""
   });
 
-  return {calorias, comidas};
+  return {
+    calorias,
+    proteina: Math.round(peso*2),
+    carbos: Math.round(calorias/4),
+    grasa: Math.round(calorias*0.25/9),
+    comidas
+  };
 }
 
 /* ===================== MOSTRAR DIETA ===================== */
@@ -265,75 +271,69 @@ function generarRutina(){
   let sexo = document.getElementById("sexo").value;
   let dias = parseInt(document.getElementById("diasGym").value) || 3;
 
+  function getSplit(){
+    if(sexo === "mujer"){
+      if(dias <= 3){
+        return ["Pierna + glúteo","Tren superior","Pierna"];
+      }
+      if(dias == 4){
+        return ["Glúteo","Espalda","Pierna","Glúteo + abdomen"];
+      }
+      return ["Glúteo","Pierna","Espalda","Pierna","Glúteo"];
+    } else {
+      if(dias <= 3){
+        return ["Pecho + tríceps","Espalda + bíceps","Pierna"];
+      }
+      if(dias == 4){
+        return ["Pecho","Espalda","Pierna","Hombro + brazos"];
+      }
+      return ["Push","Pull","Pierna","Hombro","Pierna"];
+    }
+  }
+
   const ejercicios = {
-    "Pecho":[
-      "Press banca 4x10",
-      "Aperturas 3x12",
-      "Fondos 3x15"
-    ],
-    "Espalda":[
-      "Remo barra 4x10",
-      "Jalón polea 3x12",
-      "Peso muerto 3x8"
-    ],
-    "Pierna":[
-      "Sentadilla 4x10",
-      "Prensa 3x12",
-      "Femoral 3x12",
-      "Gemelos 4x15"
-    ],
-    "Hombro + brazos":[
-      "Press militar 4x10",
-      "Laterales 3x12",
-      "Curl bíceps 3x12",
-      "Fondos tríceps 3x15"
-    ],
-    "Pierna + glúteo":[
-      "Hip thrust 4x12",
-      "Sentadilla 4x12",
-      "Patada glúteo 3x15"
-    ],
-    "Espalda + brazo":[
-      "Remo mancuerna 4x12",
-      "Jalón polea 3x12",
-      "Curl bíceps 3x12"
-    ],
-    "Glúteo + abdomen":[
-      "Hip thrust 4x12",
-      "Plancha 3x60s",
-      "Crunch 3x20"
-    ]
+    "Pecho":["Press banca 4x10","Aperturas 3x12","Fondos 3x12"],
+    "Espalda":["Remo barra 4x10","Jalón polea 3x12","Peso muerto 3x8"],
+    "Pierna":["Sentadilla 4x10","Prensa 3x12","Femoral 3x12","Pantorrilla 4x15"],
+    "Hombro":["Press militar 4x10","Elevaciones laterales 3x12"],
+    "Bíceps":["Curl barra 3x12","Curl martillo 3x12"],
+    "Tríceps":["Fondos 3x12","Extensión polea 3x12"],
+    "Glúteo":["Hip thrust 4x12","Patada glúteo 3x15"],
+    "Tren superior":["Rutina completa tren superior"],
+    "Glúteo + abdomen":["Hip thrust","Plancha 3x60s"],
+    "Push":["Press banca","Press militar","Fondos"],
+    "Pull":["Remo","Curl bíceps"]
   };
 
-  const estructuraHombre = [
-    "Pecho",
-    "Espalda",
-    "Pierna",
-    "Hombro + brazos"
-  ];
-
-  const estructuraMujer = [
-    "Pierna + glúteo",
-    "Espalda + brazo",
-    "Pierna",
-    "Glúteo + abdomen"
-  ];
-
-  let estructura = sexo === "mujer" ? estructuraMujer : estructuraHombre;
+  let split = getSplit();
 
   let html = `<div class="dieta-card">
-    <h1 style="text-align:center;color:#d4af37;">🔥 Rutina PRO</h1>`;
+    <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
+      <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
+      <p>Rutina PRO Personalizada</p>
+    </div>`;
 
-  estructura.slice(0,dias).forEach((grupo,i)=>{
+  split.forEach((dia, i)=>{
     html += `<div class="card-meal">
-      <h4>🏋️ Día ${i+1} - ${grupo}</h4>
-      <ul>`;
+      <h4>🏋️ Día ${i+1} - ${dia}</h4>`;
 
-    ejercicios[grupo].forEach(e=>{
-      html += `<li>${e}</li>`;
+    let grupos = dia.split("+");
+
+    grupos.forEach(g=>{
+      let grupo = g.trim();
+      let lista = ejercicios[grupo] || ["Ejercicio base 3x12"];
+
+      html += `<strong>${grupo}</strong><ul>`;
+      lista.forEach(e=>{
+        html += `<li>${e}</li>`;
+      });
+      html += `</ul>`;
     });
 
-    html += `</ul></div>`;
+    html += `
+      <p>🔥 Cardio: 20-30 min</p>
+      <p>😴 Descanso: 60-90 seg</p>
+    </div>`;
   });
 
   html += `</div>`;
