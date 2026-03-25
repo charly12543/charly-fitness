@@ -220,6 +220,35 @@ function descargarPDF(tipo){
   }).from(element).save();
 }
 
+/* ===================== WHATS ===================== */ 
+function enviarWhats(){ 
+let nombre=document.getElementById("nombreCliente").value; 
+let numero=prompt("Número cliente","52"); if(!numero) return; 
+  let msg=Hola ${nombre} 
+🔥 aquí tienes tu plan; window.open(https://wa.me/${numero}?text=${encodeURIComponent(msg)}); 
+}
+
+ /* ===================== PDF ===================== */ 
+async function descargarPDF(tipo){ 
+const { jsPDF } = window.jspdf; 
+const elemento = document.getElementById("resultadoPRO"); 
+if(!elemento.innerText.trim()){ 
+
+alert("Primero genera algo bro 🔥"); 
+
+return; } 
+
+let canvas = await html2canvas(elemento,{scale:2}); 
+let img = canvas.toDataURL("image/jpeg",1.0); 
+let pdf = new jsPDF("p","mm","a4"); let width = 210; 
+let height = canvas.height * width / canvas.width; let y=10; while(height>0){ 
+pdf.addImage(img,"JPEG",0,y,width,height); 
+height-=280; if(height>0){ pdf.addPage(); y=0; } 
+} 
+pdf.save(tipo+".pdf"); 
+} 
+  
+
 /* ===================== RUTINA ===================== */
 function generarRutina(){
   let sexo = document.getElementById("sexo").value;
