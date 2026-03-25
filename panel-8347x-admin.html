@@ -53,24 +53,20 @@
   <button onclick="generarRutina()" style="margin-top:10px;">🏋️‍♂️ Generar Rutina PRO</button>
 
   <div id="resultadoPRO"></div>
-
   <button onclick="descargarPDF('dieta')" style="margin-top:15px;">📄 Descargar PDF Dieta</button>
   <button onclick="descargarPDF('rutina')" style="margin-top:5px;">📄 Descargar PDF Rutina</button>
 </div>
 </section>
 
-<!-- BOTON WHATS -->  
 <div class="whats-box">
   <h3>🔥 Listo para tu plan personalizado?</h3>
   <p>Recibe dieta + rutina directamente en WhatsApp</p>
-  <input type="text" id="whatsCliente" placeholder="Número WhatsApp del cliente (con 52)">
+  <input type="text" id="whatsCliente" placeholder="Número WhatsApp del cliente">
   <button onclick="enviarWhats()" class="btn-whats-pro">
     📲 Enviar PDFs al cliente
   </button>
-  <span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
+<span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
 </div>
-
-<!-- SCRIPTS -->
 
 <script>
 /* ===================== DIETA PRO ===================== */
@@ -91,112 +87,158 @@ function usarPro(){
   mostrarDieta(dieta);
 }
 
+/* ===================== GENERAR DIETA ===================== */
+function generarDietaPRO(datos){
+  let {peso, altura, edad, objetivo, tipo} = datos;
+  if(altura>3) altura/=100;
+
+  // Calorías base
+  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
+  let calorias = Math.round(bmr*1.55);
+  if(objetivo==="definicion") calorias-=400;
+  if(objetivo==="volumen") calorias+=300;
+
+  // Macros
+  let proteina= Math.round(peso*2);
+  let grasa= Math.round(calorias*0.25/9);
+  let carbos= Math.round((calorias-(proteina*4+grasa*9))/4);
+
+  // Proteínas
+  let listaProte = ["Pollo","Pescado","Carne magra","Huevo","Whey"];
+  // Carbos
+  let listaCarbos = ["Arroz hervido","Purée de papa","Purée de plátano macho","Avena","Pan árabe"];
+  // Frutas
+  let frutasDef = ["Melón","Papaya","Manzana verde"];
+  let frutasVol = ["Manzana roja","Papaya","Melón"];
+  // Grasas
+  let listaGrasas = ["Aguacate","Aceite de oliva","Nueces"];
+
+  let comidasNombres = ["Desayuno","Comida","Pre-entreno","Cena"];
+  let comidas=[];
+
+  for(let i=0;i<4;i++){
+    let prote= listaProte[Math.floor(Math.random()*listaProte.length)];
+    let carbo= listaCarbos[Math.floor(Math.random()*listaCarbos.length)];
+    let grasaC= listaGrasas[Math.floor(Math.random()*listaGrasas.length)];
+    let fruta= objetivo==="definicion"? frutasDef[Math.floor(Math.random()*frutasDef.length)] : frutasVol[Math.floor(Math.random()*frutasVol.length)];
+
+    comidas.push({
+      nombre: comidasNombres[i],
+      proteina:`200g ${prote}`,
+      carbos:`60g ${carbo}`,
+      grasa:`15g ${grasaC}`,
+      fruta: fruta
+    });
+  }
+
+  return {calorias, proteina, carbos, grasa, comidas};
+}
+
+/* ===================== MOSTRAR DIETA ===================== */
+function mostrarDieta(dieta){
+  let nombre = document.getElementById("nombreCliente").value || "Cliente";
+  let fecha = new Date().toLocaleDateString();
+  let html=`<div class="dieta-card" style="padding:20px;">`;
+  html+=`<h2>${nombre} - ${fecha}</h2>`;
+  html+=`<p>🔥 ${dieta.calorias} kcal | 🥩 ${dieta.proteina}g | 🍚 ${dieta.carbos}g | 🥑 ${dieta.grasa}g</p>`;
+  dieta.comidas.forEach(c=>{
+    html+=`<div class="card-meal no-break">
+      <h4>🍽️ ${c.nombre}</h4>
+      <ul>
+        <li>🥩 ${c.proteina}</li>
+        <li>🍚 ${c.carbos}</li>
+        <li>🥑 ${c.grasa}</li>
+        <li>🍏 ${c.fruta}</li>
+      </ul>
+    </div>`;
+  });
+  html+="</div>";
+  document.getElementById("resultadoPRO").innerHTML=html;
+}
+
 /* ===================== RUTINA PRO ===================== */
 function generarRutina(){
   let nombre = document.getElementById("nombreCliente").value || "Cliente";
   let sexo = document.getElementById("sexo").value;
   let dias = parseInt(document.getElementById("diasGym").value) || 3;
 
-  let rutina = [];
+  let rutina=[];
 
   const ejerciciosHombre = {
-    Pecho: ["Press banca 4x10", "Aperturas mancuernas 3x12", "Fondos 3x15"],
-    Espalda: ["Remo barra 4x10", "Jalón polea 3x12", "Peso muerto 3x8"],
-    Hombros: ["Press militar 4x10", "Elevaciones laterales 3x12", "Facepull 3x15"],
-    Bíceps: ["Curl barra 4x12", "Curl martillo 3x12"],
-    Tríceps: ["Press francés 4x12", "Fondos 3x15"],
-    Pierna: ["Sentadillas 4x10", "Prensa 3x12", "Curl femoral 3x12", "Gemelos 4x15"]
+    Pecho:["Press banca 4x10","Aperturas mancuernas 3x12","Fondos 3x15"],
+    Espalda:["Remo barra 4x10","Jalón polea 3x12","Peso muerto 3x8"],
+    Hombros:["Press militar 4x10","Elevaciones laterales 3x12","Facepull 3x15"],
+    Bíceps:["Curl barra 4x12","Curl martillo 3x12"],
+    Tríceps:["Press francés 4x12","Fondos 3x15"],
+    Pierna:["Sentadillas 4x10","Prensa 3x12","Curl femoral 3x12","Gemelos 4x15"]
   };
 
   const ejerciciosMujer = {
-    Pierna: ["Sentadillas 4x12", "Hip thrust 4x12", "Prensa 3x15", "Gemelos 3x20"],
-    Glúteo: ["Patada glúteo 3x15", "Abducción 3x20"],
-    Core: ["Plancha 3x60s", "Crunch 3x20", "Russian twist 3x20"],
-    Espalda: ["Remo mancuerna 4x12", "Jalón polea 3x12"],
-    Hombros: ["Elevaciones laterales 3x12", "Press militar 3x10"],
-    Brazos: ["Curl bíceps 3x12", "Extensión tríceps 3x12"]
+    Pierna:["Sentadillas 4x12","Hip thrust 4x12","Prensa 3x15","Gemelos 3x20"],
+    Glúteo:["Patada glúteo 3x15","Abducción 3x20"],
+    Core:["Plancha 3x60s","Crunch 3x20","Russian twist 3x20"],
+    Espalda:["Remo mancuerna 4x12","Jalón polea 3x12"],
+    Hombros:["Elevaciones laterales 3x12","Press militar 3x10"],
+    Brazos:["Curl bíceps 3x12","Extensión tríceps 3x12"]
   };
 
-  let pool = sexo === "hombre" ? ejerciciosHombre : ejerciciosMujer;
-  let grupos = Object.keys(pool);
+  let pool=sexo==="hombre"? ejerciciosHombre: ejerciciosMujer;
+  let grupos=Object.keys(pool);
 
   for(let i=0;i<dias;i++){
-    let diaNombre = `Día ${i+1}`;
-    let ejeDia = [];
+    let diaNombre=`Día ${i+1}`;
+    let ejeDia=[];
     for(let j=0;j<3;j++){
-      let idx = (i+j) % grupos.length;
+      let idx=(i+j)%grupos.length;
       ejeDia.push({grupo: grupos[idx], ejercicios: pool[grupos[idx]]});
     }
-    rutina.push({dia: diaNombre, bloques: ejeDia});
+    rutina.push({dia:diaNombre, bloques:ejeDia});
   }
 
-  let html = `<div class="dieta-card">
-    <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
-      <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
-      <p>Plan de Entrenamiento Personalizado</p>
-    </div>`;
-
+  let html=`<div class="dieta-card" style="padding:20px;"><h2>${nombre} - Plan de Entrenamiento</h2>`;
   rutina.forEach(d=>{
-    html += `<div class="card-meal no-break"><h4>🏋️ ${d.dia}</h4>`;
+    html+=`<div class="card-meal no-break"><h4>🏋️ ${d.dia}</h4>`;
     d.bloques.forEach(b=>{
-      html += `<strong>${b.grupo}</strong><ul>`;
-      b.ejercicios.forEach(e=>{
-        html += `<li>${e}</li>`;
-      });
-      html += `</ul>`;
+      html+=`<strong>${b.grupo}</strong><ul>`;
+      b.ejercicios.forEach(e=>{ html+=`<li>${e}</li>`; });
+      html+=`</ul>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   });
-
-  html += `</div>`;
-  document.getElementById("resultadoPRO").innerHTML = html;
+  html+="</div>";
+  document.getElementById("resultadoPRO").innerHTML=html;
 }
 
 /* ===================== DESCARGAR PDF ===================== */
 async function descargarPDF(tipo){
   const { jsPDF } = window.jspdf;
-  const elemento = document.getElementById("resultadoPRO");
+  const elemento=document.getElementById("resultadoPRO");
   if(!elemento.innerText.trim()){
-    alert("Primero genera la " + tipo + " bro 🔥");
+    alert("Primero genera la "+tipo+" bro 🔥");
     return;
   }
-
-  const nombre = document.getElementById("nombreCliente").value || "Cliente";
-  let fecha = new Date().toLocaleDateString();
-  let planID = "CF-" + Math.floor(Math.random()*9000 + 1000);
-
-  let canvas = await html2canvas(elemento, {scale:2, useCORS:true, backgroundColor:"#ffffff"});
-  let imgData = canvas.toDataURL("image/jpeg",1.0);
-  let pdf = new jsPDF("p","mm","a4");
-  const imgWidth = 210;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  const nombre=document.getElementById("nombreCliente").value || "Cliente";
+  let canvas=await html2canvas(elemento,{scale:2,useCORS:true,backgroundColor:"#ffffff"});
+  let imgData=canvas.toDataURL("image/jpeg",1.0);
+  let pdf=new jsPDF("p","mm","a4");
+  const imgWidth=210;
+  const imgHeight=(canvas.height*imgWidth)/canvas.width;
   pdf.addImage(imgData,"JPEG",0,10,imgWidth,imgHeight>280?280:imgHeight);
-
-  // 🔥 Guardar en carpeta pdf/
-  pdf.save(`pdf/${tipo}-${nombre}.pdf`);
+  pdf.save(`${tipo}-${nombre}.pdf`);
 }
 
 /* ===================== WHATSAPP ===================== */
 function enviarWhats(){
-  let nombre = document.getElementById("nombreCliente").value;
-  let whatsapp = document.getElementById("whatsCliente").value;
-  if(!nombre || !whatsapp){
-    alert("Ingresa nombre y número WhatsApp del cliente 🔥");
+  let numero=document.getElementById("whatsCliente").value;
+  if(!numero){
+    alert("Ingresa el número WhatsApp del cliente");
     return;
   }
-
-  // 🔥 PDFs asumidos en carpeta pdf/
-  let linkDieta = `https://charly12543.github.io/charly-fitness/pdf/dieta-${nombre}.pdf`;
-  let linkRutina = `https://charly12543.github.io/charly-fitness/pdf/rutina-${nombre}.pdf`;
-
-  let mensaje = `🔥 Hola ${nombre}, gracias por tu compra! 🔥%0A%0A` +
-                `Aquí está tu plan personalizado:%0A` +
-                `📄 Dieta: ${linkDieta}%0A` +
-                `🏋️ Rutina: ${linkRutina}%0A%0A` +
-                `¡Disfrútalo y a entrenar fuerte! 💪`;
-
-  let url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(mensaje)}`;
-  window.open(url,"_blank");
+  descargarPDF('dieta');
+  descargarPDF('rutina');
+  setTimeout(()=>{
+    alert("Se han generado los PDFs. Ahora envía el mensaje por WhatsApp manualmente si quieres.");
+  },1500);
 }
 </script>
 
