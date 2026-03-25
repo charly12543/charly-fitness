@@ -70,11 +70,12 @@
 <script>
 /* ===================== DIETA PRO ===================== */
 function generarDietaPRO(datos){
-  let {peso, altura, edad, objetivo} = datos;
+
+  let {peso, altura, edad, objetivo, sexo, nivel} = datos;
 
   if(altura > 3) altura = altura / 100;
 
-  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
+  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo === "mujer" ? -161 : 5);
   let calorias = Math.round(bmr * 1.55);
 
   if(objetivo === "definicion") calorias -= 400;
@@ -84,32 +85,37 @@ function generarDietaPRO(datos){
     return arr[Math.floor(Math.random()*arr.length)];
   }
 
-  // 🔥 PROTEINAS CLARAS
-  const proteDef = [
-    "150g pollo",
-    "180g pescado",
-    "160g carne magra",
-    "4 claras + 1 huevo",
-    "1 scoop proteína whey"
-  ];
+  // 🔥 PROTEINA
+  let proteBase = sexo === "mujer" ? 1.6 : 2;
+  let proteina = Math.round(peso * proteBase);
 
-  const proteVol = [
-    "200g pollo",
-    "220g pescado",
-    "200g carne magra",
+  // 🔥 GRASA CONTROLADA
+  let grasa = Math.round((calorias * 0.22)/9);
+
+  // 🔥 CARBOS RESTANTES
+  let carbosTotales = Math.round((calorias - (proteina*4 + grasa*9))/4);
+
+  // 🔥 OPCIONES
+  const proteinas = sexo === "mujer" ? [
+    "120g pollo",
+    "140g pescado",
+    "120g carne magra",
+    "3 claras + 1 huevo",
+    "1 scoop proteína whey"
+  ] : [
+    "180g pollo",
+    "200g pescado",
+    "180g carne magra",
     "5 claras + 2 huevos",
     "1.5 scoops proteína whey"
   ];
 
-  // 🔥 CARBOS (1 POR COMIDA)
-  const carbosDef = [
+  const carbosLista = objetivo === "definicion" ? [
     "1 taza arroz blanco",
     "2 tortillas de maíz",
     "1/2 pan árabe",
     "1 taza avena cocida"
-  ];
-
-  const carbosVol = [
+  ] : [
     "1.5 tazas arroz blanco",
     "3 tortillas de maíz",
     "1 pan árabe",
@@ -117,15 +123,13 @@ function generarDietaPRO(datos){
     "1 taza pasta cocida"
   ];
 
-  // 🔥 GRASAS (CLARAS)
-  const grasas = [
+  const grasasLista = [
     "1 cucharada aceite de oliva",
     "1/4 aguacate",
     "1 cucharada crema de cacahuate",
     "10 almendras"
   ];
 
-  // 🔥 VERDURAS (SIN MEDIR EXACTO)
   const verduras = [
     "ensalada (lechuga + jitomate)",
     "espinaca",
@@ -134,26 +138,19 @@ function generarDietaPRO(datos){
     "pepino"
   ];
 
-  // 🔥 FRUTA (CON PORCIÓN REAL)
-  const frutasDef = [
+  const frutas = objetivo === "definicion" ? [
     "1 taza papaya",
     "1 taza melón",
     "1 manzana verde"
-  ];
-
-  const frutasVol = [
+  ] : [
     "1 plátano",
     "1 manzana roja",
     "1 taza mango"
   ];
 
-  let proteinas = objetivo === "definicion" ? proteDef : proteVol;
-  let carbosLista = objetivo === "definicion" ? carbosDef : carbosVol;
-  let frutas = objetivo === "definicion" ? frutasDef : frutasVol;
-
   let comidas = [];
 
-  // 🥞 DESAYUNO (CONTROLADO)
+  // 🥞 DESAYUNO
   comidas.push({
     nombre: "Desayuno",
     proteina: random([
@@ -162,22 +159,22 @@ function generarDietaPRO(datos){
       "Hotcakes de avena (2 piezas chicas)"
     ]),
     carbos: random(carbosLista),
-    grasa: random(grasas),
+    grasa: random(grasasLista),
     verdura: "",
     fruta: random(frutas)
   });
 
-  // 🍗 COMIDA (FUERTE Y LIMPIA)
+  // 🍗 COMIDA
   comidas.push({
     nombre: "Comida",
     proteina: random(proteinas),
     carbos: random(carbosLista),
-    grasa: random(grasas),
+    grasa: random(grasasLista),
     verdura: random(verduras),
     fruta: ""
   });
 
-  // 🥤 PRE-ENTRENO (REAL)
+  // 🥤 PRE
   comidas.push({
     nombre: "Pre-entreno",
     proteina: "1 scoop proteína whey",
@@ -191,7 +188,7 @@ function generarDietaPRO(datos){
     fruta: ""
   });
 
-  // 🌙 CENA (LIGERA)
+  // 🌙 CENA
   comidas.push({
     nombre: "Cena",
     proteina: random(proteinas),
@@ -200,12 +197,24 @@ function generarDietaPRO(datos){
       "1 tortilla de maíz",
       "verduras extra"
     ]),
-    grasa: random(grasas),
+    grasa: random(grasasLista),
     verdura: random(verduras),
     fruta: ""
   });
 
-  return {calorias, comidas};
+  // 🔥 EXTRA SI ES AVANZADO
+  if(nivel === "avanzado"){
+    comidas.push({
+      nombre: "Colación",
+      proteina: "1 scoop proteína whey",
+      carbos: random(frutas),
+      grasa: "5 almendras",
+      verdura: "",
+      fruta: ""
+    });
+  }
+
+  return {calorias, proteina, carbos: carbosTotales, grasa, comidas};
 }
   
 // ---------------- MOSTRAR DIETA ----------------
@@ -249,66 +258,111 @@ function mostrarDieta(dieta){
 
 /* ---------------- GENERAR RUTINA ---------------- */
 function generarRutina(){
+
   let nombre = document.getElementById("nombreCliente").value || "Cliente";
   let sexo = document.getElementById("sexo").value;
   let dias = parseInt(document.getElementById("diasGym").value) || 3;
 
   let rutina = [];
 
-  const ejerciciosHombre = {
-    Pecho:["Press banca 4x10","Aperturas mancuernas 3x12","Fondos 3x15"],
-    Espalda:["Remo barra 4x10","Jalón polea 3x12","Peso muerto 3x8"],
-    Hombros:["Press militar 4x10","Elevaciones laterales 3x12","Facepull 3x15"],
-    Bíceps:["Curl barra 4x12","Curl martillo 3x12"],
-    Tríceps:["Press francés 4x12","Fondos 3x15"],
-    Pierna:["Sentadillas 4x10","Prensa 3x12","Curl femoral 3x12","Gemelos 4x15"]
-  };
-
-  const ejerciciosMujer = {
-    Pierna:["Sentadillas 4x12","Hip thrust 4x12","Prensa 3x15","Gemelos 3x20"],
-    Glúteo:["Patada glúteo 3x15","Abducción 3x20"],
-    Core:["Plancha 3x60s","Crunch 3x20","Russian twist 3x20"],
-    Espalda:["Remo mancuerna 4x12","Jalón polea 3x12"],
-    Hombros:["Elevaciones laterales 3x12","Press militar 3x10"],
-    Brazos:["Curl bíceps 3x12","Extensión tríceps 3x12"]
-  };
-
-  let pool = sexo==="hombre"? ejerciciosHombre: ejerciciosMujer;
-  let grupos = Object.keys(pool);
-
-  for(let i=0;i<dias;i++){
-    let diaNombre = `Día ${i+1}`;
-    let ejeDia=[];
-    for(let j=0;j<3;j++){
-      let idx=(i+j)%grupos.length;
-      ejeDia.push({grupo:grupos[idx], ejercicios:pool[grupos[idx]]});
+  function getRutinaHombre(dias){
+    if(dias <= 3){
+      return [
+        ["Pecho + Tríceps"],
+        ["Espalda + Bíceps"],
+        ["Pierna + Hombro"]
+      ];
     }
-    rutina.push({dia:diaNombre,bloques:ejeDia});
+    if(dias == 4){
+      return [
+        ["Pecho"],
+        ["Espalda"],
+        ["Pierna"],
+        ["Hombro + Brazos"]
+      ];
+    }
+    return [
+      ["Push (pecho, hombro, tríceps)"],
+      ["Pull (espalda, bíceps)"],
+      ["Pierna"],
+      ["Hombro"],
+      ["Pierna + glúteo"]
+    ];
   }
 
-  let html=`<div class="dieta-card">
+  function getRutinaMujer(dias){
+    if(dias <= 3){
+      return [
+        ["Pierna + glúteo"],
+        ["Tren superior"],
+        ["Pierna completa"]
+      ];
+    }
+    if(dias == 4){
+      return [
+        ["Pierna + glúteo"],
+        ["Espalda + brazo"],
+        ["Pierna"],
+        ["Glúteo + abdomen"]
+      ];
+    }
+    return [
+      ["Glúteo"],
+      ["Pierna"],
+      ["Espalda"],
+      ["Pierna"],
+      ["Glúteo + abdomen"]
+    ];
+  }
+
+  const ejerciciosBase = {
+    "Pecho":["Press banca 4x10","Aperturas 3x12"],
+    "Espalda":["Remo barra 4x10","Jalón polea 3x12"],
+    "Pierna":["Sentadilla 4x10","Prensa 3x12","Femoral 3x12"],
+    "Hombro":["Press militar 4x10","Laterales 3x12"],
+    "Bíceps":["Curl barra 3x12"],
+    "Tríceps":["Fondos 3x15"],
+    "Glúteo":["Hip thrust 4x12","Patada glúteo 3x15"],
+    "Tren superior":["Rutina completa tren superior"],
+    "Glúteo + abdomen":["Hip thrust + plancha"],
+    "Push (pecho, hombro, tríceps)":["Press banca","Press militar","Fondos"],
+    "Pull (espalda, bíceps)":["Remo","Curl bíceps"]
+  };
+
+  let estructura = sexo === "mujer" ? getRutinaMujer(dias) : getRutinaHombre(dias);
+
+  estructura.forEach((dia, i)=>{
+    rutina.push({
+      dia: `Día ${i+1}`,
+      bloques: dia.map(grupo => ({
+        grupo: grupo,
+        ejercicios: ejerciciosBase[grupo] || ["Ejercicio base 3x12"]
+      }))
+    });
+  });
+
+  let html = `<div class="dieta-card">
     <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
       <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
       <p>Plan de Entrenamiento Personalizado</p>
     </div>`;
 
   rutina.forEach(d=>{
-    html+=`<div class="card-meal no-break">
+    html += `<div class="card-meal no-break">
       <h4>🏋️ ${d.dia}</h4>`;
     d.bloques.forEach(b=>{
-      html+=`<strong>${b.grupo}</strong><ul>`;
+      html += `<strong>${b.grupo}</strong><ul>`;
       b.ejercicios.forEach(e=>{
-        html+=`<li>${e}</li>`;
+        html += `<li>${e}</li>`;
       });
-      html+=`</ul>`;
+      html += `</ul>`;
     });
-    html+=`</div>`;
+    html += `</div>`;
   });
 
-  html+=`</div>`;
-  document.getElementById("resultadoPRO").innerHTML=html;
+  html += `</div>`;
+  document.getElementById("resultadoPRO").innerHTML = html;
 }
-
 /* ---------------- DESCARGAR PDF ---------------- */
 async function descargarPDF(tipo){
   const { jsPDF } = window.jspdf;
