@@ -203,27 +203,88 @@ function mostrarDieta(dieta){
 
 /* ===================== RUTINA ===================== */
 function generarRutina(){
-  let nivel=document.getElementById("nivel").value;
 
-  let rutinas={
-    novato:["Full Body","Full Body","Full Body"],
-    intermedio:["Pecho","Espalda","Pierna","Hombro"],
-    avanzado:["Push","Pull","Pierna","Hombro","Pierna"],
-    competidor:["Push","Pull","Pierna","Hombro","Pierna","Full Body"]
+  let sexo = document.getElementById("sexo").value;
+  let dias = parseInt(document.getElementById("diasGym").value) || 3;
+
+  function getSplit(){
+    if(sexo === "mujer"){
+      if(dias <= 3){
+        return ["Pierna + glúteo","Tren superior","Pierna"];
+      }
+      if(dias == 4){
+        return ["Glúteo","Espalda","Pierna","Glúteo + abdomen"];
+      }
+      return ["Glúteo","Pierna","Espalda","Pierna","Glúteo"];
+    } else {
+      if(dias <= 3){
+        return ["Pecho + tríceps","Espalda + bíceps","Pierna"];
+      }
+      if(dias == 4){
+        return ["Pecho","Espalda","Pierna","Hombro + brazos"];
+      }
+      return ["Push","Pull","Pierna","Hombro","Pierna"];
+    }
+  }
+
+  const ejercicios = {
+    "Pecho":["Press banca 4x10","Aperturas 3x12","Fondos 3x12"],
+    "Espalda":["Remo barra 4x10","Jalón polea 3x12","Peso muerto 3x8"],
+    "Pierna":["Sentadilla 4x10","Prensa 3x12","Femoral 3x12","Pantorrilla 4x15"],
+    "Hombro":["Press militar 4x10","Elevaciones laterales 3x12"],
+    "Bíceps":["Curl barra 3x12","Curl martillo 3x12"],
+    "Tríceps":["Fondos 3x12","Extensión polea 3x12"],
+    "Glúteo":["Hip thrust 4x12","Patada glúteo 3x15"],
+    "Tren superior":["Rutina completa tren superior"],
+    "Glúteo + abdomen":["Hip thrust","Plancha 3x60s"],
+    "Push":["Press banca","Press militar","Fondos"],
+    "Pull":["Remo","Curl bíceps"]
   };
 
-  let html="<div class='dieta-card'><h2>Rutina</h2>";
+  let split = getSplit();
 
-  rutinas[nivel].forEach((d,i)=>{
-    html+=`<div class="card-meal"><h4>Día ${i+1} - ${d}</h4>
-    <p>Ejercicios: 4-6</p>
-    <p>Series: 3-4</p>
-    <p>Cardio: ${nivel==="competidor"?"30-40min":"20-30min"}</p>
+  let html = `<div class="dieta-card">
+    <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
+      <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
+      <p>Rutina PRO Personalizada</p>
+    </div>`;
+
+  split.forEach((dia, i)=>{
+    html += `<div class="card-meal">
+      <h4>🏋️ Día ${i+1} - ${dia}</h4>`;
+
+    let grupos = dia.split("+");
+
+grupos.forEach(g=>{
+  let grupo = g.trim().toLowerCase();
+
+  // normalizar nombres
+  if(grupo === "bíceps") grupo = "Bíceps";
+  if(grupo === "tríceps") grupo = "Tríceps";
+  if(grupo === "pecho") grupo = "Pecho";
+  if(grupo === "espalda") grupo = "Espalda";
+  if(grupo === "pierna") grupo = "Pierna";
+  if(grupo === "hombro") grupo = "Hombro";
+  if(grupo === "glúteo") grupo = "Glúteo";
+
+  let lista = ejercicios[grupo] || ["Ejercicio base 3x12"];
+
+      html += `<strong>${grupo}</strong><ul>`;
+      lista.forEach(e=>{
+        html += `<li>${e}</li>`;
+      });
+      html += `</ul>`;
+    });
+
+    html += `
+      <p>🔥 Cardio: 20-30 min</p>
+      <p>😴 Descanso: 60-90 seg</p>
     </div>`;
   });
 
-  html+="</div>";
-  document.getElementById("resultadoPRO").innerHTML=html;
+  html += `</div>`;
+
+  document.getElementById("resultadoPRO").innerHTML = html;
 }
 
 /* ===================== PDF ===================== */
