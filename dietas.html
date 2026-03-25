@@ -169,6 +169,7 @@ setInterval(() => {
 
 <script>
 function enviarWhatsPro(){
+
   let nombre = document.getElementById("nombreLead").value;
   let whats = document.getElementById("whatsLead").value;
 
@@ -180,31 +181,43 @@ function enviarWhatsPro(){
   let mensaje = 
 `🔥 *QUIERO MI DIETA PERSONALIZADA* 🔥
 
-Hola, quiero mi plan nutricional y rutina 💪
+Hola, soy tu asesor fitness *Charly Fitness* 💪  
+Te ayudo a crear tu plan nutricional + rutina personalizada
 
-👤 *MIS DATOS:*
-• Nombre completo: ${nombre}
-• WhatsApp: ${whats}
-• Edad:
-• Sexo:
+━━━━━━━━━━━━━━━
 
-📊 *DATOS FÍSICOS:*
-• Peso (kg):
-• Altura (cm):
+📌 *PUEDES RESPONDER DE 2 FORMAS:*
 
-🏋️ *ENTRENAMIENTO:*
-• Nivel: (Novato / Intermedio / Avanzado / Competidor)
-• Días que entrenas por semana:
+🎤 *OPCIÓN 1 (RÁPIDO):*  
+Envíame un audio con:
+• Nombre completo  
+• Edad  
+• Peso  
+• Altura  
+• Nivel en gym (Novato / Intermedio / Avanzado / Competidor)  
+• Días que entrenas  
+• Objetivo (Definición / Volumen)  
 
-🎯 *OBJETIVO:*
-• (Definición / Volumen / Recomposición)
+📋 *OPCIÓN 2 (ESCRIBIR):*  
+Copia y rellena esto 👇
 
-💳 *PAGO:*
-➤ Banco: AZTECA
-➤ Cuenta: 6774 0164 4103 34
-➤ CLABE: 1275 5200 1644 1033 40
+Nombre completo:
+Edad:
+Peso:
+Altura:
+Nivel (Novato / Intermedio / Avanzado / Competidor):
+Días:
+Objetivo (Definición / Volumen):
 
-📌 En cuanto realice el pago envío comprobante para recibir mi dieta en PDF.`;
+━━━━━━━━━━━━━━━
+
+💳 *INFO DE PAGO (para avanzar más rápido):*  
+Banco: AZTECA  
+Cuenta: 6774 0164 4103 34  
+CLABE: 1275 5200 1644 1033 40  
+
+📌 Puedes enviarme tus datos o comprobante primero 🙌  
+En cuanto tenga todo, te entrego tu Dieta y plan de Entrenamiento en PDF 🔥`;
 
   let url = `https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`;
   window.open(url, "_blank");
