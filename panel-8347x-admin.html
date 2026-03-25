@@ -76,7 +76,7 @@ function usarPro(){
     altura: parseFloat(document.getElementById("altura").value),
     edad: parseFloat(document.getElementById("edad").value),
     sexo: document.getElementById("sexo").value,
-    objetivo: document.getElementById("objetivo").value
+    objetivo: document.getElementById("objetivo").value,
     nivel: document.getElementById("nivel").value
   };
 
@@ -228,7 +228,7 @@ function generarDietaPRO(datos){
     comidas.push({
       nombre:"Cena",
       proteina: random(proteinas),
-      carbos: nivel === "competidor" ? "verduras" : random(carbosLista),
+      carbos: nivel === "competidor" ? "1 taza verduras" : random(carbosLista),
       grasa: random(grasas),
       verdura: random(verduras),
       fruta:""
@@ -337,9 +337,19 @@ function generarRutina(){
 
     let grupos = dia.split("+");
 
-    grupos.forEach(g=>{
-      let grupo = g.trim();
-      let lista = ejercicios[grupo] || ["Ejercicio base 3x12"];
+grupos.forEach(g=>{
+  let grupo = g.trim().toLowerCase();
+
+  // normalizar nombres
+  if(grupo === "bíceps") grupo = "Bíceps";
+  if(grupo === "tríceps") grupo = "Tríceps";
+  if(grupo === "pecho") grupo = "Pecho";
+  if(grupo === "espalda") grupo = "Espalda";
+  if(grupo === "pierna") grupo = "Pierna";
+  if(grupo === "hombro") grupo = "Hombro";
+  if(grupo === "glúteo") grupo = "Glúteo";
+
+  let lista = ejercicios[grupo] || ["Ejercicio base 3x12"];
 
       html += `<strong>${grupo}</strong><ul>`;
       lista.forEach(e=>{
