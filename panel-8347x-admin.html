@@ -69,24 +69,6 @@
 
 <script>
 /* ===================== DIETA PRO ===================== */
-function usarPro(){
-  let datos = {
-    peso: parseFloat(document.getElementById("peso").value),
-    altura: parseFloat(document.getElementById("altura").value),
-    edad: parseFloat(document.getElementById("edad").value),
-    sexo: document.getElementById("sexo").value,
-    objetivo: document.getElementById("objetivo").value,
-    tipo: document.getElementById("tipoDieta").value
-  };
-  if(!datos.peso || !datos.altura || !datos.edad){
-    alert("Completa todos los datos bro 🔥");
-    return;
-  }
-  let dieta = generarDietaPRO(datos);
-  mostrarDieta(dieta);
-}
-
-// ---------------- GENERAR DIETA ----------------
 function generarDietaPRO(datos){
   let {peso, altura, edad, objetivo} = datos;
 
@@ -98,21 +80,17 @@ function generarDietaPRO(datos){
   if(objetivo === "definicion") calorias -= 400;
   if(objetivo === "volumen") calorias += 300;
 
-  let proteina = Math.round(peso * 2);
-  let grasa = Math.round((calorias * 0.25)/9);
-  let carbos = Math.round((calorias - (proteina*4 + grasa*9))/4);
-
   function random(arr){
     return arr[Math.floor(Math.random()*arr.length)];
   }
 
-  // 🔥 PROTEINAS
+  // 🔥 PROTEINAS CLARAS
   const proteDef = [
     "150g pollo",
     "180g pescado",
     "160g carne magra",
     "4 claras + 1 huevo",
-    "1 scoop whey protein"
+    "1 scoop proteína whey"
   ];
 
   const proteVol = [
@@ -120,47 +98,47 @@ function generarDietaPRO(datos){
     "220g pescado",
     "200g carne magra",
     "5 claras + 2 huevos",
-    "1.5 scoop whey protein"
+    "1.5 scoops proteína whey"
   ];
 
-  // 🔥 CARBOS
+  // 🔥 CARBOS (1 POR COMIDA)
   const carbosDef = [
-    "1 taza arroz",
-    "2 tortillas",
+    "1 taza arroz blanco",
+    "2 tortillas de maíz",
     "1/2 pan árabe",
-    "1 taza avena",
-    "1 taza pasta"
+    "1 taza avena cocida"
   ];
 
   const carbosVol = [
-    "1.5 tazas arroz",
-    "2 tazas arroz",
-    "3 tortillas",
-    "1.5 tazas pasta",
-    "1 taza plátano macho"
+    "1.5 tazas arroz blanco",
+    "3 tortillas de maíz",
+    "1 pan árabe",
+    "1.5 tazas avena",
+    "1 taza pasta cocida"
   ];
 
-  // 🔥 GRASAS
+  // 🔥 GRASAS (CLARAS)
   const grasas = [
     "1 cucharada aceite de oliva",
-    "1/2 aguacate",
-    "20g nueces"
+    "1/4 aguacate",
+    "1 cucharada crema de cacahuate",
+    "10 almendras"
   ];
 
-  // 🔥 VERDURAS
+  // 🔥 VERDURAS (SIN MEDIR EXACTO)
   const verduras = [
-    "lechuga y jitomate",
+    "ensalada (lechuga + jitomate)",
     "espinaca",
     "brócoli",
     "calabaza",
     "pepino"
   ];
 
-  // 🔥 FRUTAS (CON MEDIDA REAL)
+  // 🔥 FRUTA (CON PORCIÓN REAL)
   const frutasDef = [
-    "1 manzana verde",
     "1 taza papaya",
-    "1 taza melón"
+    "1 taza melón",
+    "1 manzana verde"
   ];
 
   const frutasVol = [
@@ -175,13 +153,13 @@ function generarDietaPRO(datos){
 
   let comidas = [];
 
-  // 🥞 DESAYUNO (SÍ fruta)
+  // 🥞 DESAYUNO (CONTROLADO)
   comidas.push({
     nombre: "Desayuno",
     proteina: random([
-      "4 claras + 1 huevo con espinaca",
-      "Hotcakes de avena con miel ligera",
-      "1 scoop whey protein en agua"
+      "4 claras + 1 huevo",
+      "1 scoop proteína whey",
+      "Hotcakes de avena (2 piezas chicas)"
     ]),
     carbos: random(carbosLista),
     grasa: random(grasas),
@@ -189,7 +167,7 @@ function generarDietaPRO(datos){
     fruta: random(frutas)
   });
 
-  // 🍗 COMIDA (SIN fruta)
+  // 🍗 COMIDA (FUERTE Y LIMPIA)
   comidas.push({
     nombre: "Comida",
     proteina: random(proteinas),
@@ -199,33 +177,36 @@ function generarDietaPRO(datos){
     fruta: ""
   });
 
-  // 🥤 PRE-ENTRENO (CON FRUTA BIEN USADA)
+  // 🥤 PRE-ENTRENO (REAL)
   comidas.push({
     nombre: "Pre-entreno",
-    proteina: "1 scoop whey protein",
+    proteina: "1 scoop proteína whey",
     carbos: random([
-      "1 taza avena",
-      "2 cucharadas avena",
-      "1 cucharada miel"
+      "1/2 taza avena",
+      "1 plátano",
+      "1 cucharada miel de abeja"
     ]),
-    grasa: "10g nueces",
+    grasa: "5 almendras",
     verdura: "",
-    fruta: random(frutas)
+    fruta: ""
   });
 
-  // 🌙 CENA (SIN fruta)
+  // 🌙 CENA (LIGERA)
   comidas.push({
     nombre: "Cena",
     proteina: random(proteinas),
-    carbos: random(carbosLista),
+    carbos: random([
+      "1/2 taza arroz",
+      "1 tortilla de maíz",
+      "verduras extra"
+    ]),
     grasa: random(grasas),
     verdura: random(verduras),
     fruta: ""
   });
 
-  return {calorias, proteina, carbos, grasa, comidas};
+  return {calorias, comidas};
 }
-
   
 // ---------------- MOSTRAR DIETA ----------------
 function mostrarDieta(dieta){
