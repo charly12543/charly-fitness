@@ -64,7 +64,6 @@
   <p>Obtén tu plan personalizado en PDF completo y seguimiento real. (Este plan tiene costo y no es gratuito)</p>
 
   <input type="text" id="nombreLead" placeholder="Tu nombre">
-  <input type="text" id="whatsLead" placeholder="Tu WhatsApp">
 
   <p class="contador">🔥 Más de <span id="contadorUsuarios">147</span> personas ya generaron su dieta</p>
 
@@ -171,40 +170,48 @@ setInterval(() => {
 function enviarWhatsPro(){
 
   let nombre = document.getElementById("nombreLead").value;
-  let whats = document.getElementById("whatsLead").value;
 
-  if(!nombre || !whats){ 
-    alert("Completa tus datos bro 🔥"); 
+  if(!nombre){ 
+    alert("Ingresa tu nombre completo bro 🔥"); 
     return; 
   }
 
- let mensaje = 
+  let mensaje = 
 `🔥 *QUIERO MI DIETA PERSONALIZADA* 🔥
 
-Hola, soy tu asesor fitness Charlie Fitness 💪  
+Hola, soy tu asesor fitness *Charlie Fitness* 💪  
 Te ayudo a crear tu plan nutricional + rutina personalizada
 
-👤 *MIS DATOS:*
-• Nombre completo: ${nombre}
-• WhatsApp: ${whats}
-• Edad:
-• Sexo:
+━━━━━━━━━━━━━━━
 
-📊 *DATOS FÍSICOS:*
-• Peso (kg):
-• Altura (cm):
+📌 *PUEDES RESPONDER DE 2 FORMAS:*
 
-🏋️ *ENTRENAMIENTO:*
-• Nivel (Novato / Intermedio / Avanzado / Competidor):
-• Días que entrenas por semana:
+🎤 *OPCIÓN 1 (RÁPIDO):*  
+Envíame un audio con:
+• Nombre completo  
+• Edad  
+• Peso  
+• Altura  
+• Nivel (Novato / Intermedio / Avanzado / Competidor)  
+• Días que entrenas  
+• Objetivo (Definición / Volumen / Recomposición)  
 
-🎯 *OBJETIVO:*
-• (Definición / Volumen / Recomposición)
+📋 *OPCIÓN 2 (ESCRIBIR):*  
 
-💳 *PAGO:*
-➤ Banco: AZTECA
-➤ Cuenta: 6774 0164 4103 34
-➤ CLABE: 1275 5200 1644 1033 40
+Nombre completo: ${nombre}
+Edad:
+Peso:
+Altura:
+Nivel:
+Días:
+Objetivo:
+
+━━━━━━━━━━━━━━━
+
+💳 *INFO DE PAGO (para avanzar más rápido):*  
+Banco: AZTECA  
+Cuenta: 6774 0164 4103 34  
+CLABE: 1275 5200 1644 1033 40  
 
 📩 Puedes enviarme tus datos o comprobante primero 🙌  
 En cuanto tenga todo, te entrego tu Dieta y plan de Entrenamiento en PDF 🔥`;
