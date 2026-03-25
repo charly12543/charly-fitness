@@ -99,7 +99,6 @@ function generarDietaPRO(datos){
 
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo === "mujer" ? -161 : 5);
 
-  // 🔥 ACTIVIDAD SEGÚN DÍAS
   let factorActividad = 1.2;
   if(dias >= 2 && dias <= 3) factorActividad = 1.4;
   if(dias >= 4 && dias <= 5) factorActividad = 1.55;
@@ -110,11 +109,6 @@ function generarDietaPRO(datos){
   if(objetivo === "definicion") calorias -= 400;
   if(objetivo === "volumen") calorias += 300;
 
-  function random(arr){
-    return arr[Math.floor(Math.random()*arr.length)];
-  }
-
-  // 🔥 PROTEÍNA SEGÚN NIVEL
   let proteBase = {
     novato: 1.6,
     intermedio: 1.8,
@@ -124,194 +118,153 @@ function generarDietaPRO(datos){
 
   let proteina = Math.round(peso * proteBase[nivel]);
 
-  // 🔥 MACROS REALES
   let grasa = Math.round((calorias * 0.25) / 9);
   let caloriasProte = proteina * 4;
   let caloriasGrasa = grasa * 9;
   let caloriasRestantes = calorias - (caloriasProte + caloriasGrasa);
   let carbos = Math.round(caloriasRestantes / 4);
 
-  // 🔥 ALIMENTOS BASE
-  const proteinas = [
-    "150g pechuga de pollo",
-    "180g pescado",
-    "150g carne magra",
-    "4 claras + 1 huevo entero",
-    "1 scoop proteína whey"
-  ];
-
-  const carbosBase = [
-    "2 tortillas de maíz",
-    "1 taza de arroz",
-    "1 pan integral",
-    "1 taza de avena"
-  ];
-
-  const grasas = [
-    "cocinar con aceite de aguacate",
-    "cocinar con aceite de coco",
-    "1/4 de aguacate",
-    "10 almendras"
-  ];
-
-  const verduras = [
-    "verduras al gusto",
-    "ensalada libre"
-  ];
-
-  const frutas = [
-    "1 fruta (manzana, plátano o papaya)",
-    "1 taza de fruta"
-  ];
-
   let comidas = [];
 
-  // 🔥 NOVATO (SIMPLE)
+  /* ================= NOVATO ================= */
   if(nivel === "novato"){
-    comidas.push({
-      nombre:"Desayuno",
-      proteina:"Huevos con jamón",
-      carbos:"2 tortillas de maíz",
-      grasa:"Aguacate",
-      verdura:"",
-      fruta:"1 fruta"
-    });
-
-    comidas.push({
-      nombre:"Comida",
-      proteina:"150g pechuga de pollo",
-      carbos:"1 taza de arroz",
-      grasa:"cocinar con aceite de aguacate",
-      verdura:"verduras al gusto",
-      fruta:""
-    });
-
-    comidas.push({
-      nombre:"Cena",
-      proteina:"Atún o pollo",
-      carbos:"2 tostadas horneadas",
-      grasa:"Aguacate",
-      verdura:"verduras libres",
-      fruta:""
-    });
+    comidas = [
+      {
+        nombre:"Desayuno",
+        proteina:"3 claras + 1 huevo entero con 40g jamón",
+        carbos:"2 tortillas de maíz",
+        grasa:"1/4 de aguacate",
+        verdura:"",
+        fruta:"1 fruta"
+      },
+      {
+        nombre:"Comida",
+        proteina:"150g pechuga de pollo",
+        carbos:"1 taza de arroz",
+        grasa:"1 cucharadita aceite de aguacate",
+        verdura:"1 taza de verduras",
+        fruta:""
+      },
+      {
+        nombre:"Cena",
+        proteina:"120g atún o pollo",
+        carbos:"2 tostadas horneadas",
+        grasa:"1/4 de aguacate",
+        verdura:"1 taza de verduras",
+        fruta:""
+      }
+    ];
   }
 
-  // 🔥 INTERMEDIO
+  /* ================= INTERMEDIO ================= */
   else if(nivel === "intermedio"){
-    comidas.push({
-      nombre:"Desayuno",
-      proteina: random(proteinas),
-      carbos: random(carbosBase),
-      grasa: random(grasas),
-      verdura:"",
-      fruta: random(frutas)
-    });
-
-    comidas.push({
-      nombre:"Comida",
-      proteina: random(proteinas),
-      carbos: random(carbosBase),
-      grasa: random(grasas),
-      verdura: random(verduras),
-      fruta:""
-    });
-
-    comidas.push({
-      nombre:"Cena",
-      proteina: random(proteinas),
-      carbos: random(carbosBase),
-      grasa: random(grasas),
-      verdura: random(verduras),
-      fruta:""
-    });
+    comidas = [
+      {
+        nombre:"Desayuno",
+        proteina:"4 claras + 1 huevo entero",
+        carbos:"1/2 taza de avena",
+        grasa:"1 cucharadita aceite de coco",
+        verdura:"",
+        fruta:"1 fruta"
+      },
+      {
+        nombre:"Comida",
+        proteina:"150g pollo o carne magra",
+        carbos:"1 taza de arroz",
+        grasa:"1 cucharadita aceite de aguacate",
+        verdura:"1 taza de verduras",
+        fruta:""
+      },
+      {
+        nombre:"Cena",
+        proteina:"150g pescado o pollo",
+        carbos:"1/2 taza de arroz",
+        grasa:"10 almendras",
+        verdura:"1 taza de verduras",
+        fruta:""
+      }
+    ];
   }
 
-  // 🔥 AVANZADO
+  /* ================= AVANZADO ================= */
   else if(nivel === "avanzado"){
-    comidas.push({
-      nombre:"Desayuno",
-      proteina: random(proteinas),
-      carbos: "1 taza de avena",
-      grasa: random(grasas),
-      verdura:"",
-      fruta: random(frutas)
-    });
-
-    comidas.push({
-      nombre:"Comida",
-      proteina: random(proteinas),
-      carbos: "1 taza de arroz",
-      grasa: random(grasas),
-      verdura: random(verduras),
-      fruta:""
-    });
-
-    comidas.push({
-      nombre:"Pre-entreno",
-      proteina:"1 scoop proteína whey",
-      carbos:"1 plátano",
-      grasa:"5 almendras",
-      verdura:"",
-      fruta:""
-    });
-
-    comidas.push({
-      nombre:"Cena",
-      proteina: random(proteinas),
-      carbos: objetivo === "definicion" ? "verduras al gusto" : "1/2 taza de arroz",
-      grasa: random(grasas),
-      verdura: random(verduras),
-      fruta:""
-    });
+    comidas = [
+      {
+        nombre:"Desayuno",
+        proteina:"5 claras + 1 huevo entero",
+        carbos:"1 taza de avena",
+        grasa:"1 cucharadita aceite de coco",
+        verdura:"",
+        fruta:"1 fruta"
+      },
+      {
+        nombre:"Comida",
+        proteina:"180g pollo",
+        carbos:"1 taza de arroz",
+        grasa:"1 cucharadita aceite de aguacate",
+        verdura:"1 taza de verduras",
+        fruta:""
+      },
+      {
+        nombre:"Pre-entreno",
+        proteina:"1 scoop proteína whey",
+        carbos:"1 plátano",
+        grasa:"5 almendras",
+        verdura:"",
+        fruta:""
+      },
+      {
+        nombre:"Cena",
+        proteina:"150g pescado",
+        carbos: objetivo === "definicion" ? "1-2 tazas de verduras" : "1/2 taza de arroz",
+        grasa:"1 cucharadita aceite de oliva",
+        verdura:"1 taza de verduras",
+        fruta:""
+      }
+    ];
   }
 
-  // 🔥 COMPETIDOR (MÁS ESTRICTO)
+  /* ================= COMPETIDOR ================= */
   else {
-    comidas.push({
-      nombre:"Desayuno",
-      proteina:"4 claras + 1 huevo",
-      carbos:"1/2 taza avena",
-      grasa:"5 almendras",
-      verdura:"",
-      fruta:""
-    });
-
-    comidas.push({
-      nombre:"Comida",
-      proteina:"150g pollo",
-      carbos:"1 taza arroz",
-      grasa:"cocinar con aceite de coco",
-      verdura:"verduras al gusto",
-      fruta:""
-    });
-
-    comidas.push({
-      nombre:"Pre-entreno",
-      proteina:"1 scoop proteína whey",
-      carbos:"1 plátano",
-      grasa:"",
-      verdura:"",
-      fruta:""
-    });
-
-    comidas.push({
-      nombre:"Cena",
-      proteina:"180g pescado",
-      carbos:"verduras al gusto",
-      grasa:"",
-      verdura:"ensalada libre",
-      fruta:""
-    });
+    comidas = [
+      {
+        nombre:"Desayuno",
+        proteina:"6 claras + 1 huevo entero",
+        carbos:"1/2 taza avena",
+        grasa:"5 almendras",
+        verdura:"",
+        fruta:""
+      },
+      {
+        nombre:"Comida",
+        proteina:"180g pollo",
+        carbos:"1 taza arroz",
+        grasa:"1 cucharadita aceite de coco",
+        verdura:"1 taza verduras",
+        fruta:""
+      },
+      {
+        nombre:"Pre-entreno",
+        proteina:"1 scoop proteína whey",
+        carbos:"1 plátano",
+        grasa:"",
+        verdura:"",
+        fruta:""
+      },
+      {
+        nombre:"Cena",
+        proteina:"180g pescado",
+        carbos:"1-2 tazas verduras",
+        grasa:"",
+        verdura:"ensalada libre",
+        fruta:""
+      }
+    ];
   }
 
-  return {
-    calorias,
-    proteina,
-    carbos,
-    grasa,
-    comidas
-  };
+  return { calorias, proteina, carbos, grasa, comidas };
 }
+
 /* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
   let nombre = document.getElementById("nombreCliente").value;
@@ -347,125 +300,39 @@ function mostrarDieta(dieta){
     html += `</ul></div>`;
   });
 
-  html += `</div>`;
-  document.getElementById("resultadoPRO").innerHTML = html;
-}
+  /* 🔥 BLOQUE PRO REAL */
+  html += `
+  <div class="card-meal">
+    <h4>📌 Recomendaciones</h4>
+    <ul>
+      <li>✔ Cocinar con aceite de aguacate o coco</li>
+      <li>✔ Tomar 3-4 litros de agua diarios</li>
+      <li>✔ Agua de jamaica o limón con stevia</li>
+      <li>✔ Evitar azúcar y ultraprocesados</li>
+    </ul>
+  </div>
 
-/* ===================== RUTINA ===================== */
-function generarRutina(){
+  <div class="card-meal">
+    <h4>🍽️ Si tienes hambre</h4>
+    <ul>
+      <li>✔ Pepino o jícama al gusto</li>
+      <li>✔ Verduras libres</li>
+      <li>✔ Gelatina light (1-2)</li>
+    </ul>
+  </div>
 
-  let sexo = document.getElementById("sexo").value;
-  let dias = parseInt(document.getElementById("diasGym").value) || 3;
-  let nivel = document.getElementById("nivel").value;
-
-  // 🔥 SPLIT SEGÚN NIVEL
-  function getSplit(){
-    if(nivel === "novato"){
-      return ["Full Body","Full Body","Full Body"];
-    }
-    if(nivel === "intermedio"){
-      return ["Pecho + tríceps","Espalda + bíceps","Pierna","Hombro"];
-    }
-    if(nivel === "avanzado"){
-      return ["Push","Pull","Pierna","Hombro","Pierna"];
-    }
-    return ["Push","Pull","Pierna","Hombro","Pierna","Full Body"];
-  }
-
-  // 🔥 EJERCICIOS BASE
-  const base = {
-    pecho:["Press banca","Aperturas","Press inclinado","Fondos"],
-    espalda:["Remo barra","Jalón polea","Peso muerto","Remo mancuerna"],
-    pierna:["Sentadilla","Prensa","Femoral","Extensión","Pantorrilla"],
-    hombro:["Press militar","Elevaciones laterales","Pájaros"],
-    biceps:["Curl barra","Curl martillo"],
-    triceps:["Fondos","Extensión polea"]
-  };
-
-  function generarLista(grupo){
-    let ejercicios = base[grupo] || ["Ejercicio base"];
-
-    let volumen = 3;
-
-    if(nivel === "intermedio") volumen = 4;
-    if(nivel === "avanzado") volumen = 5;
-    if(nivel === "competidor") volumen = 6;
-
-    return ejercicios.slice(0, volumen).map(e => `${e} 3x10`);
-  }
-
-  let split = getSplit();
-
-  let html = `<div class="dieta-card">
-    <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
-      <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
-      <p>Rutina PRO Personalizada</p>
-    </div>`;
-
-  split.forEach((dia, i)=>{
-
-    html += `<div class="card-meal no-break">
-      <h4>🏋️ Día ${i+1} - ${dia}</h4>`;
-
-    let grupos = dia.toLowerCase().split("+");
-
-    grupos.forEach(g=>{
-      let grupo = g.trim();
-
-      let lista = [];
-
-      if(grupo === "push"){
-        lista = [...generarLista("pecho"), ...generarLista("hombro"), ...generarLista("triceps")];
-      }
-      else if(grupo === "pull"){
-        lista = [...generarLista("espalda"), ...generarLista("biceps")];
-      }
-      else if(grupo === "full body"){
-        lista = [
-          ...generarLista("pecho"),
-          ...generarLista("espalda"),
-          ...generarLista("pierna")
-        ];
-      }
-      else{
-        lista = generarLista(grupo);
-      }
-
-      html += `<ul>`;
-      lista.forEach(e=>{
-        html += `<li>${e}</li>`;
-      });
-      html += `</ul>`;
-    });
-
-    // 🔥 AJUSTE CARDIO SEGÚN NIVEL
-    let cardio = "20 min";
-    if(nivel === "avanzado") cardio = "25-30 min";
-    if(nivel === "competidor") cardio = "30-40 min";
-
-    html += `
-      <p>🔥 Cardio: ${cardio}</p>
-      <p>😴 Descanso: 60-90 seg</p>
-    </div>`;
-  });
+  <div class="card-meal">
+    <h4>⚠️ Notas</h4>
+    <ul>
+      <li>✔ Constancia = resultados</li>
+      <li>✔ Ajustar cada 2-4 semanas</li>
+      <li>✔ Dormir 7-8 horas</li>
+    </ul>
+  </div>
+  `;
 
   html += `</div>`;
-
   document.getElementById("resultadoPRO").innerHTML = html;
-}
-/* ===================== WHATS ===================== */
-function enviarWhats(){
-  let nombre=document.getElementById("nombreCliente").value;
-  let numero=prompt("Número cliente (52XXXXXXXXXX)","52");
-
-  if(!numero){
-    alert("Falta número bro");
-    return;
-  }
-
-  let msg=`Hola ${nombre}, gracias por tu compra 🔥%0A%0AAquí tienes tu plan.%0ADisfrútalo 💪`;
-
-  window.open(`https://wa.me/${numero}?text=${msg}`);
 }
 </script>
 
