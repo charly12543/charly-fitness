@@ -37,13 +37,13 @@
   </select>
 
   <!-- TIPO DE DIETA -->
-  <label>⚡ Tipo de dieta</label>
-  <select id="tipoDieta">
-    <option value="normal">Normal</option>
-    <option value="keto">Keto</option>
-    <option value="godin">Godín</option>
-    <option value="runner">Runner</option>
-  </select>
+  <label>🔥 Nivel del cliente</label>
+<select id="nivel">
+  <option value="novato">Novato</option>
+  <option value="intermedio">Intermedio</option>
+  <option value="avanzado">Avanzado</option>
+  <option value="competidor">Competidor</option>
+</select>
 
   <!-- DÍAS ENTRENAMIENTO -->
   <label>📅 Días por semana</label>
@@ -77,6 +77,7 @@ function usarPro(){
     edad: parseFloat(document.getElementById("edad").value),
     sexo: document.getElementById("sexo").value,
     objetivo: document.getElementById("objetivo").value
+    nivel: document.getElementById("nivel").value
   };
 
   if(!datos.peso || !datos.altura || !datos.edad){
@@ -91,7 +92,7 @@ function usarPro(){
 /* ===================== DIETA PRO ===================== */
 function generarDietaPRO(datos){
 
-  let {peso, altura, edad, objetivo, sexo} = datos;
+  let {peso, altura, edad, objetivo, sexo, nivel} = datos;
 
   if(altura > 3) altura = altura / 100;
 
@@ -105,47 +106,47 @@ function generarDietaPRO(datos){
     return arr[Math.floor(Math.random()*arr.length)];
   }
 
-  const proteinas = sexo === "mujer" ? [
-    "120g pollo",
-    "140g pescado",
-    "120g carne magra",
-    "3 claras + 1 huevo",
+  // 🔥 PROTE BASE SEGÚN NIVEL
+  let proteBase = {
+    novato: 1.6,
+    intermedio: 1.8,
+    avanzado: 2,
+    competidor: 2.2
+  };
+
+  let proteina = Math.round(peso * proteBase[nivel]);
+
+  const proteinas = [
+    "150g pollo",
+    "180g pescado",
+    "150g carne magra",
+    "4 claras + 1 huevo",
     "1 scoop proteína whey"
-  ] : [
-    "180g pollo",
-    "200g pescado",
-    "180g carne magra",
-    "5 claras + 2 huevos",
-    "1.5 scoops proteína whey"
   ];
 
-  const carbosDef = [
-    "1 taza arroz blanco",
+  const carbosNovato = [
     "2 tortillas de maíz",
-    "1/2 pan árabe",
-    "1 taza avena cocida"
+    "1 taza arroz",
+    "1 pan árabe",
+    "1 taza avena"
   ];
 
-  const carbosVol = [
-    "1.5 tazas arroz blanco",
-    "3 tortillas de maíz",
-    "1 pan árabe",
-    "1 taza pasta cocida"
+  const carbosPro = [
+    "1 taza arroz",
+    "2 tortillas",
+    "1/2 pan árabe",
+    "1/2 taza avena"
   ];
 
   const grasas = [
     "1 cucharada aceite de oliva",
     "1/4 aguacate",
-    "1 cucharada crema de cacahuate",
     "10 almendras"
   ];
 
   const verduras = [
-    "1 taza lechuga + jitomate",
-    "1 taza espinaca",
-    "1 taza brócoli",
-    "1 taza calabaza",
-    "1 taza pepino"
+    "1 taza ensalada",
+    "1 taza verduras al vapor"
   ];
 
   const frutasDef = [
@@ -156,76 +157,93 @@ function generarDietaPRO(datos){
 
   const frutasVol = [
     "1 plátano",
-    "1 manzana roja",
-    "1 taza mango"
+    "1 manzana roja"
   ];
 
-  let carbosLista = objetivo === "definicion" ? carbosDef : carbosVol;
+  let carbosLista = (nivel === "novato") ? carbosNovato : carbosPro;
   let frutasLista = objetivo === "definicion" ? frutasDef : frutasVol;
 
   let comidas = [];
 
-  // DESAYUNO
-  comidas.push({
-    nombre: "Desayuno",
-    proteina: random([
-      "4 claras + 1 huevo",
-      "1 scoop proteína whey",
-      "Hotcakes de avena (2 medianos)"
-    ]),
-    carbos: random(carbosLista),
-    grasa: random(grasas),
-    verdura: "",
-    fruta: random(frutasLista)
-  });
+  // 🔥 NOVATO (FLEXIBLE)
+  if(nivel === "novato"){
+    comidas.push({
+      nombre:"Desayuno",
+      proteina:"Huevos con jamón",
+      carbos:"2 tortillas de maíz",
+      grasa:"Aguacate",
+      verdura:"",
+      fruta:"1 taza fruta"
+    });
 
-  // COMIDA
-  comidas.push({
-    nombre: "Comida",
-    proteina: random(proteinas),
-    carbos: random(carbosLista),
-    grasa: random(grasas),
-    verdura: random(verduras),
-    fruta: ""
-  });
+    comidas.push({
+      nombre:"Comida",
+      proteina:"150g pollo",
+      carbos:"1 taza arroz",
+      grasa:"1 cucharada aceite",
+      verdura:"1 taza ensalada",
+      fruta:""
+    });
 
-  // PRE ENTRENAMIENTO
-  comidas.push({
-    nombre: "Pre-entreno",
-    proteina: "1 scoop proteína whey",
-    carbos: random([
-      "1/2 taza avena",
-      "1 plátano",
-      "1 cucharada miel de abeja"
-    ]),
-    grasa: "5 almendras",
-    verdura: "",
-    fruta: ""
-  });
+    comidas.push({
+      nombre:"Cena",
+      proteina:"Atún o pollo",
+      carbos:"2 tostadas",
+      grasa:"Aguacate",
+      verdura:"Verduras libres",
+      fruta:""
+    });
+  }
 
-  // CENA
-  comidas.push({
-    nombre: "Cena",
-    proteina: random(proteinas),
-    carbos: random([
-      "1/2 taza arroz",
-      "1 tortilla de maíz",
-      "verduras libres"
-    ]),
-    grasa: random(grasas),
-    verdura: random(verduras),
-    fruta: ""
-  });
+  // 🔥 INTERMEDIO / AVANZADO / COMPETIDOR
+  else{
+
+    comidas.push({
+      nombre:"Desayuno",
+      proteina: random(proteinas),
+      carbos: random(carbosLista),
+      grasa: random(grasas),
+      verdura:"",
+      fruta: random(frutasLista)
+    });
+
+    comidas.push({
+      nombre:"Comida",
+      proteina: random(proteinas),
+      carbos: random(carbosLista),
+      grasa: random(grasas),
+      verdura: random(verduras),
+      fruta:""
+    });
+
+    comidas.push({
+      nombre:"Pre-entreno",
+      proteina:"1 scoop proteína whey",
+      carbos: nivel === "competidor" ? "1/2 taza avena" : "1 plátano",
+      grasa:"5 almendras",
+      verdura:"",
+      fruta:""
+    });
+
+    comidas.push({
+      nombre:"Cena",
+      proteina: random(proteinas),
+      carbos: nivel === "competidor" ? "verduras" : random(carbosLista),
+      grasa: random(grasas),
+      verdura: random(verduras),
+      fruta:""
+    });
+
+  }
 
   return {
     calorias,
-    proteina: Math.round(peso*2),
+    proteina,
     carbos: Math.round(calorias/4),
     grasa: Math.round(calorias*0.25/9),
     comidas
   };
 }
-
 /* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
   let nombre = document.getElementById("nombreCliente").value;
