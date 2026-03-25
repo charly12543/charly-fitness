@@ -203,6 +203,23 @@ function mostrarDieta(dieta){
   document.getElementById("resultadoPRO").innerHTML = html;
 }
 
+/* ===================== DESCARGAR PDF ===================== */
+function descargarPDF(tipo){
+  let element = (tipo==="dieta")? document.getElementById("dietaPDF") : document.getElementById("rutinaPDF");
+  if(!element){
+    alert("Primero genera la " + tipo + " bro 🔥");
+    return;
+  }
+
+  html2pdf().set({
+    margin: 0.5,
+    filename: tipo.toUpperCase() + "_CharlyFitness.pdf",
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  }).from(element).save();
+}
+
 /* ===================== RUTINA ===================== */
 function generarRutina(){
   let sexo = document.getElementById("sexo").value;
