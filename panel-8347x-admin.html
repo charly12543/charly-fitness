@@ -9,7 +9,7 @@
 
 <body>
 
-<section class="hero">
+<section class="hero">F
   <h1>🔥 Calculadora PRO (Privada)</h1>
   <p>Genera dieta + rutina personalizada</p>
   <h3>⚠️ Solo uso interno</h3>
@@ -98,120 +98,89 @@ function generarDietaPRO(datos){
   if(objetivo === "definicion") calorias -= 400;
   if(objetivo === "volumen") calorias += 300;
 
-  let proteina, grasa, carbos;
-
-  if(tipo === "keto"){
-    proteina = Math.round(peso * 2);
-    grasa = Math.round((calorias * 0.65)/9);
-    carbos = Math.round((calorias*0.10)/4);
-  } else if(tipo === "runner"){
-    proteina = Math.round(peso*1.8);
-    grasa = Math.round((calorias*0.2)/9);
-    carbos = Math.round((calorias*0.6)/4);
-  } else if(tipo === "godin"){
-    proteina = Math.round(peso*2);
-    grasa = Math.round((calorias*0.25)/9);
-    carbos = Math.round((calorias*0.4)/4);
-  } else {
-    proteina = Math.round(peso*2);
-    grasa = Math.round((calorias*0.25)/9);
-    carbos = Math.round((calorias-(proteina*4 + grasa*9))/4);
-  }
-
-  let protePorComida = Math.round(proteina/4);
-  let carbosPorComida = Math.round(carbos/4);
-  let grasaPorComida = Math.round(grasa/4);
+  let proteina = Math.round(peso * 2);
+  let grasa = Math.round((calorias * 0.25)/9);
+  let carbos = Math.round((calorias - (proteina*4 + grasa*9))/4);
 
   const nombresComida = ["Desayuno", "Comida", "Pre-entreno", "Cena"];
 
-  // ---------------- OPCIONES DE ALIMENTOS ----------------
+  function random(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
+
+  // 🔥 PROTEINAS REALISTAS
   const proteinas = [
-    {nombre:"Pollo", prote:31},
-    {nombre:"Pescado", prote:25},
-    {nombre:"Huevo", prote:6},
-    {nombre:"Carne magra", prote:26},
-    {nombre:"Whey protein", prote:30, medida:"scoop"} // 1 scoop ~30g proteína
+    "150g Pollo",
+    "180g Pescado",
+    "160g Carne magra",
+    "4 claras + 2 huevos",
+    "1.5 scoop Whey protein"
   ];
+
+  // 🔥 CARBOS REALISTAS
   const carbosLista = [
-    {nombre:"Arroz hervido", carbos:28, medida:"taza"},
-    {nombre:"Purée de papa", carbos:20, medida:"taza"},
-    {nombre:"Purée de plátano macho", carbos:30, medida:"taza"},
-    {nombre:"Avena", carbos:60, medida:"taza"},
-    {nombre:"Pan árabe", carbos:15, medida:"rebanada"},
-    {nombre:"Pasta cocida", carbos:30, medida:"taza"}
+    "1 taza arroz",
+    "1.5 tazas arroz",
+    "2 tortillas",
+    "1 taza pasta",
+    "1 taza puré de papa",
+    "1 taza plátano macho",
+    "1/2 pan árabe"
   ];
+
+  // 🔥 GRASAS
   const grasasLista = [
-    {nombre:"Aceite de oliva", grasa:10, medida:"cucharada"},
-    {nombre:"Aguacate", grasa:15, medida:"pieza"},
-    {nombre:"Nueces", grasa:14, medida:"20g"}
+    "1 cucharada aceite de oliva",
+    "1/2 aguacate",
+    "20g nueces"
   ];
-  const frutas = [
-    {nombre:"Melón"}, {nombre:"Papaya"}, {nombre:"Manzana verde"}, {nombre:"Manzana roja"}, {nombre:"Naranja"}, {nombre:"Toronja"}
-  ];
+
+  // 🔥 VERDURAS (NO TODAS LAS COMIDAS)
   const verduras = [
-    {nombre:"Lechuga"}, {nombre:"Jitomate"}, {nombre:"Espinaca"}, {nombre:"Camote"}
+    "lechuga y jitomate",
+    "espinaca",
+    "brócoli",
+    "calabaza",
+    "pepino"
   ];
 
-  function random(arr){return arr[Math.floor(Math.random()*arr.length)];}
-
-  function calcularProte(p, gramos){
-    if(p.medida === "scoop"){
-      let scoops = Math.round(gramos / p.prote);
-      return `${scoops} scoop(s) ${p.nombre}`;
-    } else {
-      let g = Math.round((gramos/p.prote)*100);
-      return `${g}g ${p.nombre}`;
-    }
-  }
-
-  function calcularCarbos(c, gramos){
-    if(c.medida === "taza"){
-      let tazas = Math.round(gramos / c.carbos);
-      return `${tazas} taza(s) ${c.nombre}`;
-    } else if(c.medida === "rebanada"){
-      let r = Math.round(gramos / c.carbos);
-      return `${r} rebanada(s) ${c.nombre}`;
-    } else {
-      let g = Math.round((gramos / c.carbos) * 100);
-      return `${g}g ${c.nombre}`;
-    }
-  }
-
-  function calcularGrasa(g, gramos){
-    if(g.medida === "cucharada"){
-      let c = Math.round(gramos / g.grasa);
-      return `${c} cucharada(s) ${g.nombre}`;
-    } else if(g.medida === "pieza"){
-      let p = Math.round(gramos / g.grasa);
-      return `${p} pieza(s) ${g.nombre}`;
-    } else {
-      let x = Math.round((gramos / g.grasa)*100);
-      return `${x}g ${g.nombre}`;
-    }
-  }
+  // 🔥 FRUTA SOLO EN MOMENTOS CLAVE
+  const frutas = [
+    "manzana verde",
+    "manzana roja",
+    "papaya",
+    "melón",
+    "plátano"
+  ];
 
   let comidas = [];
 
   for(let i=0;i<4;i++){
-    let p = random(proteinas);
-    let c = random(carbosLista);
-    let g = random(grasasLista);
-    let v = random(verduras);
-    let f = (i===2)? random(frutas) : null; // fruta solo pre-entreno
 
-    comidas.push({
+    let comida = {
       nombre: nombresComida[i],
-      proteina: calcularProte(p, protePorComida),
-      carbos: calcularCarbos(c, carbosPorComida),
-      grasa: calcularGrasa(g, grasaPorComida),
-      verdura: `${v.nombre} 50-80g`,
-      fruta: f? f.nombre : ""
-    });
+      proteina: random(proteinas),
+      carbos: random(carbosLista),
+      grasa: random(grasasLista),
+      verdura: "",
+      fruta: ""
+    };
+
+    // 🥦 Verduras SOLO comida fuerte
+    if(i === 1 || i === 3){
+      comida.verdura = random(verduras);
+    }
+
+    // 🍎 Fruta SOLO desayuno o pre
+    if(i === 0 || i === 2){
+      comida.fruta = random(frutas);
+    }
+
+    comidas.push(comida);
   }
 
   return {calorias, proteina, carbos, grasa, comidas};
 }
-
 // ---------------- MOSTRAR DIETA ----------------
 function mostrarDieta(dieta){
   let nombre = document.getElementById("nombreCliente").value;
