@@ -194,13 +194,14 @@ function generarDietaPRO(datos){
 function mostrarDieta(dieta){
   let nombre=document.getElementById("nombreCliente").value;
   let fecha=new Date().toLocaleDateString();
-  let html=`<div class="dieta-card">
+
+  let html=`<div class="dieta-card" contenteditable="true">
   <h2>${nombre||"Cliente"}</h2>
   <p>${fecha}</p>
-  🔥 ${dieta.calorias} kcal<br>
-  🥩 ${dieta.proteina}<br>
-  🍚 ${dieta.carbos}<br>
-  🥑 ${dieta.grasa}`;
+  <p>🔥 ${dieta.calorias}</p>
+  <p>🥩 ${dieta.proteina}</p>
+  <p>🍚 ${dieta.carbos}</p>
+  <p>🥑 ${dieta.grasa}</p>`;
 
   dieta.comidas.forEach(c=>{
     html+=`<div class="card-meal">
@@ -222,6 +223,7 @@ function mostrarDieta(dieta){
     ✔ Jamaica o limón con stevia<br>
     ✔ Evitar ultraprocesados
   </div>
+
   <div class="card-meal">
     <h4>🍽️ Hambre</h4>
     ✔ Pepino/jícama libre<br>
