@@ -60,57 +60,54 @@
 
 <!-- DIETA PRO -->
 <section class="lead-box" id="pro">
-  <h2>🔥 Dieta PRO – Plan Profesional</h2>
-  <p>Obtén tu plan personalizado en PDF completo + seguimiento real</p>
+ <h2>🔥 Dieta PRO – Plan Profesional (Con costo 💵)</h2>
+<p>
+Recibe tu dieta personalizada + rutina de entrenamiento en PDF completamente adaptada a tu objetivo.<br>
+✔ Plan profesional<br>
+✔ Seguimiento real<br>
+✔ Resultados garantizados
+</p>
 
-  <!-- BOTÓN -->
-  <button class="btn-whats-pro" onclick="mostrarFormulario()">
-    🟢 Pagar & recibir mi plan
-  </button>
+ <!-- BOTÓN PRO -->
+<button class="btn-whats-pro" onclick="mostrarFormulario()">🟢 Pagar & recibir mi plan</button>
 
-  <!-- FORMULARIO OCULTO -->
-  <div class="pro-form" id="formPro">
-    <input type="text" id="nombrePro" placeholder="Nombre completo">
-    <input type="number" id="edadPro" placeholder="Edad">
+<!-- FORMULARIO OCULTO -->
+<div id="formularioPro" style="display:none; margin-top:20px;">
+  <input type="text" id="nombreClientePro" placeholder="Nombre completo">
+  <input type="number" id="edadClientePro" placeholder="Edad">
+  <input type="number" id="pesoClientePro" placeholder="Peso (kg)">
+  <input type="number" id="alturaClientePro" placeholder="Altura (cm)">
 
-    <select id="sexoPro">
-      <option value="">Sexo</option>
-      <option value="Masculino">Masculino</option>
-      <option value="Femenino">Femenino</option>
-    </select>
+  <select id="sexoClientePro">
+    <option value="">Sexo</option>
+    <option value="hombre">Hombre</option>
+    <option value="mujer">Mujer</option>
+  </select>
 
-    <input type="number" step="0.1" id="pesoPro" placeholder="Peso (kg)">
-    <input type="number" step="0.01" id="alturaPro" placeholder="Altura (cm o m)">
+  <select id="nivelClientePro">
+    <option value="">Nivel</option>
+    <option value="novato">Novato</option>
+    <option value="intermedio">Intermedio</option>
+    <option value="avanzado">Avanzado</option>
+    <option value="competidor">Competidor</option>
+  </select>
 
-    <select id="nivelPro">
-      <option value="">Nivel</option>
-      <option value="Novato">Novato</option>
-      <option value="Intermedio">Intermedio</option>
-      <option value="Avanzado">Avanzado</option>
-      <option value="Competidor">Competidor</option>
-    </select>
+  <input type="number" id="diasClientePro" placeholder="Días que entrena">
 
-    <input type="number" id="diasPro" placeholder="Días que entrenas">
+  <select id="objetivoClientePro">
+    <option value="">Objetivo</option>
+    <option value="definicion">Definición</option>
+    <option value="volumen">Volumen</option>
+  </select>
 
-    <select id="objetivoPro">
-      <option value="">Objetivo</option>
-      <option value="Definición">Definición</option>
-      <option value="Volumen">Volumen</option>
-      <option value="Recomposición">Recomposición</option>
-    </select>
+  <select id="proteClientePro">
+    <option value="">¿Tomas proteína en polvo?</option>
+    <option value="si">Sí</option>
+    <option value="no">No</option>
+  </select>
 
-    <select id="proteinaPro">
-      <option value="">¿Consumes proteína en polvo?</option>
-      <option value="Sí">Sí</option>
-      <option value="No">No</option>
-    </select>
-
-    <input type="tel" id="telefonoPro" placeholder="Tu WhatsApp (10 dígitos)">
-
-    <button class="btn-whats-pro" onclick="enviarPro()" style="margin-top:10px;">
-      📲 Enviar datos & continuar pago
-    </button>
-  </div>
+  <button onclick="enviarFormularioPro()">📲 Enviar datos</button>
+</div>
 
   <p class="urgencia">
     ⚠️ Solo quedan <span id="cupos">3</span> cupos hoy
@@ -227,18 +224,75 @@ Una vez realizado el depósito, envíame tu comprobante por este chat y recibir�
 
 
 function mostrarFormulario(){
-  const form = document.getElementById("formPro");
+  let form = document.getElementById("formularioPro");
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
 
-  form.style.display = "flex";
-  form.style.opacity = "0";
-  form.style.transform = "translateY(20px)";
+function enviarFormularioPro(){
+
+  let nombre = document.getElementById("nombreClientePro").value;
+  let edad = document.getElementById("edadClientePro").value;
+  let peso = document.getElementById("pesoClientePro").value;
+  let altura = document.getElementById("alturaClientePro").value;
+  let sexo = document.getElementById("sexoClientePro").value;
+  let nivel = document.getElementById("nivelClientePro").value;
+  let dias = document.getElementById("diasClientePro").value;
+  let objetivo = document.getElementById("objetivoClientePro").value;
+  let prote = document.getElementById("proteClientePro").value;
+
+  if(!nombre || !edad || !peso || !altura || !sexo || !nivel || !dias || !objetivo || !prote){
+    alert("Completa todos los datos bro 🔥");
+    return;
+  }
+
+  /* 📲 MENSAJE PARA TI */
+  let mensajeAdmin =
+`🔥 NUEVO CLIENTE PRO 🔥
+
+Nombre: ${nombre}
+Edad: ${edad}
+Peso: ${peso} kg
+Altura: ${altura} cm
+Sexo: ${sexo}
+Nivel: ${nivel}
+Días entrena: ${dias}
+Objetivo: ${objetivo}
+Proteína: ${prote}`;
+
+  window.open(`https://wa.me/527341771575?text=${encodeURIComponent(mensajeAdmin)}`, "_blank");
+
+  /* 📲 MENSAJE PARA CLIENTE */
+  let mensajeCliente =
+`🔥 *¡Gracias por elegir Charly Fitness!* 🔥
+
+Hola ${nombre} 🙌
+
+Tu plan *Dieta + Rutina personalizada en PDF* está listo para comenzar 💪
+
+━━━━━━━━━━━━━━━
+
+💳 *INVERSIÓN:* $299 MXN
+
+🏦 *DATOS DE PAGO:*
+Banco: AZTECA
+Cuenta: 6774 0164 4103 34
+CLABE: 1275 5200 1644 1033 40
+
+━━━━━━━━━━━━━━━
+
+📩 Una vez realizado el pago:
+Envíame tu comprobante por este medio
+
+⏱️ En menos de 24h recibirás:
+✔ Dieta personalizada en PDF
+✔ Rutina de entrenamiento
+✔ Ajustes incluidos
+
+🔥 Vamos a llevar tu físico al siguiente nivel`;
 
   setTimeout(()=>{
-    form.style.opacity = "1";
-    form.style.transform = "translateY(0)";
-  },100);
-
-  form.scrollIntoView({ behavior: "smooth" });
+    window.open(`https://wa.me/?text=${encodeURIComponent(mensajeCliente)}`, "_blank");
+  },1000);
 }
 
 function enviarPro(){
