@@ -95,106 +95,129 @@ function usarPro(){
 /* ===================== DIETA PRO HUMANIZADA ===================== */
 /* ===================== DIETA PRO HUMANIZADA ===================== */
 function generarDietaPRO(datos){
-  let {peso, altura, edad, objetivo, sexo, nivel} = datos;
+  let {nombre, peso, altura, edad, objetivo, sexo, nivel} = datos;
 
   if(altura > 3) altura = altura / 100;
 
   // 🔥 Calorías
-  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo === "mujer"? -161: 5);
-  let factorActividad = 1.55; // base
+  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo==="mujer"? -161: 5);
+  let factorActividad = 1.55;
   let calorias = Math.round(bmr * factorActividad);
-
-  if(objetivo === "definicion") calorias -= 400;
-  if(objetivo === "volumen") calorias += 300;
+  if(objetivo==="definicion") calorias -= 400;
+  if(objetivo==="volumen") calorias += 300;
 
   // 🔥 Proteínas
-  const proteBase = { novato:1.6, intermedio:1.8, avanzado:2, competidor:2.2 };
-  let proteina = Math.round(peso * proteBase[nivel]);
+  const proteBase = {novato:1.6, intermedio:1.8, avanzado:2, competidor:2.2};
+  let proteina = Math.round(peso*proteBase[nivel]);
 
-  // 🔥 Listas de alimentos HUMANIZADAS
+  // 🔥 Alimentos humanizados
   const proteinas = [
-    "4 claras + 1 huevo entero con espinaca",
+    "6 claras + 2 huevos enteros",
     "150g pollo magro",
     "150g pescado",
-    "150g carne magra (res o pollo)",
+    "150g carne magra",
     "1 scoop proteína whey"
   ];
   const carbos = [
-    "1/2 taza arroz cocido",
-    "1 camote mediano",
-    "1 plátano macho mediano",
-    "3 hot cakes",
-    "2 tortillas de maíz",
-    "1 pan árabe",
-    "1 taza avena cocida",
-    "2 galletas de arroz"
+    "1/2 taza arroz cocido","1 1/2 taza arroz hervido",
+    "1 camote mediano","4 hot cakes con miel de agave",
+    "1 taza pasta cocida","1 taza puré de papa",
+    "1 taza avena cocida","2 galletas de arroz"
   ];
   const grasas = [
-    "¼ aguacate",
-    "10 almendras",
-    "1 cucharadita aceite de oliva",
-    "1 cucharadita aceite de coco",
-    "1 cucharada mantequilla de maní",
-    "10 nueces",
+    "½ aguacate",
+    "1 cucharadita aceite de oliva","1 cucharadita aceite de coco",
+    "1 cucharada mantequilla de maní","10 nueces",
     "1 cucharada amaranto"
   ];
   const verduras = [
-    "1 taza calabaza cocida",
-    "1 taza brócoli cocido",
-    "1 plato lechuga",
-    "1 taza espinaca cocida"
+    "1 taza calabaza cocida","1 taza brócoli cocido",
+    "1 plato lechuga + 1 jitomate","1 plato lechuga + 1 taza pepino",
+    "1 taza espinaca cocida","1 taza nopal cocido"
   ];
-  const frutasDef = [
-    "1 manzana mediana",
-    "1 taza papaya en cubos",
-    "1 taza melón en cubos",
-    "½ toronja"
-  ];
-  const frutasVol = [
-    "1 plátano macho mediano",
-    "1 taza fresas",
-    "1 manzana roja mediana",
-    "1 mango mediano"
-  ];
+  const frutasDef = ["1 manzana mediana","1 taza papaya","1 taza melón","½ toronja"];
+  const frutasVol = ["1 plátano macho","1 taza fresas","1 manzana roja","1 mango mediano"];
+  const frutasWhey = ["½ taza papaya","1 taza papaya","1 taza melón","1 taza puré de plátano macho","1 taza fresas"];
 
   function random(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-  // 🔥 Número de comidas según objetivo
-  let numComidas = (objetivo==="volumen") ? 6 : 5;
-
+  let numComidas = (objetivo==="volumen")?6:5;
   let comidas = [];
 
-  for(let i=0; i<numComidas; i++){
-    let comida = {};
+  let contadorAguacate = 0;
+  let hotcakesUsados = false;
 
-    if(i === numComidas-1 && objetivo==="volumen"){ // Última comida post-entreno whey
-      comida = {
-        nombre:"Post-entreno",
+  for(let i=0;i<numComidas;i++){
+    let comida={};
+
+    // Whey solo en comida 2 y 4
+    if((i===1 || i===3) && Math.random()<0.8){
+      let frutaW = random(frutasWhey);
+      comida={
+        nombre:`Comida ${i+1} – Whey`,
         proteina:"1 scoop proteína whey",
-        carbos:"1 pan árabe o 1 plátano macho",
-        grasa:"¼ aguacate o 1 cucharadita mantequilla de maní",
+        carbos:random(["1 taza avena cocida","2 galletas de arroz","4 hot cakes con miel de agave"]),
+        grasa:"",
         verdura:"",
-        fruta:""
+        fruta:frutaW
       };
-    } else {
-      comida = {
-        nombre: `Comida ${i+1}`,
-        proteina: random(proteinas),
-        carbos: random(carbos),
-        grasa: random(grasas),
-        verdura: random(verduras),
-        fruta: (objetivo==="definicion")? random(frutasDef) : random(frutasVol)
-      };
+      // Hot cakes solo 1 vez
+      if(comida.carbos.includes("hot cakes") && hotcakesUsados){
+        comida.carbos = "1 taza avena cocida";
+      }
+      if(comida.carbos.includes("hot cakes")) hotcakesUsados = true;
+      comidas.push(comida);
+      continue;
     }
+
+    // Elegir proteína realista
+    let prote = random(proteinas);
+    if(prote==="150g carne magra") prote = (Math.random()<0.5)?"150g pollo magro":"150g carne magra";
+    if(prote==="1 scoop proteína whey") prote = "6 claras + 2 huevos enteros";
+
+    // Decidir si poner aguacate (max 2 comidas, solo mitades, no con whey)
+    let grasa="";
+    if(contadorAguacate<2 && !prote.includes("whey") && Math.random()<0.5){
+      grasa="½ aguacate";
+      contadorAguacate++;
+    } else {
+      grasa=random(grasas.filter(g=>!g.includes("aguacate")));
+    }
+
+    // Elegir carbo
+    let carbo = random(carbos);
+    // Hot cakes solo 1 vez
+    if(carbo.includes("hot cakes") && hotcakesUsados) carbo = "1 taza avena cocida";
+    if(carbo.includes("hot cakes")) hotcakesUsados = true;
+
+    // Elegir verdura
+    let verd = random(verduras);
+    if(prote.includes("huevo")) verd = (Math.random()<0.5)?"1 taza espinaca cocida":verd;
+
+    // Elegir fruta opcional
+    let fruta="";
+    if(!["1/2 taza arroz cocido","1 taza pasta cocida","1 1/2 taza arroz hervido","1 camote mediano","4 hot cakes con miel de agave","1 taza puré de papa"].includes(carbo)){
+      fruta = (objetivo==="definicion")?random(frutasDef):random(frutasVol);
+    }
+
+    comida={
+      nombre:`Comida ${i+1}`,
+      proteina:prote,
+      carbos:carbo,
+      grasa:grasa,
+      verdura:verd,
+      fruta:fruta
+    };
 
     comidas.push(comida);
   }
 
   return {
-    calorias,
-    proteina,
-    carbos: Math.round(calorias/4),
-    grasa: Math.round(calorias*0.25/9),
+    titulo:`🥗 Dieta de ${nombre} – ${objetivo.charAt(0).toUpperCase()+objetivo.slice(1)} (${numComidas} días / ${nivel})`,
+    calorias:`🔥 Calorías: ${calorias} kcal`,
+    proteina:`💪 Proteína: ${proteina} g`,
+    carbos:`🍚 Carbohidratos: ${Math.round(calorias/4)} g aprox.`,
+    grasa:`🥑 Grasas: ${Math.round(calorias*0.25/9)} g aprox.`,
     comidas
   };
 }
