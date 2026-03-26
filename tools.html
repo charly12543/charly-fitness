@@ -1,1 +1,614 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fitness Lab | Calculadora de Proteína y Transformación</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<meta name="description" content="Calculadora de proteína, IMC y fitness. Aprende nutrición y transforma tu cuerpo con Charly Fitness.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> 
+
+<!-- Open Graph (preview del link) -->
+<meta property="og:title" content="Fitness Lab - Calculadoras Fitness PRO">
+<meta property="og:description" content="Calcula tus calorías, macros y BMI como un atleta. Herramientas fitness profesionales gratuitas.">
+<meta property="og:image" content="https://charly12543.github.io/charly-fitness/imagenes/preview-fitness.jpg">
+<meta property="og:url" content="https://charly12543.github.io/charly-fitness/">
+<meta property="og:type" content="website">
+
+<!-- Twitter preview -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fitness Lab - Calculadoras Fitness PRO">
+<meta name="twitter:description" content="Calcula calorías, macros y BMI gratis. Fitness tools profesionales.">
+<meta name="twitter:image" content="https://charly12543.github.io/charly-fitness/imagenes/preview-fitness.jpg">  
+</head>
+<body>
+
+<!-- NAVBAR --> 
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo">
+      <img src="imagenes/logoGitHub.png" alt="CB Fitness Logo">
+    </div>
+
+    <span class="menu-toggle" onclick="toggleMenu()">
+      <i class="fa-solid fa-bars"></i>
+    </span>
+
+    <ul class="nav-links">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#videos">Videos</a></li>
+      <li><a href="#transformacion">Transformación</a></li> 
+      <li><a href="#herramientas">Herramientas</a></li>    
+      <li><a href="dietas.html" class="btn-main">🥗 Generar mi dieta</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <!-- BANNER -->
+<div class="top-banner">
+🔥 Nuevo: Mira mi transformación completa en YouTube →
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank">
+Ver ahora
+</a>
+</div>  
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+<h1>Transforma tu cuerpo como un atleta</h1>
+<p class="hero-main">
+🔥 Más de 1000 personas ya iniciaron su cambio (y siguen el proceso en YouTube)
+</p>
+<p class="hero-sub">
+📺 Sigue mi transformación real paso a paso en YouTube  
+💪 Rutinas, dieta y estrategias que sí funcionan
+</p>
+<div class="hero-buttons">
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="btn-main">
+🔥 Empieza tu cambio
+</a>
+<button onclick="scrollToSection('proteina')">
+Calcular proteína
+</button>
+<button onclick="scrollToSection('videos')">
+Ver entrenamientos
+</button>
+<a href="https://www.tiktok.com/@charlybustamante12" target="_blank" class="btn-outline">
+<i class="fa-brands fa-tiktok"></i> TikTok
+</a>
+</div>
+</section>
+
+<!-- ================= SECCIÓN CTA DIETAS CENTRADA ================= -->
+<section style="display:flex; justify-content:center; width:100%;">
+  <div class="cta-dietas" style="
+    background: linear-gradient(135deg, #f5a623, #f76b1c);
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: white;
+    border-radius: 15px;
+    margin: 40px 0;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    max-width: 700px;
+    width: 100%;
+    transition: transform 0.3s;
+  ">
+    <h2 style="font-size:2.5rem; margin-bottom:15px; line-height:1.2;">
+      🔥 Genera tu dieta personalizada HOY 🔥
+    </h2>
+    <p style="font-size:1.2rem; margin-bottom:25px; max-width:600px;">
+      Calcula tu plan nutricional basado en tus datos y empieza tu transformación
+    </p>
+    <a href="dietas.html" style="
+      display:inline-block;
+      padding: 18px 35px;
+      background:white;
+      color:#f76b1c;
+      font-weight:bold;
+      font-size:1.2rem;
+      border-radius:10px;
+      text-decoration:none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    " 
+    onmouseover="this.style.transform='translateY(-3px) scale(1.05)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.3)';" 
+    onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.2)';">
+      ➤ Generar mi dieta
+    </a>
+    <p style="margin-top:20px; font-size:0.95rem; opacity:0.85;">
+      🎯 Primer paso hacia tu Dieta PRO y tu transformación fitness
+    </p>
+  </div>
+</section>
+<!-- ================= FIN CTA DIETAS CENTRADA ================= -->
+
+  
+
+<!-- VIDEO DESTACADO -->  
+<section class="video-destacado">
+<iframe src="https://www.youtube.com/embed/PZDh-ufI1kU" allowfullscreen></iframe>
+<a href="https://www.youtube.com/shorts/PZDh-ufI1kU" target="_blank"class="btn-outline">
+<i class="fa-brands fa-youtube"></i> Ver en YouTube</a>  
+</section> 
+
+<!-- VIDEOS  -->
+<section id="videos">
+<h2>Mis videos fitness</h2>
+<p class="videos-sub">
+Entrenamientos reales, tips de nutrición y progreso personal.
+</p> 
+<div class="videos" id="youtubeVideos"></div>  
+<!-- <iframe src="https://www.youtube.com/embed/pvsgVVlw88g" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/xTadB9eAtgk" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/GyCqZSFOa4s" allowfullscreen></iframe>  -->
+</div>
+</section>   
+
+<!-- TRANSFORMACION -->
+<section id="transformacion">
+  <h2>Mi transformación</h2>
+  <div class="galeria">
+    <img src="imagenes/foto1.jpg" alt="Transformación antes">
+    <img src="imagenes/foto2.jpg" alt="Transformación despues">
+    <img src="imagenes/foto3.jpg" alt="Progreso">
+  </div>
+</section> 
+
+<!-- INVITACION -->  
+<section class="cta-box">
+<h2>🔥 Antes de usar las herramientas</h2>
+<p>
+Este es el mismo método que estoy usando en mi transformación real.
+Si quieres resultados de verdad, sigue el proceso completo.
+</p>
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="btn-main">
+📺 Ver método completo en YouTube
+</a>
+<p style="font-size:12px;opacity:0.7;margin-top:10px;">
+Después puedes usar todas las calculadoras gratis 👇
+</p>
+</section>
+  
+<!-- HERRAMIENTAS --> 
+<section id="herramientas">
+<h2>Herramientas Fitness</h2>
+<div class="tools-grid">
+  <div class="tool-card">
+    <i class="fa-solid fa-drumstick-bite tool-icon"></i>
+    <h3>Proteína</h3>
+    <p>Calcula tu proteína diaria según tu peso corporal.</p>
+    <a href="#proteina">Usar calculadora</a>
+  </div>
+  <div class="tool-card">
+    <i class="fa-solid fa-chart-line tool-icon"></i>
+    <h3>IMC</h3>
+    <p>Descubre tu índice de masa corporal.</p>
+    <a href="#imc">Usar calculadora</a>
+  </div>
+  <div class="tool-card">
+    <i class="fa-solid fa-fire tool-icon"></i>
+    <h3>Calorías</h3>
+    <p>Calcula tu gasto energético diario.</p>
+    <a href="#calorias">Usar calculadora</a>
+  </div>
+  <div class="tool-card">
+    <i class="fa-solid fa-bowl-rice tool-icon"></i>
+    <h3>Macros</h3>
+    <p>Distribuye proteína, carbohidratos y grasas por comida.</p>
+    <a href="#macros">Usar calculadora</a>
+  </div>
+</div>
+</section>
+
+<!-- INVITACION 2 -->  
+<p style="text-align:center; font-weight:bold; color:#d4af37;">
+⚠️ Los mejores resultados vienen si sigues los videos del canal
+</p>
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="btn-main">
+🔥 Empieza tu cambio
+</a>  
+
+  
+<!-- CALCULADORA PROTEINA -->
+<section id="proteina">
+<h2>Calculadora de proteína</h2>
+<div class="calculadora">
+<input type="number" id="peso" placeholder="Tu peso en kg">
+<select id="actividad">
+  <option value="1.6">Actividad moderada</option>
+  <option value="2">Entrenamiento intenso</option>
+  <option value="2.2">Atleta avanzado</option>
+</select>
+<button onclick="calcularProteina()">Calcular</button>
+<div class="resultado" id="resultadoProteina"></div>
+</div>
+</section>
+
+<!-- CALCULADORA IMC -->
+<section id="imc">
+<h2>Calculadora de IMC</h2>
+<div class="calculadora">
+<input type="number" step="0.01" id="altura" placeholder="Altura en cm (1.80 o 180)">
+<input type="number" id="pesoIMC" placeholder="Peso en kg">
+<button onclick="calcularIMC()">Calcular IMC</button>
+<div class="resultado" id="resultadoIMC"></div>
+<p style="font-size:14px;opacity:0.7;">Nota: El IMC no distingue entre músculo y grasa, por lo que atletas pueden tener valores altos sin tener sobrepeso.</p>
+</div>
+</section>
+
+<!-- CALCULADORA MACROS -->
+<section id="macros">
+<h2>Calculadora de macros por comida</h2>
+<div class="calculadora">
+<input type="number" id="pesoMacros" placeholder="Peso corporal (kg)">
+<select id="objetivo">
+  <option value="definicion">Definición</option>
+  <option value="mantenimiento">Mantenimiento</option>
+  <option value="volumen">Volumen</option>
+</select>
+<label>Comidas al día</label>
+<select id="comidasMacros">
+  <option value="3">3 comidas</option>
+  <option value="4" selected>4 comidas</option>
+  <option value="5">5 comidas</option>
+  <option value="6">6 comidas</option>
+</select>
+<button onclick="calcularMacros()">Calcular macros</button>
+<div class="resultado" id="resultadoMacros"></div>
+</div>
+</section>
+
+<!-- CALCULADORA CALORÍAS DIARIAS PRO -->
+<section id="calorias">
+  <h2>Calculadora de calorías "DIARIAS"</h2>
+  <div class="calculadora">
+    <input type="number" id="pesoCal" placeholder="Peso (kg)">
+    <input type="number" id="alturaCal" placeholder="Altura (cm)">
+    <input type="number" id="edadCal" placeholder="Edad">
+    <select id="sexoCal">
+      <option value="hombre">Hombre</option>
+      <option value="mujer">Mujer</option>
+    </select>
+    <select id="actividadCal">
+      <option value="1.2">Sedentario</option>
+      <option value="1.375">Ejercicio ligero</option>
+      <option value="1.55">Entrenamiento moderado</option>
+      <option value="1.725">Entrenamiento intenso</option>
+      <option value="1.9">Atleta avanzado</option>
+    </select>
+    <select id="objetivoCal">
+      <option value="definicion">Definición</option>
+      <option value="mantenimiento">Mantenimiento</option>
+      <option value="volumen">Volumen</option>
+    </select>
+    <select id="comidasCal">
+      <option value="3">3 comidas</option>
+      <option value="4" selected>4 comidas</option>
+      <option value="5">5 comidas</option>
+      <option value="6">6 comidas</option>
+    </select>
+    <button onclick="caloriasPRO()">Calcular calorías PRO</button>
+    <div class="resultado" id="resultadoCalorias"></div>
+  </div>
+</section>
+
+
+  
+<!-- CIERRE -->
+<section class="cta-final">
+<h2>🔥 ¿Listo para cambiar tu físico?</h2>
+<p>
+No es magia. Es método, disciplina y constancia.
+Síguelo paso a paso en mi canal.
+</p>
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="btn-main">
+📺 Suscribirme ahora
+</a>
+</section>  
+  
+<!-- FOOTER -->
+<footer>
+<p>© 2026 CharlyBFitness Lab</p>
+<p>Sitio desarrollado por CharlyB 💻</p>
+<div class="redes">
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank">YouTube</a>
+<a href="#" target="_blank">Instagram</a>
+<a href="https://www.tiktok.com/@charlybustamante12" target="_blank">TikTok</a>
+</div>
+<div style="margin-top:20px; color:#d4af37; font-weight:600;">
+🔥 Personas que ya iniciaron su transformación
+<br><br>
+
+<!-- SCRIPTS -->
+<script>
+// SCROLL
+function scrollToSection(id){
+  const element = document.getElementById(id);
+  const navbarHeight = document.querySelector(".navbar").offsetHeight;
+  const elementPosition = element.offsetTop - navbarHeight - 20;
+  window.scrollTo({ top: elementPosition, behavior: "smooth" });
+}
+
+// NAVBAR CELULAR
+function toggleMenu(){
+  const navLinks = document.querySelector(".nav-links");
+  const toggle = document.querySelector(".menu-toggle");
+  navLinks.classList.toggle("active");
+  toggle.classList.toggle("active");
+}
+document.querySelectorAll(".nav-links a").forEach(link => {
+  link.addEventListener("click", () => {
+    const navLinks = document.querySelector(".nav-links");
+    const toggle = document.querySelector(".menu-toggle");
+    if(navLinks.classList.contains("active")){
+      navLinks.classList.remove("active");
+      toggle.classList.remove("active");
+    }
+  });
+});
+
+// PROTEINA
+function calcularProteina(){
+  let peso = document.getElementById("peso").value;
+  let factor = document.getElementById("actividad").value;
+  let proteina = peso * factor;
+  document.getElementById("resultadoProteina").innerHTML =
+    "Debes consumir aproximadamente <b>" + proteina.toFixed(1) + " g de proteína al día</b>";
+}
+
+// IMC
+function calcularIMC(){
+  let altura = document.getElementById("altura").value;
+  let peso = document.getElementById("pesoIMC").value;
+  if(!altura || !peso){
+    document.getElementById("resultadoIMC").innerHTML = "Por favor ingresa altura y peso";
+    return;
+  }
+  if(altura > 3) altura /= 100;
+  let imc = peso / (altura*altura);
+  let categoria = imc < 18.5 ? "Bajo peso" : imc < 25 ? "Peso normal" : imc < 30 ? "Sobrepeso" : "Obesidad";
+  document.getElementById("resultadoIMC").innerHTML = `Tu IMC es <b>${imc.toFixed(2)}</b><br>Clasificación: <b>${categoria}</b>`;
+}
+
+// MACROS
+function calcularMacros(){
+  let peso = parseFloat(document.getElementById("pesoMacros").value);
+  let objetivo = document.getElementById("objetivo").value;
+  let comidas = parseFloat(document.getElementById("comidasMacros").value);
+  if(!peso || !comidas){
+    document.getElementById("resultadoMacros").innerHTML = "Por favor ingresa tu peso";
+    return;
+  }
+  let proteina = peso*2;
+  let calorias = peso*33;
+  if(objetivo === "definicion") calorias -= 400;
+  if(objetivo === "volumen") calorias += 300;
+  let grasa = (calorias*0.25)/9;
+  let carbos = (calorias - (proteina*4) - (grasa*9))/4;
+  document.getElementById("resultadoMacros").innerHTML =
+    `<b>Macros diarios</b><br>
+     🥩 Proteína: ${proteina.toFixed(0)} g<br>
+     🍚 Carbohidratos: ${carbos.toFixed(0)} g<br>
+     🥑 Grasas: ${grasa.toFixed(0)} g<br><br>
+     <b>Macros por comida (${comidas} comidas)</b><br>
+     🥩 Proteína: ${(proteina/comidas).toFixed(0)} g<br>
+     🍚 Carbos: ${(carbos/comidas).toFixed(0)} g<br>
+     🥑 Grasas: ${(grasa/comidas).toFixed(0)} g`;
+}
+
+// CALORIAS PRO
+function caloriasPRO() {
+  let peso = parseFloat(document.getElementById("pesoCal").value);
+  let altura = parseFloat(document.getElementById("alturaCal").value);
+  let edad = parseFloat(document.getElementById("edadCal").value);
+  let sexo = document.getElementById("sexoCal").value;
+  let actividad = parseFloat(document.getElementById("actividadCal").value);
+  let objetivo = document.getElementById("objetivoCal").value;
+  let comidas = parseInt(document.getElementById("comidasCal").value);
+
+  if(!peso || !altura || !edad){
+    document.getElementById("resultadoCalorias").innerHTML = "Por favor completa todos los campos.";
+    return;
+  }
+
+  // Altura en metros
+  if(altura > 3){ altura = altura / 100; }
+
+  // BMR (Mifflin-St Jeor)
+  let bmr;
+  if(sexo === "hombre"){
+    bmr = 10*peso + 6.25*(altura*100) - 5*edad + 5;
+  } else {
+    bmr = 10*peso + 6.25*(altura*100) - 5*edad - 161;
+  }
+
+  let caloriasTotales = bmr * actividad;
+
+  // Ajuste según objetivo
+  if(objetivo === "definicion"){ caloriasTotales -= 400; }
+  if(objetivo === "volumen"){ caloriasTotales += 300; }
+
+  // Macros
+  let proteina = peso * 2; // g
+  let grasa = (caloriasTotales * 0.25) / 9;
+  let carbos = (caloriasTotales - (proteina*4 + grasa*9)) / 4;
+
+  // Por comida
+  let proteinaComida = proteina / comidas;
+  let carbosComida = carbos / comidas;
+  let grasaComida = grasa / comidas;
+
+  // Equivalentes de proteína
+  const protPollo100 = 31;
+  const protAtunLata = 25;
+  const protClara = 3.6;
+  const protHuevo = 6;
+  let polloGr = (proteina / protPollo100) * 100;
+  let latasAtun = proteina / protAtunLata;
+  let proteinaRestante = proteina - protHuevo;
+  let claras = proteinaRestante / protClara;
+
+  document.getElementById("resultadoCalorias").innerHTML =
+  `<b>Calorías totales diarias:</b> ${caloriasTotales.toFixed(0)} kcal<br><br>
+   <b>Macros diarios:</b><br>
+   🥩 Proteína: ${proteina.toFixed(0)} g<br>
+   🍚 Carbohidratos: ${carbos.toFixed(0)} g<br>
+   🥑 Grasas: ${grasa.toFixed(0)} g<br><br>
+   <b>Macros por comida (${comidas} comidas):</b><br>
+   🥩 Proteína: ${proteinaComida.toFixed(0)} g<br>
+   🍚 Carbos: ${carbosComida.toFixed(0)} g<br>
+   🥑 Grasas: ${grasaComida.toFixed(0)} g<br><br>
+   <b>Equivalentes de proteína (~${proteina.toFixed(0)} g):</b><br>
+   • ${polloGr.toFixed(0)} g pechuga de pollo<br>
+   • ${latasAtun.toFixed(1)} lata de atún<br>
+   • ${claras.toFixed(0)} claras + 1 huevo`;
+}
+</script>
+
+
+<script>
+// Cambiar navbar al hacer scroll
+window.addEventListener("scroll", function(){
+  const navbar = document.querySelector(".navbar");
+  if(window.scrollY > 50){
+    navbar.classList.add("scrolled");
+  } else {
+    navbar.classList.remove("scrolled");
+  }
+});
+</script>
+
+
+
+<!-- CONTADOR -->
+<a href="https://www.hitwebcounter.com/" target="_blank">
+<img src="https://hitwebcounter.com/counter/counter.php?page=21483068&style=0048&nbdigits=5&type=page&initCount=0"
+title="Contador de visitas"
+alt="contador visitas"
+border="0"/>
+</a>
+</div>
+</footer>
+<!-- BOTON FLOTANTE YOUTUBE -->
+<a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="youtube-float">
+🔥 Suscríbete
+</a>
+
+  <!-- CIERRE -->
+<div id="popupYT" class="popup">
+  <div class="popup-content">
+    <h2>🔥 Espera!</h2>
+    <p>
+    Antes de irte...  
+    Mira el método completo que estoy usando para transformar mi físico.
+    </p>
+    <a href="https://www.youtube.com/@ACUARIO12543/shorts" target="_blank" class="btn-main">
+      📺 Ver en YouTube
+    </a>
+    <button onclick="cerrarPopup()">Seguir en la página</button>
+</div>
+</div>
+<script>
+let popupMostrado = false;
+document.addEventListener("mouseout", function(e){
+  if(e.clientY < 10 && !popupMostrado){
+    document.getElementById("popupYT").style.display = "flex";
+    popupMostrado = true;
+  }
+});
+function cerrarPopup(){
+  document.getElementById("popupYT").style.display = "none";
+}
+</script>  
+
+  <!-- VIDEOS DINAMICOS -->  
+<script>
+const API_KEY = "AIzaSyCuAgdEKPKzXYLTQWi7HF3DlOqeobSDDj8";
+const CHANNEL_ID = "UCC5BpAev5IBVwTQb1DxrSUA";  
+async function cargarVideos() {
+  const url = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&maxResults=6`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    const contenedor = document.getElementById("youtubeVideos");
+    contenedor.innerHTML = "";
+    data.items.forEach(video => {
+      if(video.id.videoId){
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube.com/embed/${video.id.videoId}`;
+        iframe.allowFullscreen = true;
+        contenedor.appendChild(iframe);
+      }
+    });
+
+  } catch (error) {
+    console.log("Error YouTube:", error);
+  }
+}
+cargarVideos();
+</script>  
+
+
+<!-- SECCION PRUEBA DIETAS $$$ -->    
+<script> 
+function generarDieta(){
+  let peso = parseFloat(document.getElementById("pesoDieta").value);
+  let altura = parseFloat(document.getElementById("alturaDieta").value);
+  let edad = parseFloat(document.getElementById("edadDieta").value);
+  let sexo = document.getElementById("sexoDieta").value;
+  let actividad = parseFloat(document.getElementById("actividadDieta").value);
+  let objetivo = document.getElementById("objetivoDieta").value;
+
+  if(!peso || !altura || !edad){
+    document.getElementById("resultadoDieta").innerHTML = "Completa todos los campos bro";
+    return;
+  }
+
+  // BMR
+  let bmr = sexo === "hombre"
+    ? 10*peso + 6.25*altura - 5*edad + 5
+    : 10*peso + 6.25*altura - 5*edad - 161;
+
+  let calorias = bmr * actividad;
+
+  if(objetivo === "definicion") calorias -= 400;
+  if(objetivo === "volumen") calorias += 300;
+
+  let proteina = peso * 2;
+  let grasa = (calorias * 0.25) / 9;
+  let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
+
+  // DIETA BASE
+  let html = `
+  <b>🔥 Tu plan diario:</b><br><br>
+
+  🥣 Desayuno:<br>
+  - 4 claras + 2 huevos<br>
+  - 50g avena<br><br>
+
+  🍗 Comida:<br>
+  - 150g pollo<br>
+  - 100g arroz<br><br>
+
+  🥩 Cena:<br>
+  - 150g carne o pescado<br>
+  - verduras libres<br><br>
+
+  💪 Totales aproximados:<br>
+  🔥 ${calorias.toFixed(0)} kcal<br>
+  🥩 ${proteina.toFixed(0)} g proteína<br>
+  🍚 ${carbos.toFixed(0)} g carbos<br>
+  🥑 ${grasa.toFixed(0)} g grasas<br><br>
+
+  ⚠️ Esta es una base general. Si quieres tu versión EXACTA abajo 👇
+  `;
+  document.getElementById("resultadoDieta").innerHTML = html;
+}
+</script>   
+
+</body>
+</html>
