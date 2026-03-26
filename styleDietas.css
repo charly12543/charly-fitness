@@ -251,10 +251,34 @@ section{ padding:60px 20px; max-width:800px; margin:auto; }
 }
 
 
+.pro-form button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-bright));
+  color:black;
+  font-weight:bold;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 8px 20px rgba(212,175,55,0.4);
+}
+
+.pro-form button:hover{
+  transform:scale(1.05);
+  box-shadow:0 12px 30px rgba(212,175,55,0.7);
+}
+
+.pro-form button:active{
+  transform:scale(0.98);
+}
 
 
-
-
+.pro-form button{
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
 
 
 
