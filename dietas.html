@@ -68,7 +68,8 @@
   </button>
 
   <!-- FORMULARIO -->
-  <div id="formularioPro" style="display:none; margin-top:20px;">
+  <div id="formularioPro" class="pro-form">
+    
     <input type="text" id="nombreClientePro" placeholder="Nombre completo">
     <input type="number" id="edadClientePro" placeholder="Edad">
     <input type="number" id="pesoClientePro" placeholder="Peso (kg)">
@@ -122,7 +123,7 @@ function toggleMenu(){
 /* FORMULARIO SHOW */
 function mostrarFormulario(){
   let form = document.getElementById("formularioPro");
-  form.style.display = form.style.display === "none" ? "block" : "none";
+  form.classList.toggle("show");
 }
 
 /* DIETA GRATIS */
@@ -158,14 +159,39 @@ function enviarFormularioPro(){
     return;
   }
 
-  /* MENSAJE PARA TI */
-  let mensajeAdmin = `🔥 NUEVO CLIENTE PRO 🔥
-Nombre: ${nombre}
-WhatsApp: ${telefono}`;
+  let edad = document.getElementById("edadClientePro").value;
+let peso = document.getElementById("pesoClientePro").value;
+let altura = document.getElementById("alturaClientePro").value;
+let sexo = document.getElementById("sexoClientePro").value;
+let nivel = document.getElementById("nivelClientePro").value;
+let dias = document.getElementById("diasClientePro").value;
+let objetivo = document.getElementById("objetivoClientePro").value;
+let prote = document.getElementById("proteClientePro").value;
+
+let mensajeAdmin = `🔥 NUEVO CLIENTE PRO 🔥
+
+👤 Nombre: ${nombre}
+📱 WhatsApp: ${telefono}
+
+📊 DATOS:
+🎂 Edad: ${edad}
+⚖️ Peso: ${peso} kg
+📏 Altura: ${altura} cm
+🚻 Sexo: ${sexo}
+
+🏋️ ENTRENAMIENTO:
+📅 Días: ${dias}
+📈 Nivel: ${nivel}
+
+🎯 OBJETIVO:
+🔥 ${objetivo}
+
+🥤 Suplementación:
+Proteína: ${prote}
+`;
 
   window.open(`https://wa.me/527341771575?text=${encodeURIComponent(mensajeAdmin)}`, "_blank");
 
-  /* MENSAJE PARA CLIENTE */
   let mensajeCliente = `Hola ${nombre} 👋
 
 🔥 Gracias por elegir *Charly Fitness*
