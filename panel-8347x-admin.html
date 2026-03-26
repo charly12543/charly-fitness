@@ -245,6 +245,11 @@ async function descargarPDF(tipo){
     return;
   }
 
+  // 🔥 DESACTIVA EDICIÓN (IMPORTANTE)
+  let editable = elemento.querySelector(".dieta-card");
+  if(editable) editable.setAttribute("contenteditable", "false");
+
+  // 📸 CAPTURA
   let canvas = await html2canvas(elemento, { scale: 2 });
   let imgData = canvas.toDataURL("image/jpeg", 1.0);
 
@@ -262,7 +267,7 @@ async function descargarPDF(tipo){
   pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
   heightLeft -= pageHeight;
 
-  // Páginas siguientes (CLAVE)
+  // Páginas extra
   while (heightLeft > 0) {
     position = heightLeft - imgHeight;
 
@@ -272,7 +277,11 @@ async function descargarPDF(tipo){
     heightLeft -= pageHeight;
   }
 
+  // 💾 GUARDAR
   pdf.save(tipo + ".pdf");
+
+  // 🔥 VOLVER A ACTIVAR EDICIÓN
+  if(editable) editable.setAttribute("contenteditable", "true");
 }
 
 /* ===================== WHATSAPP ===================== */
