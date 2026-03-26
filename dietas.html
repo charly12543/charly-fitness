@@ -5,33 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dietas Fitness PRO</title>
 <link rel="stylesheet" href="styleDietas.css">
-<style>
-/* Navbar y responsive mínimo */
-.nav-links { display: flex; gap: 15px; }
-.nav-links li { list-style:none; }
-.menu-toggle { cursor:pointer; display:none; }
-@media(max-width:768px){ .nav-links { display:none; flex-direction:column; } .menu-toggle{display:block;} }
-
-/* Formulario dinámico PRO */
-#formPro { display:none; margin-top:15px; padding:10px; border:1px solid #ddd; border-radius:8px; }
-#formPro input, #formPro select { display:block; margin:5px 0; padding:8px; width:100%; }
-</style>
 </head>
+
 <body>
 
 <!-- NAVBAR -->  
 <nav class="navbar">
   <div class="nav-container">
+
     <a href="index.html" class="logo">
       <img src="imagenes/logoGitHub.png" alt="Charly Fitness">
     </a>
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+    <!-- BOTÓN HAMBURGUESA -->
+    <div class="menu-toggle" onclick="toggleMenu()">
+      ☰
+    </div>
+
+    <!-- LINKS -->
     <ul class="nav-links" id="navLinks">
       <li><a href="index.html" class="back-btn">⬅ Volver</a></li>
       <li><a href="index.html">Inicio</a></li>
       <li><a href="#dieta">Dieta</a></li>
       <li><a href="#pro">PRO</a></li>
     </ul>
+
   </div>
 </nav>
 
@@ -43,15 +41,19 @@
 <!-- DIETA GRATIS -->
 <section id="dieta">
   <h2>🔥 Dieta base automática</h2>
+
   <div class="calculadora">
     <input type="number" id="pesoDieta" placeholder="Peso (kg)">
     <input type="number" step="0.01" id="alturaDieta" placeholder="Altura (1.80 o 180)">
     <input type="number" id="edadDieta" placeholder="Edad">
+
     <select id="objetivoDieta">
       <option value="definicion">Definición</option>
       <option value="volumen">Volumen</option>
     </select>
+
     <button onclick="generarDieta()">Generar dieta</button>
+
     <div id="resultadoDieta" class="dieta-card"></div>
   </div>
 </section>
@@ -61,88 +63,82 @@
   <h2>🔥 Dieta PRO – Plan Profesional (Con costo 💵 y resultados reales)</h2>
   <p>Obtén tu plan personalizado en PDF completo y seguimiento real. (Este plan tiene costo y no es gratuito)</p>
 
-  <button id="btnAbrirPro" class="btn-whats-pro">🟢 Pagar & recibir mi plan</button>
-
-  <!-- FORMULARIO PRO -->
-  <div id="formPro">
+  <div class="pro-form">
     <input type="text" id="nombrePro" placeholder="Nombre completo">
     <input type="number" id="edadPro" placeholder="Edad">
     <select id="sexoPro">
-      <option value="">Sexo</option>
-      <option value="Hombre">Hombre</option>
-      <option value="Mujer">Mujer</option>
+      <option value="Masculino">Masculino</option>
+      <option value="Femenino">Femenino</option>
     </select>
-    <input type="number" id="pesoPro" placeholder="Peso (kg)">
-    <input type="number" id="alturaPro" placeholder="Altura (cm)">
+    <input type="number" step="0.1" id="pesoPro" placeholder="Peso (kg)">
+    <input type="number" step="0.01" id="alturaPro" placeholder="Altura (m o cm)">
     <select id="nivelPro">
-      <option value="">Nivel</option>
       <option value="Novato">Novato</option>
       <option value="Intermedio">Intermedio</option>
       <option value="Avanzado">Avanzado</option>
       <option value="Competidor">Competidor</option>
     </select>
-    <input type="number" id="diasPro" placeholder="Días que entrenas a la semana">
+    <input type="number" id="diasPro" placeholder="Días que entrenas por semana">
     <select id="objetivoPro">
-      <option value="">Objetivo</option>
       <option value="Definición">Definición</option>
       <option value="Volumen">Volumen</option>
       <option value="Recomposición">Recomposición</option>
     </select>
     <select id="proteinaPro">
-      <option value="">¿Tomas proteína?</option>
-      <option value="Sí">Sí</option>
-      <option value="No">No</option>
+      <option value="Sí">Toma proteína</option>
+      <option value="No">No toma proteína</option>
     </select>
-    <button onclick="enviarPro()">Enviar mis datos</button>
+    <input type="tel" id="telefonoPro" placeholder="Tu WhatsApp (10 dígitos)">
   </div>
 
-  <p class="urgencia">
-    ⚠️ Solo quedan <span id="cupos">3</span> cupos para dieta personalizada hoy
-  </p>
-  <p style="font-size:12px; color:#aaa; margin-top:10px;">
-    📲 Respuesta en menos de 10 minutos
-  </p>
+  <!-- BOTÓN PRINCIPAL -->
+  <button class="btn-whats-pro" onclick="enviarPro()">🟢 Pagar & recibir mi plan</button>
 </section>
 
+<!-- SCRIPTS -->
 <script>
-/* Navbar toggle */
 function toggleMenu(){
   const nav = document.getElementById("navLinks");
-  nav.style.display = (nav.style.display === "flex") ? "none" : "flex";
+  nav.classList.toggle("active");
 }
 
-/* Dieta gratis */
+// Generador dieta gratis
 function generarDieta(){
   let peso = parseFloat(document.getElementById("pesoDieta").value);
   let altura = parseFloat(document.getElementById("alturaDieta").value);
   let edad = parseFloat(document.getElementById("edadDieta").value);
   let objetivo = document.getElementById("objetivoDieta").value;
+
   if(!peso || !altura || !edad){
     document.getElementById("resultadoDieta").innerHTML = "Completa todos los datos bro 🔥";
     return;
   }
-  if(altura > 3) altura /= 100;
+
+  if(altura > 3){ altura = altura / 100; }
 
   let contenedor = document.getElementById("resultadoDieta");
   contenedor.innerHTML = `<div class="loading">🔥 Calculando tu dieta...</div>`;
-  setTimeout(()=>{
-    let proteina = peso*2;
-    let calorias = peso*30 + (objetivo==='definicion'?-400:300);
-    let grasa = (calorias*0.25)/9;
-    let carbos = (calorias - (proteina*4 + grasa*9))/4;
+
+  setTimeout(() => {
+    let proteina = peso * 2;
+    let calorias = peso * 30;
+    if(objetivo === "definicion"){ calorias -= 400; } else { calorias += 300; }
+
+    let grasa = (calorias * 0.25) / 9;
+    let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
 
     let desayuno, comida, cena;
-    if(objetivo==='definicion'){
-      desayuno="4 claras + 1 huevo + 30g avena";
-      comida="150g pollo + 80g arroz + verduras";
-      cena="150g pescado + ensalada";
-    }else{
-      desayuno="4 claras + 2 huevos + 60g avena";
-      comida="180g pollo + 120g arroz";
-      cena="150g carne + papa";
+    if(objetivo === "definicion"){
+      desayuno = "4 claras + 1 huevo + 30g avena";
+      comida = "150g pollo + 80g arroz + verduras";
+      cena = "150g pescado + ensalada";
+    } else {
+      desayuno = "4 claras + 2 huevos + 60g avena";
+      comida = "180g pollo + 120g arroz";
+      cena = "150g carne + papa";
     }
 
-    contenedor.innerHTML=`
+    contenedor.innerHTML = `
       <div class="dieta-card">
         <div class="card-header">
           <h3>🔥 Tu plan personalizado</h3>
@@ -152,23 +148,12 @@ function generarDieta(){
         <div class="card-meal"><h4>🍗 Comida</h4><ul><li>${comida}</li></ul></div>
         <div class="card-meal"><h4>🥩 Cena</h4><ul><li>${cena}</li></ul></div>
         <div class="card-macros">🥩 ${proteina.toFixed(0)}g | 🍚 ${carbos.toFixed(0)}g | 🥑 ${grasa.toFixed(0)}g</div>
-      </div>`;
-  },1500);
+      </div>
+    `;
+  }, 1500);
 }
 
-/* Contadores dinámicos */
-let contador=147;
-setInterval(()=>{ contador+=Math.floor(Math.random()*3); document.getElementById("contadorUsuarios").innerText=contador; },3000);
-let cupos=3;
-setInterval(()=>{ if(cupos>1){ cupos--; document.getElementById("cupos").innerText=cupos;} },10000);
-
-/* Abrir formulario PRO */
-document.getElementById("btnAbrirPro").addEventListener("click", ()=>{
-  document.getElementById("formPro").style.display="block";
-  document.getElementById("btnAbrirPro").style.display="none";
-});
-
-/* Enviar PRO con dos mensajes separados */
+// Función PRO
 function enviarPro(){
   const nombre = document.getElementById("nombrePro").value;
   const edad = document.getElementById("edadPro").value;
@@ -179,42 +164,43 @@ function enviarPro(){
   const dias = document.getElementById("diasPro").value;
   const objetivo = document.getElementById("objetivoPro").value;
   const proteina = document.getElementById("proteinaPro").value;
+  const telefono = document.getElementById("telefonoPro").value;
 
-  if(!nombre||!edad||!sexo||!peso||!altura||!nivel||!dias||!objetivo||!proteina){
+  if(!nombre || !edad || !sexo || !peso || !altura || !nivel || !dias || !objetivo || !proteina || !telefono){
     alert("Completa todos los campos bro 🔥");
     return;
   }
 
-  // Mensaje a ti
-  const mensajeTuyo = 
-`🔥 NUEVO CLIENTE PRO 🔥
+  // Mensaje para ti (llega a tu WhatsApp)
+  let mensajeParaMi = `🔥 NUEVO CLIENTE PRO 🔥
 Nombre: ${nombre}
 Edad: ${edad}
 Sexo: ${sexo}
 Peso: ${peso} kg
-Altura: ${altura} cm
+Altura: ${altura} m
 Nivel: ${nivel}
 Días entrenamiento: ${dias}
 Objetivo: ${objetivo}
-Toma proteína: ${proteina}`;
+Toma proteína: ${proteina}
+WhatsApp del cliente: ${telefono}`;
 
-  // Mensaje al cliente
-  const mensajeCliente = 
-`Hola ${nombre} 👋
-Gracias por tu interés en la Dieta PRO 💪
-Para activar tu plan, realiza tu pago al banco:
-Banco: AZTECA
+  let urlParaMi = `https://wa.me/527341771575?text=${encodeURIComponent(mensajeParaMi)}`;
+  window.open(urlParaMi, "_blank");
+
+  // Mensaje para cliente
+  let mensajeCliente = `Hola ${nombre} 👋
+Gracias por elegir tu Dieta PRO con *Charlie Fitness* 💪
+
+💵 Para activar tu plan realiza tu pago al número:
+Banco AZTECA
 Cuenta: 6774 0164 4103 34
 CLABE: 1275 5200 1644 1033 40
 
-En cuanto confirmemos tu pago, recibirás tu Dieta + Rutina en PDF 🔥`;
+Una vez realizado el depósito, envíame tu comprobante por este chat y recibirás tu Dieta PRO + Rutina personalizada en PDF 🔥
+`;
 
-  // Abrir dos URLs de WhatsApp
-  const urlTuyo = `https://wa.me/527341771575?text=${encodeURIComponent(mensajeTuyo)}`;
-  const urlCliente = `https://wa.me/527341771575?text=${encodeURIComponent(mensajeCliente)}`; // Si quieres otro número, cámbialo aquí
-
-  window.open(urlTuyo,"_blank");
-  setTimeout(()=>{ window.open(urlCliente,"_blank"); },500);
+  let urlCliente = `https://wa.me/52${telefono}?text=${encodeURIComponent(mensajeCliente)}`;
+  window.open(urlCliente, "_blank");
 }
 </script>
 
