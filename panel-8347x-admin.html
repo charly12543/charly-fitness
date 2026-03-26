@@ -237,24 +237,42 @@ function mostrarDieta(dieta){
 
 /* ===================== DESCARGAR PDF ===================== */
 async function descargarPDF(tipo){
-  const { jsPDF }=window.jspdf;
-  const elemento=document.getElementById("resultadoPRO");
+  const { jsPDF } = window.jspdf;
+  const elemento = document.getElementById("resultadoPRO");
+
   if(!elemento.innerText.trim()){
     alert("Primero genera algo bro 🔥");
     return;
   }
-  let canvas=await html2canvas(elemento,{scale:2});
-  let img=canvas.toDataURL("image/jpeg",1.0);
-  let pdf=new jsPDF("p","mm","a4");
-  let width=210;
-  let height=canvas.height*width/canvas.width;
-  let y=10;
-  while(height>0){
-    pdf.addImage(img,"JPEG",0,y,width,height);
-    height-=280;
-    if(height>0){pdf.addPage();y=0;}
+
+  let canvas = await html2canvas(elemento, { scale: 2 });
+  let imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+  let pdf = new jsPDF("p", "mm", "a4");
+
+  let imgWidth = 210;
+  let pageHeight = 297;
+
+  let imgHeight = (canvas.height * imgWidth) / canvas.width;
+  let heightLeft = imgHeight;
+
+  let position = 0;
+
+  // Primera página
+  pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+  heightLeft -= pageHeight;
+
+  // Páginas siguientes (CLAVE)
+  while (heightLeft > 0) {
+    position = heightLeft - imgHeight;
+
+    pdf.addPage();
+    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+
+    heightLeft -= pageHeight;
   }
-  pdf.save(tipo+".pdf");
+
+  pdf.save(tipo + ".pdf");
 }
 
 /* ===================== WHATSAPP ===================== */
