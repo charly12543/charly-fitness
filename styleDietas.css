@@ -6,6 +6,9 @@ html, body{ overflow-x:hidden; }
   outline: 2px dashed #d4af37;
   padding: 10px;
 }
+.card-meal {
+  page-break-inside: avoid;
+}
 
 /* VARIABLES */
 :root{
