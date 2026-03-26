@@ -92,39 +92,90 @@ function usarPro(){
 }
 
 /* ===================== DIETA PRO ===================== */
+/* ===================== DIETA PRO HUMANIZADA ===================== */
 function generarDietaPRO(datos){
   let {peso, altura, edad, objetivo, sexo, nivel} = datos;
+
   if(altura > 3) altura = altura / 100;
 
-  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo==="mujer"? -161:5);
-  let factorActividad = 1.55;
+  // 🔥 Calorías
+  let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo === "mujer"? -161: 5);
+  let factorActividad = 1.55; // base
   let calorias = Math.round(bmr * factorActividad);
 
-  if(objetivo==="definicion") calorias -= 400;
-  if(objetivo==="volumen") calorias += 300;
+  if(objetivo === "definicion") calorias -= 400;
+  if(objetivo === "volumen") calorias += 300;
 
+  // 🔥 Proteínas
   const proteBase = { novato:1.6, intermedio:1.8, avanzado:2, competidor:2.2 };
   let proteina = Math.round(peso * proteBase[nivel]);
 
-  const proteinas = ["5 claras + 1 huevo","150g pollo","180g pescado","150g carne magra","1 scoop whey"];
-  const carbos = ["1 taza arroz","1/2 taza avena","2 tortillas de maíz","1 pan árabe","1/2 taza quinoa"];
-  const grasas = ["1 cucharadita aceite de coco","1 cucharadita aceite de oliva","1/4 aguacate","10 almendras"];
-  const verduras = ["1 taza verduras al vapor","1 taza ensalada","Brócoli","Espinaca","Calabaza"];
-  const frutasDef = ["Toronja","Manzana verde","Papaya","Fresas","Kiwi"];
-  const frutasVol = ["Naranja","Manzana roja","Plátano","Mango","Pera"];
+  // 🔥 Listas de alimentos más humanas
+  const proteinas = [
+    "4 claras + 1 huevo entero con espinaca",
+    "150g pollo",
+    "180g pescado",
+    "150g carne magra",
+    "1 scoop proteína whey"
+  ];
+  const carbos = [
+    "½ taza arroz",
+    "½ taza avena",
+    "2 tortillas de maíz",
+    "1 pan árabe",
+    "1 camote mediano",
+    "1 plátano macho",
+    "3 hot cakes (volumen)"
+  ];
+  const grasas = [
+    "1 cucharadita aceite de coco",
+    "1 cucharadita aceite de oliva",
+    "¼ aguacate",
+    "10 almendras",
+    "10 nueces",
+    "1 cucharada mantequilla de maní",
+    "2 cucharadas amaranto"
+  ];
+  const verduras = [
+    "1 plato lechuga",
+    "1 taza calabaza cocida",
+    "1 taza brócoli cocido",
+    "1 taza espinaca salteada"
+  ];
+  const frutasDef = ["Papaya","Melón","Toronja","Manzana verde"];
+  const frutasVol = ["Plátano","Manzana roja","Fresas","Mango"];
 
   function random(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-  let numComidas = (objetivo==="volumen")?6:5;
+
+  // 🔥 Número de comidas según objetivo
+  let numComidas;
+  if(objetivo==="definicion"){
+    numComidas = 4; // + 1 post-entreno proteína
+  } else {
+    numComidas = 6; // Volumen avanzado
+  }
 
   let comidas = [];
-  for(let i=0;i<numComidas;i++){
+
+  for(let i=0; i<numComidas; i++){
     let comida = {};
-    if(i===numComidas-1){
+
+    // Última comida post-entreno
+    if(objetivo==="volumen" && i === numComidas-1){
       comida = {
         nombre:"Post-entreno",
         proteina:"1 scoop proteína whey",
-        carbos: objetivo==="volumen"? random(carbos) : "1 plátano",
-        grasa: objetivo==="volumen"? random(grasas) : "5 almendras",
+        carbos:"1 pan árabe o 1 plátano macho",
+        grasa:"1 cucharadita mantequilla de maní",
+        verdura:"",
+        fruta:""
+      };
+    } else if(objetivo==="definicion" && i === numComidas-1){
+      comida = {
+        nombre:"Post-entreno",
+        proteina:"1 scoop proteína whey",
+        carbos:"½ taza arroz",
+        grasa:"5 almendras",
         verdura:"",
         fruta:""
       };
@@ -135,9 +186,10 @@ function generarDietaPRO(datos){
         carbos: random(carbos),
         grasa: random(grasas),
         verdura: random(verduras),
-        fruta: objetivo==="definicion"? random(frutasDef):random(frutasVol)
+        fruta: objetivo==="definicion"? random(frutasDef) : random(frutasVol)
       };
     }
+
     comidas.push(comida);
   }
 
