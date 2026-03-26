@@ -160,15 +160,15 @@ function enviarFormularioPro(){
   }
 
   let edad = document.getElementById("edadClientePro").value;
-let peso = document.getElementById("pesoClientePro").value;
-let altura = document.getElementById("alturaClientePro").value;
-let sexo = document.getElementById("sexoClientePro").value;
-let nivel = document.getElementById("nivelClientePro").value;
-let dias = document.getElementById("diasClientePro").value;
-let objetivo = document.getElementById("objetivoClientePro").value;
-let prote = document.getElementById("proteClientePro").value;
+  let peso = document.getElementById("pesoClientePro").value;
+  let altura = document.getElementById("alturaClientePro").value;
+  let sexo = document.getElementById("sexoClientePro").value;
+  let nivel = document.getElementById("nivelClientePro").value;
+  let dias = document.getElementById("diasClientePro").value;
+  let objetivo = document.getElementById("objetivoClientePro").value;
+  let prote = document.getElementById("proteClientePro").value;
 
-let mensajeAdmin = `🔥 NUEVO CLIENTE PRO 🔥
+  let mensaje = `🔥 NUEVO CLIENTE PRO 🔥
 
 👤 Nombre: ${nombre}
 📱 WhatsApp: ${telefono}
@@ -186,39 +186,32 @@ let mensajeAdmin = `🔥 NUEVO CLIENTE PRO 🔥
 🎯 OBJETIVO:
 🔥 ${objetivo}
 
-🥤 Suplementación:
-Proteína: ${prote}
-`;
+🥤 Proteína:
+${prote}
 
-  window.open(`https://wa.me/527341771575?text=${encodeURIComponent(mensajeAdmin)}`, "_blank");
+----------------------------------
 
-  let mensajeCliente = `Hola ${nombre} 👋
+📩 MENSAJE PARA ENVIAR AL CLIENTE:
+
+Hola ${nombre} 👋
 
 🔥 Gracias por elegir *Charly Fitness*
 
 💳 Para activar tu plan realiza tu pago:
 
-Banco: AZTECA
-Cuenta: 6774 0164 4103 34
-CLABE: 1275 5200 1644 1033 40
+Banco: AZTECA  
+Cuenta: 6774 0164 4103 34  
+CLABE: 1275 5200 1644 1033 40  
 
 📩 Envíame tu comprobante y recibirás:
-✔ Dieta personalizada en PDF
-✔ Rutina de entrenamiento
+✔ Dieta personalizada en PDF  
+✔ Rutina de entrenamiento  
 
-🔥 Vamos con todo 💪`;
+🔥 Vamos con todo 💪
+`;
 
-  window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensajeCliente)}`, "_blank");
+  window.open(`https://wa.me/527341771575?text=${encodeURIComponent(mensaje)}`, "_blank");
 }
-
-/* CUPOS */
-let cupos = 3;
-setInterval(()=>{
-  if(cupos>1){
-    cupos--;
-    document.getElementById("cupos").innerText = cupos;
-  }
-},10000);
 
 </script>
 
