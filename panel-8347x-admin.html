@@ -6,7 +6,6 @@
 <title>Dietas y Rutinas PRO</title>
 <link rel="stylesheet" href="styleDietas.css">
 </head>
-
 <body>
 
 <section class="hero">
@@ -22,21 +21,18 @@
   <input type="number" step="0.01" id="altura" placeholder="Altura (1.80 o 180)">
   <input type="number" id="edad" placeholder="Edad">
 
-  <!-- SEXO -->
   <label>🧍 Sexo</label>
   <select id="sexo">
     <option value="hombre">Hombre</option>
     <option value="mujer">Mujer</option>
   </select>
 
-  <!-- OBJETIVO -->
   <label>🎯 Objetivo</label>  
   <select id="objetivo">
     <option value="definicion">Definición</option>
     <option value="volumen">Volumen</option>
   </select>
 
-  <!-- TIPO DE DIETA -->
   <label>🔥 Nivel del cliente</label>
   <select id="nivel">
     <option value="novato">Novato</option>
@@ -45,13 +41,11 @@
     <option value="competidor">Competidor</option>
   </select>
 
-  <!-- DÍAS ENTRENAMIENTO -->
   <label>📅 Días por semana</label>
   <input type="number" id="diasGym" min="2" max="7" placeholder="Ej: 3">
 
-  <!-- PROTEÍNA EN POLVO -->
-  <label>💊 ¿Toma proteína en polvo?</label>
-  <select id="usarWhey">
+  <label>💊 Toma proteína en polvo</label>
+  <select id="tomaWhey">
     <option value="true">Sí</option>
     <option value="false">No</option>
   </select>
@@ -75,6 +69,7 @@
 </div>
 
 <script>
+/* ===================== USAR PRO ===================== */
 function usarPro(){
   let datos = {
     nombre: document.getElementById("nombreCliente").value,
@@ -84,7 +79,7 @@ function usarPro(){
     sexo: document.getElementById("sexo").value,
     objetivo: document.getElementById("objetivo").value,
     nivel: document.getElementById("nivel").value,
-    usarWhey: document.getElementById("usarWhey").value === "true"
+    tomaWhey: document.getElementById("tomaWhey").value==="true"
   };
 
   if(!datos.peso || !datos.altura || !datos.edad){
@@ -96,52 +91,27 @@ function usarPro(){
   mostrarDieta(dieta);
 }
 
+/* ===================== DIETA PRO ===================== */
 function generarDietaPRO(datos){
   let {nombre, peso, altura, edad, objetivo, sexo, nivel, tomaWhey} = datos;
   if(altura>3) altura = altura/100;
 
+  // Calorías
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo==="mujer"?-161:5);
   let factorActividad = 1.55;
   let calorias = Math.round(bmr*factorActividad);
   if(objetivo==="definicion") calorias-=400;
   if(objetivo==="volumen") calorias+=300;
 
+  // Proteínas base según nivel
   const proteBase = {novato:1.6, intermedio:1.8, avanzado:2, competidor:2.2};
   let proteina = Math.round(peso*proteBase[nivel]);
 
-  const proteinas = [
-    "6 claras + 2 huevos enteros",
-    "150g pollo magro",
-    "150g pescado",
-    "150g carne magra"
-  ];
-  const carbos = [
-    "1/2 taza arroz cocido",
-    "1 1/2 taza arroz hervido",
-    "1 camote mediano",
-    "4 hot cakes con miel de agave",
-    "1 taza pasta cocida",
-    "1 taza puré de papa",
-    "1 taza avena cocida",
-    "2 galletas de arroz"
-  ];
-  const grasas = [
-    "½ aguacate",
-    "1 cucharadita aceite de oliva",
-    "1 cucharadita aceite de coco",
-    "1 cucharada mantequilla de maní",
-    "10 nueces",
-    "1 cucharada amaranto"
-  ];
-  const verduras = [
-    "1 taza calabaza cocida",
-    "1 taza brócoli cocido",
-    "1 plato lechuga + 1 jitomate",
-    "1 plato lechuga + 1 taza pepino",
-    "1 taza espinaca cocida",
-    "1 taza nopal cocido",
-    "½ taza zanahoria rallada"
-  ];
+  // Alimentos
+  const proteinas = ["6 claras + 2 huevos enteros","150g pollo magro","150g pescado","150g carne magra"];
+  const carbos = ["1/2 taza arroz cocido","1 1/2 taza arroz hervido","1 camote mediano","4 hot cakes con miel de agave","1 taza pasta cocida","1 taza puré de papa","1 taza avena cocida","2 galletas de arroz"];
+  const grasas = ["½ aguacate","1 cucharadita aceite de oliva","1 cucharadita aceite de coco","1 cucharada mantequilla de maní","10 nueces","1 cucharada amaranto"];
+  const verduras = ["1 taza calabaza cocida","1 taza brócoli cocido","1 plato lechuga + 1 jitomate","1 plato lechuga + 1 taza pepino","1 taza espinaca cocida","1 taza nopal cocido","½ taza zanahoria rallada"];
   const frutasDef = ["1 manzana mediana","1 taza papaya","1 taza melón","½ toronja"];
   const frutasVol = ["1 plátano macho","1 taza fresas","1 manzana roja","1 mango mediano"];
   const frutasWhey = ["½ taza papaya","1 taza papaya","1 taza melón","1 taza puré de plátano macho","1 taza fresas"];
@@ -150,39 +120,39 @@ function generarDietaPRO(datos){
 
   let numComidas = (objetivo==="volumen")?6:5;
   let comidas = [];
-  let contadorAguacate = 0;
-  let hotcakesUsados = false;
-  let huevoUsado = false; // ✅ nueva regla huevos solo 1 vez
+  let contadorAguacate=0;
+  let hotcakesUsados=false;
+  let huevoUsado=false;
 
   for(let i=0;i<numComidas;i++){
     let comida={};
 
-    // ==================== COMIDA WHEY ====================
+    // COMIDA WHEY (solo si toma proteína y es comida 2 o 4)
     if(tomaWhey && (i===1 || i===3)){
       let frutaW = random(frutasWhey);
       comida = {
         nombre:`Comida ${i+1} – Whey`,
         proteina:"1 scoop proteína whey",
-        carbos: random(["1 taza avena cocida", "2 galletas de arroz", (!hotcakesUsados?"4 hot cakes con miel de agave":"1 taza avena cocida")]),
+        carbos: random(["1 taza avena cocida","2 galletas de arroz",(!hotcakesUsados?"4 hot cakes con miel de agave":"1 taza avena cocida")]),
         grasa:"1 cucharada mantequilla de maní",
         verdura: random(["1 taza calabaza cocida","1 plato lechuga + 1 jitomate","½ taza zanahoria rallada","1 plato lechuga + 1 taza pepino"]),
         fruta: frutaW
       };
-      if(comida.carbos.includes("hot cakes")) hotcakesUsados = true;
+      if(comida.carbos.includes("hot cakes")) hotcakesUsados=true;
       comidas.push(comida);
       continue;
     }
 
-    // ==================== PROTEÍNA ====================
+    // PROTEÍNA (Huevos solo en comida 1)
     let prote="";
     if(i===0 && !huevoUsado){
-      prote="6 claras + 2 huevos enteros"; // regla huevos solo comida 1
+      prote="6 claras + 2 huevos enteros";
       huevoUsado=true;
     } else {
-      prote = random(proteinas.filter(p=>!p.includes("huevos")));
+      prote=random(proteinas.filter(p=>!p.includes("huevos")));
     }
 
-    // ==================== GRASA ====================
+    // GRASA
     let grasa="";
     if(contadorAguacate<2 && Math.random()<0.5 && !prote.includes("whey")){
       grasa="½ aguacate";
@@ -191,29 +161,22 @@ function generarDietaPRO(datos){
       grasa=random(grasas.filter(g=>!g.includes("aguacate") && (!g.includes("mantequilla") || prote.includes("whey"))));
     }
 
-    // ==================== CARBO ====================
-    let carbo = random(carbos);
-    if(carbo.includes("hot cakes") && hotcakesUsados) carbo = "1 taza avena cocida";
-    if(carbo.includes("hot cakes")) hotcakesUsados = true;
-    if(carbo.includes("hot cakes") && (prote.includes("pescado") || prote.includes("carne magra"))) carbo = "1 taza avena cocida"; // regla hot cakes no con res/pescado
+    // CARBO (solo 1 por comida, hot cakes controlados)
+    let carbo=random(carbos);
+    if(carbo.includes("hot cakes") && hotcakesUsados) carbo="1 taza avena cocida";
+    if(carbo.includes("hot cakes")) hotcakesUsados=true;
+    if(carbo.includes("hot cakes") && (prote.includes("pescado")||prote.includes("carne magra"))) carbo="1 taza avena cocida";
 
-    // ==================== VERDURA ====================
-    let verd = random(verduras.filter(v=>!(v.includes("espinaca") && prote.includes("whey"))));
+    // VERDURA
+    let verd=random(verduras.filter(v=>!(v.includes("espinaca") && prote.includes("whey"))));
 
-    // ==================== FRUTA ====================
+    // FRUTA
     let fruta="";
     if(!["1/2 taza arroz cocido","1 taza pasta cocida","1 1/2 taza arroz hervido","1 camote mediano","4 hot cakes con miel de agave","1 taza puré de papa"].includes(carbo)){
-      fruta = (objetivo==="definicion")?random(frutasDef):random(frutasVol);
+      fruta=(objetivo==="definicion")?random(frutasDef):random(frutasVol);
     }
 
-    comida = {
-      nombre:`Comida ${i+1}`,
-      proteina:prote,
-      carbos:carbo,
-      grasa:grasa,
-      verdura:verd,
-      fruta:fruta
-    };
+    comida={nombre:`Comida ${i+1}`,proteina:prote,carbos:carbo,grasa:grasa,verdura:verd,fruta:fruta};
     comidas.push(comida);
   }
 
@@ -227,25 +190,17 @@ function generarDietaPRO(datos){
   };
 }
 
-  return {
-    titulo:`🥗 Dieta de ${nombre} – ${objetivo.charAt(0).toUpperCase()+objetivo.slice(1)} (${numComidas} días / ${nivel})`, // regla 12
-    calorias:`🔥 Calorías: ${calorias} kcal`,
-    proteina:`💪 Proteína: ${proteina} g`,
-    carbos:`🍚 Carbohidratos: ${Math.round(calorias/4)} g aprox.`,
-    grasa:`🥑 Grasas: ${Math.round(calorias*0.25/9)} g aprox.`,
-    comidas
-  };
-}
+/* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
-  let nombre = document.getElementById("nombreCliente").value;
-  let fecha = new Date().toLocaleDateString();
-  let html = `<div class="dieta-card">
+  let nombre=document.getElementById("nombreCliente").value;
+  let fecha=new Date().toLocaleDateString();
+  let html=`<div class="dieta-card">
   <h2>${nombre||"Cliente"}</h2>
   <p>${fecha}</p>
-  ${dieta.calorias}<br>
-  ${dieta.proteina}<br>
-  ${dieta.carbos}<br>
-  ${dieta.grasa}`;
+  🔥 ${dieta.calorias} kcal<br>
+  🥩 ${dieta.proteina}<br>
+  🍚 ${dieta.carbos}<br>
+  🥑 ${dieta.grasa}`;
 
   dieta.comidas.forEach(c=>{
     html+=`<div class="card-meal">
@@ -275,42 +230,44 @@ function mostrarDieta(dieta){
   </div>
   </div>`;
 
-  document.getElementById("resultadoPRO").innerHTML = html;
+  document.getElementById("resultadoPRO").innerHTML=html;
 }
 
+/* ===================== DESCARGAR PDF ===================== */
 async function descargarPDF(tipo){
-  const { jsPDF } = window.jspdf;
-  const elemento = document.getElementById("resultadoPRO");
+  const { jsPDF }=window.jspdf;
+  const elemento=document.getElementById("resultadoPRO");
   if(!elemento.innerText.trim()){
     alert("Primero genera algo bro 🔥");
     return;
   }
-  let canvas = await html2canvas(elemento,{scale:2});
-  let img = canvas.toDataURL("image/jpeg",1.0);
-  let pdf = new jsPDF("p","mm","a4");
-  let width = 210;
-  let height = canvas.height * width / canvas.width;
+  let canvas=await html2canvas(elemento,{scale:2});
+  let img=canvas.toDataURL("image/jpeg",1.0);
+  let pdf=new jsPDF("p","mm","a4");
+  let width=210;
+  let height=canvas.height*width/canvas.width;
   let y=10;
   while(height>0){
     pdf.addImage(img,"JPEG",0,y,width,height);
     height-=280;
-    if(height>0){ pdf.addPage(); y=0; }
+    if(height>0){pdf.addPage();y=0;}
   }
   pdf.save(tipo+".pdf");
 }
 
+/* ===================== WHATSAPP ===================== */
 function enviarWhats(){
-  let nombre = document.getElementById("nombreCliente").value;
-  let numero = prompt("Número cliente","52");
-  if(!numero) return;
-  let msg = `Hola ${nombre} 🔥 aquí tienes tu plan`;
+  let nombre=document.getElementById("nombreCliente").value;
+  let numero=prompt("Número cliente","52");
+  if(!numero)return;
+  let msg=`Hola ${nombre} 🔥 aquí tienes tu plan`;
   window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`);
 }
 
+/* ===================== RUTINA ===================== */
 function generarRutina(){
-  let sexo = document.getElementById("sexo").value;
-  let dias = parseInt(document.getElementById("diasGym").value) || 3;
-
+  let sexo=document.getElementById("sexo").value;
+  let dias=parseInt(document.getElementById("diasGym").value)||3;
   function getSplit(){
     if(sexo==="mujer"){
       if(dias<=3) return ["Pierna + glúteo","Tren superior","Pierna"];
@@ -322,8 +279,7 @@ function generarRutina(){
       return ["Push","Pull","Pierna","Hombro","Pierna"];
     }
   }
-
-  const ejercicios = {
+  const ejercicios={
     "Pecho":["Press banca 4x10","Aperturas 3x12","Fondos 3x12"],
     "Espalda":["Remo barra 4x10","Jalón polea 3x12","Peso muerto 3x8"],
     "Pierna":["Sentadilla 4x10","Prensa 3x12","Femoral 3x12","Pantorrilla 4x15"],
@@ -333,42 +289,35 @@ function generarRutina(){
     "Glúteo":["Hip thrust 4x12","Patada glúteo 3x15","Puente glúteo 3x15"],
     "Abdomen":["Plancha 3x60s","Crunch 3x15","Elevación piernas 3x12"]
   };
-
-  const splitMap = {
+  const splitMap={
     "Push":["Pecho","Hombro","Tríceps"],
     "Pull":["Espalda","Bíceps"],
     "Hombro + brazos":["Hombro","Bíceps","Tríceps"],
     "Tren superior":["Pecho","Espalda","Hombro","Bíceps","Tríceps"],
     "Glúteo + abdomen":["Glúteo","Abdomen"]
   };
-
-  let split = getSplit();
-
-  let html = `<div class="dieta-card">
+  let split=getSplit();
+  let html=`<div class="dieta-card">
     <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
       <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
       <p>Rutina PRO Personalizada</p>
     </div>`;
-
   split.forEach((dia,i)=>{
-    html += `<div class="card-meal">
+    html+=`<div class="card-meal">
       <h4>🏋️ Día ${i+1} - ${dia}</h4>`;
     let grupos = splitMap[dia] || [dia];
     grupos.forEach(g=>{
       let lista = ejercicios[g] || ["Ejercicio base 3x12"];
-      html += `<strong>${g}</strong><ul>`;
-      lista.forEach(e=>{
-        html += `<li>${e}</li>`;
-      });
-      html += `</ul>`;
+      html+=`<strong>${g}</strong><ul>`;
+      lista.forEach(e=>{html+=`<li>${e}</li>`;});
+      html+=`</ul>`;
     });
-    html += `<p>🔥 Cardio: ${sexo==="mujer"? "20-30 min":"20-35 min"}</p>
-             <p>😴 Descanso: 60-90 seg</p>
+    html+=`<p>🔥 Cardio: ${sexo==="mujer"? "20-30 min":"20-35 min"}</p>
+           <p>😴 Descanso: 60-90 seg</p>
     </div>`;
   });
-
-  html += `</div>`;
-  document.getElementById("resultadoPRO").innerHTML = html;
+  html+=`</div>`;
+  document.getElementById("resultadoPRO").innerHTML=html;
 }
 </script>
 
