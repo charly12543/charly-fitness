@@ -2,6 +2,11 @@
 *{ margin:0; padding:0; box-sizing:border-box; }
 html, body{ overflow-x:hidden; }
 
+[contenteditable="true"] {
+  outline: 2px dashed #d4af37;
+  padding: 10px;
+}
+
 /* VARIABLES */
 :root{
   --bg-dark:#0b0b0b;
