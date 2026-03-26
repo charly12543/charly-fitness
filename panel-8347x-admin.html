@@ -245,42 +245,59 @@ async function descargarPDF(tipo){
     return;
   }
 
-  // 🔥 DESACTIVA EDICIÓN (IMPORTANTE)
+  // 🔒 quitar edición temporalmente
   let editable = elemento.querySelector(".dieta-card");
   if(editable) editable.setAttribute("contenteditable", "false");
 
-  // 📸 CAPTURA
-  let canvas = await html2canvas(elemento, { scale: 2 });
-  let imgData = canvas.toDataURL("image/jpeg", 1.0);
+  const canvas = await html2canvas(elemento, { scale: 2 });
 
-  let pdf = new jsPDF("p", "mm", "a4");
+  const pdf = new jsPDF("p", "mm", "a4");
 
-  let imgWidth = 210;
-  let pageHeight = 297;
+  const pageWidth = 210;
+  const pageHeight = 297;
 
-  let imgHeight = (canvas.height * imgWidth) / canvas.width;
-  let heightLeft = imgHeight;
+  const imgWidth = pageWidth;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  // 🔥 ALTURA DE CORTE EN PIXELES
+  const pageHeightPx = (canvas.width * pageHeight) / pageWidth;
 
   let position = 0;
+  let pageCanvas = document.createElement("canvas");
+  let pageCtx = pageCanvas.getContext("2d");
 
-  // Primera página
-  pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-  heightLeft -= pageHeight;
+  pageCanvas.width = canvas.width;
+  pageCanvas.height = pageHeightPx;
 
-  // Páginas extra
-  while (heightLeft > 0) {
-    position = heightLeft - imgHeight;
+  let page = 0;
 
-    pdf.addPage();
-    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+  while(position < canvas.height){
 
-    heightLeft -= pageHeight;
+    // limpiar canvas temporal
+    pageCtx.clearRect(0, 0, pageCanvas.width, pageCanvas.height);
+
+    // 🔥 recortar parte del canvas original
+    pageCtx.drawImage(
+      canvas,
+      0, position,
+      canvas.width, pageHeightPx,
+      0, 0,
+      canvas.width, pageHeightPx
+    );
+
+    let imgData = pageCanvas.toDataURL("image/jpeg", 1.0);
+
+    if(page > 0) pdf.addPage();
+
+    pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, pageHeight);
+
+    position += pageHeightPx;
+    page++;
   }
 
-  // 💾 GUARDAR
   pdf.save(tipo + ".pdf");
 
-  // 🔥 VOLVER A ACTIVAR EDICIÓN
+  // 🔓 reactivar edición
   if(editable) editable.setAttribute("contenteditable", "true");
 }
 
