@@ -12,24 +12,17 @@
 <!-- NAVBAR -->  
 <nav class="navbar">
   <div class="nav-container">
-
     <a href="index.html" class="logo">
       <img src="imagenes/logoGitHub.png" alt="Charly Fitness">
     </a>
 
-    <!-- BOTÓN HAMBURGUESA -->
-    <div class="menu-toggle" onclick="toggleMenu()">
-      ☰
-    </div>
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-    <!-- LINKS -->
     <ul class="nav-links" id="navLinks">
-      <li><a href="index.html" class="back-btn">⬅ Volver</a></li>
       <li><a href="index.html">Inicio</a></li>
       <li><a href="#dieta">Dieta</a></li>
       <li><a href="#pro">PRO</a></li>
     </ul>
-
   </div>
 </nav>
 
@@ -53,77 +46,86 @@
     </select>
 
     <button onclick="generarDieta()">Generar dieta</button>
-
     <div id="resultadoDieta" class="dieta-card"></div>
   </div>
 </section>
 
-<!-- DIETA PRO -->
+<!-- PRO -->
 <section class="lead-box" id="pro">
- <h2>🔥 Dieta PRO – Plan Profesional (Con costo 💵)</h2>
-<p>
-Recibe tu dieta personalizada + rutina de entrenamiento en PDF completamente adaptada a tu objetivo.<br>
-✔ Plan profesional<br>
-✔ Seguimiento real<br>
-✔ Resultados garantizados
-</p>
+  <h2>🔥 Dieta PRO – Plan Profesional (Con costo 💵)</h2>
 
- <!-- BOTÓN PRO -->
-<button class="btn-whats-pro" onclick="mostrarFormulario()">🟢 Pagar & recibir mi plan</button>
+  <p>
+    Recibe tu <strong>dieta personalizada + rutina en PDF</strong> totalmente adaptada a tu objetivo.<br><br>
+    ✔ Plan profesional<br>
+    ✔ Rutina incluida<br>
+    ✔ Seguimiento real<br>
+    ✔ Resultados comprobados<br><br>
+    💰 <strong>Inversión: $299 MXN</strong>
+  </p>
 
-<!-- FORMULARIO OCULTO -->
-<div id="formularioPro" style="display:none; margin-top:20px;">
-  <input type="text" id="nombreClientePro" placeholder="Nombre completo">
-  <input type="number" id="edadClientePro" placeholder="Edad">
-  <input type="number" id="pesoClientePro" placeholder="Peso (kg)">
-  <input type="number" id="alturaClientePro" placeholder="Altura (cm)">
-  <input type="number" id="telefonoClientePro" placeholder="Tu WhatsApp (10 dígitos)">
+  <button class="btn-whats-pro" onclick="mostrarFormulario()">
+    🟢 Pagar & recibir mi plan
+  </button>
 
-  <select id="sexoClientePro">
-    <option value="">Sexo</option>
-    <option value="hombre">Hombre</option>
-    <option value="mujer">Mujer</option>
-  </select>
+  <!-- FORMULARIO -->
+  <div id="formularioPro" style="display:none; margin-top:20px;">
+    <input type="text" id="nombreClientePro" placeholder="Nombre completo">
+    <input type="number" id="edadClientePro" placeholder="Edad">
+    <input type="number" id="pesoClientePro" placeholder="Peso (kg)">
+    <input type="number" id="alturaClientePro" placeholder="Altura (cm)">
 
-  <select id="nivelClientePro">
-    <option value="">Nivel</option>
-    <option value="novato">Novato</option>
-    <option value="intermedio">Intermedio</option>
-    <option value="avanzado">Avanzado</option>
-    <option value="competidor">Competidor</option>
-  </select>
+    <select id="sexoClientePro">
+      <option value="">Sexo</option>
+      <option value="hombre">Hombre</option>
+      <option value="mujer">Mujer</option>
+    </select>
 
-  <input type="number" id="diasClientePro" placeholder="Días que entrena">
+    <select id="nivelClientePro">
+      <option value="">Nivel</option>
+      <option value="novato">Novato</option>
+      <option value="intermedio">Intermedio</option>
+      <option value="avanzado">Avanzado</option>
+      <option value="competidor">Competidor</option>
+    </select>
 
-  <select id="objetivoClientePro">
-    <option value="">Objetivo</option>
-    <option value="definicion">Definición</option>
-    <option value="volumen">Volumen</option>
-  </select>
+    <input type="number" id="diasClientePro" placeholder="Días que entrena">
 
-  <select id="proteClientePro">
-    <option value="">¿Tomas proteína en polvo?</option>
-    <option value="si">Sí</option>
-    <option value="no">No</option>
-  </select>
+    <select id="objetivoClientePro">
+      <option value="">Objetivo</option>
+      <option value="definicion">Definición</option>
+      <option value="volumen">Volumen</option>
+    </select>
 
-  <button onclick="enviarFormularioPro()">📲 Enviar datos</button>
-</div>
+    <select id="proteClientePro">
+      <option value="">¿Tomas proteína en polvo?</option>
+      <option value="si">Sí</option>
+      <option value="no">No</option>
+    </select>
+
+    <input type="text" id="telefonoClientePro" placeholder="WhatsApp (Ej: 521234567890)">
+
+    <button onclick="enviarFormularioPro()">📲 Enviar datos</button>
+  </div>
 
   <p class="urgencia">
     ⚠️ Solo quedan <span id="cupos">3</span> cupos hoy
   </p>
 </section>
 
-<!-- SCRIPTS -->
 <script>
-// NAVBAR MOBILE
+
+/* NAVBAR */
 function toggleMenu(){
-  const nav = document.getElementById("navLinks");
-  nav.classList.toggle("active");
+  document.getElementById("navLinks").classList.toggle("active");
 }
 
-// DIETA GRATIS
+/* FORMULARIO SHOW */
+function mostrarFormulario(){
+  let form = document.getElementById("formularioPro");
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+/* DIETA GRATIS */
 function generarDieta(){
   let peso = parseFloat(document.getElementById("pesoDieta").value);
   let altura = parseFloat(document.getElementById("alturaDieta").value);
@@ -135,108 +137,63 @@ function generarDieta(){
     return;
   }
 
-  if(altura > 3){ altura = altura / 100; }
+  let calorias = peso * 30 + (objetivo==="volumen"?300:-400);
 
-  let contenedor = document.getElementById("resultadoDieta");
-  contenedor.innerHTML = `<div class="loading">🔥 Calculando tu dieta...</div>`;
-
-  setTimeout(() => {
-    let proteina = peso * 2;
-    let calorias = peso * 30;
-    if(objetivo === "definicion"){ calorias -= 400; } else { calorias += 300; }
-
-    let grasa = (calorias * 0.25) / 9;
-    let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
-
-    let desayuno, comida, cena;
-    if(objetivo === "definicion"){
-      desayuno = "4 claras + 1 huevo + 30g avena";
-      comida = "150g pollo + 80g arroz + verduras";
-      cena = "150g pescado + ensalada";
-    } else {
-      desayuno = "4 claras + 2 huevos + 60g avena";
-      comida = "180g pollo + 120g arroz";
-      cena = "150g carne + papa";
-    }
-
-    contenedor.innerHTML = `
-      <div class="dieta-card">
-        <h3>🔥 Tu plan personalizado</h3>
-        <p>${calorias.toFixed(0)} kcal</p>
-        <div class="card-meal"><h4>🥣 Desayuno</h4><ul><li>${desayuno}</li></ul></div>
-        <div class="card-meal"><h4>🍗 Comida</h4><ul><li>${comida}</li></ul></div>
-        <div class="card-meal"><h4>🥩 Cena</h4><ul><li>${cena}</li></ul></div>
-        <div class="card-macros">🥩 ${proteina.toFixed(0)}g | 🍚 ${carbos.toFixed(0)}g | 🥑 ${grasa.toFixed(0)}g</div>
-      </div>
-    `;
-  }, 1200);
+  document.getElementById("resultadoDieta").innerHTML = `
+    <div class="dieta-card">
+      <h3>🔥 Tu plan base</h3>
+      <p>${calorias} kcal / día</p>
+    </div>
+  `;
 }
 
-// MOSTRAR FORM
-function mostrarFormulario(){
-  let form = document.getElementById("formularioPro");
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
-
-// ENVIAR FORM PRO
+/* FORMULARIO PRO */
 function enviarFormularioPro(){
 
   let nombre = document.getElementById("nombreClientePro").value;
-  let edad = document.getElementById("edadClientePro").value;
-  let peso = document.getElementById("pesoClientePro").value;
-  let altura = document.getElementById("alturaClientePro").value;
-  let sexo = document.getElementById("sexoClientePro").value;
-  let nivel = document.getElementById("nivelClientePro").value;
-  let dias = document.getElementById("diasClientePro").value;
-  let objetivo = document.getElementById("objetivoClientePro").value;
-  let prote = document.getElementById("proteClientePro").value;
+  let telefono = document.getElementById("telefonoClientePro").value;
 
-  if(!nombre || !edad || !peso || !altura || !sexo || !nivel || !dias || !objetivo || !prote){
+  if(!nombre || !telefono){
     alert("Completa todos los datos bro 🔥");
     return;
   }
 
-  // 📲 MENSAJE PARA TI
-  let mensajeAdmin =
-`🔥 NUEVO CLIENTE PRO 🔥
-
+  /* MENSAJE PARA TI */
+  let mensajeAdmin = `🔥 NUEVO CLIENTE PRO 🔥
 Nombre: ${nombre}
-Edad: ${edad}
-Peso: ${peso} kg
-Altura: ${altura} cm
-Sexo: ${sexo}
-Nivel: ${nivel}
-Días entrena: ${dias}
-Objetivo: ${objetivo}
-Proteína: ${prote}`;
+WhatsApp: ${telefono}`;
 
   window.open(`https://wa.me/527341771575?text=${encodeURIComponent(mensajeAdmin)}`, "_blank");
 
-  // 📲 MENSAJE PARA CLIENTE
-  let mensajeCliente =
-`🔥 ¡Gracias por elegir Charly Fitness! 🔥
+  /* MENSAJE PARA CLIENTE */
+  let mensajeCliente = `Hola ${nombre} 👋
 
-Hola ${nombre} 🙌
+🔥 Gracias por elegir *Charly Fitness*
 
-Tu plan personalizado está en proceso 💪
+💳 Para activar tu plan realiza tu pago:
 
-💳 Inversión: $299 MXN
-
-🏦 Pago:
-Banco AZTECA
+Banco: AZTECA
 Cuenta: 6774 0164 4103 34
 CLABE: 1275 5200 1644 1033 40
 
-📩 Envíame tu comprobante para comenzar
+📩 Envíame tu comprobante y recibirás:
+✔ Dieta personalizada en PDF
+✔ Rutina de entrenamiento
 
-🔥 En menos de 24h recibes:
-✔ Dieta personalizada
-✔ Rutina en PDF`;
+🔥 Vamos con todo 💪`;
 
-  setTimeout(()=>{
-    window.open(`https://wa.me/?text=${encodeURIComponent(mensajeCliente)}`, "_blank");
-  },800);
+  window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensajeCliente)}`, "_blank");
 }
+
+/* CUPOS */
+let cupos = 3;
+setInterval(()=>{
+  if(cupos>1){
+    cupos--;
+    document.getElementById("cupos").innerText = cupos;
+  }
+},10000);
+
 </script>
 
 </body>
