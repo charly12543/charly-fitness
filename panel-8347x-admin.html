@@ -97,80 +97,100 @@ function generarDietaPRO(datos){
 
   if(altura > 3) altura = altura / 100;
 
-  // 🔥 CALORÍAS
+  // 🔥 IMC Y TIPO
+  let imc = peso / (altura * altura);
+  let tipoFisico = "fit";
+
+  if(imc >= 30) tipoFisico = "obesidad";
+  else if(imc >= 25) tipoFisico = "sobrepeso";
+
+  // 🔥 CALORÍAS BASE
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo==="mujer"?-161:5);
   let calorias = Math.round(bmr * 1.55);
 
-  if(objetivo==="definicion") calorias -= 600;
-  if(objetivo==="volumen") calorias += 300;
+  // 🔥 AJUSTE INTELIGENTE
+  if(tipoFisico==="obesidad") calorias -= 800;
+  else if(tipoFisico==="sobrepeso") calorias -= 500;
+  else if(objetivo==="volumen") calorias += 300;
 
-  // 🔥 MACROS REALES
-  let proteina = Math.round(peso * (nivel==="competidor"?2.2:2));
+  // 🔥 MACROS
+  let proteina = Math.round(peso * 2.2);
   let grasa = Math.round((calorias * 0.25)/9);
   let carbos = Math.round((calorias - (proteina*4 + grasa*9)) / 4);
 
-  // 🔥 ESCALA DE PORCIONES (clave)
-  let protePorComida = Math.round(proteina / 5);
-
-  function proteFuente(){
-    return Math.round(protePorComida * 4) + "g pollo / carne / pescado";
-  }
-
-  function carbFuente(tipo){
-    if(tipo==="alto") return "150g arroz / papa / avena";
-    if(tipo==="medio") return "100g arroz / camote";
-    return "50g arroz / verduras extra";
-  }
-
   let comidas = [];
 
-  // 🥣 COMIDA 1
+  function proteFuente(){
+    return Math.round(peso * 1.5) + "g pollo / carne / pescado";
+  }
+
+  // 🔥 CARBOS SEGÚN TIPO
+  function carb(tipo){
+    if(tipoFisico==="obesidad"){
+      if(tipo==="alto") return "100g arroz / papa";
+      if(tipo==="medio") return "50g arroz";
+      return "verduras + ensalada";
+    }
+
+    if(tipoFisico==="sobrepeso"){
+      if(tipo==="alto") return "150g arroz / papa";
+      if(tipo==="medio") return "100g arroz";
+      return "50g arroz";
+    }
+
+    // FIT
+    if(tipo==="alto") return "200g arroz";
+    if(tipo==="medio") return "120g arroz";
+    return "80g arroz";
+  }
+
+  // 🥣 DESAYUNO
   comidas.push({
-    nombre: "Desayuno",
-    proteina: "6 claras + 2 huevos",
-    carbos: objetivo==="volumen" ? "80g avena" : "60g avena",
-    grasa: "1 cucharada mantequilla de maní",
-    extra: "1 fruta"
+    nombre:"Desayuno",
+    proteina:"6 claras + 2 huevos",
+    carbos: tipoFisico==="obesidad" ? "40g avena" : "60g avena",
+    grasa:"1 cucharada mantequilla de maní",
+    extra:"1 fruta"
   });
 
   // 🍗 COMIDA 2
   comidas.push({
-    nombre: "Comida 2",
+    nombre:"Comida 2",
     proteina: proteFuente(),
-    carbos: carbFuente("medio"),
-    grasa: "1 cucharadita aceite de oliva",
-    extra: "verduras"
+    carbos: carb("medio"),
+    grasa:"1 cucharadita aceite de oliva",
+    extra:"verduras"
   });
 
   // 🍚 PRE ENTRENO
   comidas.push({
-    nombre: "Pre-entreno",
+    nombre:"Pre-entreno",
     proteina: proteFuente(),
-    carbos: carbFuente("alto"),
-    grasa: "baja grasa",
-    extra: "verduras"
+    carbos: carb("alto"),
+    grasa:"baja grasa",
+    extra:""
   });
 
   // 🥤 POST ENTRENO
   comidas.push({
-    nombre: "Post-entreno",
+    nombre:"Post-entreno",
     proteina: tomaWhey ? "1 scoop whey" : proteFuente(),
-    carbos: "1 plátano + 2 galletas de arroz",
-    grasa: "sin grasa",
-    extra: ""
+    carbos:"rápidos (plátano + arroz)",
+    grasa:"0 grasa",
+    extra:""
   });
 
   // 🥩 CENA
   comidas.push({
-    nombre: "Cena",
+    nombre:"Cena",
     proteina: proteFuente(),
-    carbos: objetivo==="volumen" ? carbFuente("medio") : "sin carbos",
-    grasa: "½ aguacate",
-    extra: "ensalada grande"
+    carbos: tipoFisico==="obesidad" ? "sin carbos" : carb("bajo"),
+    grasa:"½ aguacate",
+    extra:"ensalada grande"
   });
 
   return {
-    titulo:`🔥 Dieta PRO de ${nombre}`,
+    titulo:`🔥 Dieta ${tipoFisico.toUpperCase()} de ${nombre}`,
     calorias:`${calorias} kcal`,
     proteina:`${proteina} g`,
     carbos:`${carbos} g`,
