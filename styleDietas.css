@@ -15,6 +15,7 @@ html, body{ overflow-x:hidden; }
 }
 .card-meal {
   page-break-inside: avoid;
+  margin-bottom: 15px;
 }
 
 /* VARIABLES */
