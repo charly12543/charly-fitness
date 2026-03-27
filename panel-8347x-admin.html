@@ -340,50 +340,11 @@ async function descargarPDF(tipo){
   const pageWidth = 210;
   const pageHeight = 297;
 
-  /* ==========================
-     🔥 PORTADA PREMIUM
-  ========================== */
-
-  // fondo negro
-  pdf.setFillColor(10,10,10);
-  pdf.rect(0,0,pageWidth,pageHeight,"F");
-
-  // logo
-  let img = new Image();
-  img.src = "imagenes/logoGitHub.png";
-
-  await new Promise(resolve => {
-    img.onload = resolve;
-  });
-
-  pdf.addImage(img, "PNG", 55, 40, 100, 60);
-
-  // título dorado
-  pdf.setTextColor(212,175,55);
-  pdf.setFont("helvetica","bold");
-  pdf.setFontSize(24);
-  pdf.text("PLAN PERSONALIZADO", 105, 120, null, null, "center");
-
-  pdf.setFontSize(20);
-  pdf.text(nombre.toUpperCase(), 105, 135, null, null, "center");
-
-  // frase
-  pdf.setFontSize(12);
-  pdf.setTextColor(255,255,255);
-  pdf.text("Disciplina > Motivación", 105, 160, null, null, "center");
-
-  pdf.setFontSize(10);
-  pdf.text("Charly Fitness", 105, 270, null, null, "center");
-
-  /* ==========================
-     🔥 CONTENIDO (PÁGINAS)
-  ========================== */
-
-  // clonar contenido
+  // 🔥 CLONAR CONTENIDO
   let clon = elemento.cloneNode(true);
 
   clon.style.background = "white";
-  clon.style.padding = "30px";
+  clon.style.padding = "20px";
   clon.style.width = "800px";
   clon.style.position = "absolute";
   clon.style.left = "-9999px";
@@ -395,13 +356,24 @@ async function descargarPDF(tipo){
   document.body.removeChild(clon);
 
   const margin = 10;
+  const headerHeight = 20;
+
   const usableWidth = pageWidth - margin * 2;
+  const usableHeight = pageHeight - margin * 2 - headerHeight;
 
   const imgWidth = usableWidth;
-  const pageHeightPx = (canvas.width * (pageHeight - margin*2)) / usableWidth;
+  const pageHeightPx = (canvas.width * usableHeight) / usableWidth;
 
   let position = 0;
   let page = 0;
+
+  // 🔥 cargar logo
+  let logo = new Image();
+  logo.src = "imagenes/logoGitHub.png";
+
+  await new Promise(resolve => {
+    logo.onload = resolve;
+  });
 
   while(position < canvas.height){
 
@@ -421,33 +393,46 @@ async function descargarPDF(tipo){
 
     let imgData = pageCanvas.toDataURL("image/jpeg", 1.0);
 
-    pdf.addPage();
+    if(page > 0) pdf.addPage();
 
-    // fondo claro
+    // 🔥 FONDO
     pdf.setFillColor(255,255,255);
     pdf.rect(0,0,pageWidth,pageHeight,"F");
 
-    // header dorado
-    pdf.setFillColor(212,175,55);
-    pdf.rect(0,0,pageWidth,10,"F");
+    // 🔥 HEADER TIPO NAVBAR
+    pdf.setFillColor(15,15,15);
+    pdf.rect(0,0,pageWidth,headerHeight,"F");
 
+    // LOGO IZQUIERDA
+    pdf.addImage(logo, "PNG", 10, 3, 30, 12);
+
+    // TEXTO DERECHA
+    pdf.setTextColor(212,175,55);
+    pdf.setFont("helvetica","bold");
+    pdf.setFontSize(10);
+    pdf.text("💎 Plan personalizado por Charly Fitness", pageWidth - 10, 12, null, null, "right");
+
+    // 🔥 CONTENIDO
     pdf.addImage(
       imgData,
       "JPEG",
       margin,
-      15,
+      headerHeight + 5,
       imgWidth,
-      pageHeight - 25
+      usableHeight
     );
 
     position += pageHeightPx;
     page++;
   }
 
-  pdf.save(nombre + "_Plan_Premium.pdf");
+  pdf.save(nombre + "_Plan_Pro.pdf");
 
   if(editable) editable.setAttribute("contenteditable", "true");
 }
+
+
+  
 /* ===================== RUTINA ===================== */
 function generarRutina(){
   let sexo=document.getElementById("sexo").value;
