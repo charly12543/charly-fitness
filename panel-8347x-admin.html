@@ -120,23 +120,23 @@ function generarDietaPRO(datos){
 
   let comidas = [];
 
-  // 🔥 PROTEINA REAL POR COMIDA (FASE 2 PRO)
+  // 🔥 PROTEINA POR COMIDA
   let protePorComida = Math.round(proteina / 5);
 
   function proteFuente(){
     return protePorComida + "g pollo / carne / pescado";
   }
 
-  // 🔥 CARBOS SEGÚN TIPO (MEJORADOS)
+  // 🔥 CARBOS SEGÚN TIPO
   function carb(tipo){
     if(tipoFisico==="obesidad"){
-      if(tipo==="alto") return "80g arroz / papa";
+      if(tipo==="alto") return "80g arroz o papa";
       if(tipo==="medio") return "40g arroz";
-      return "verduras + ensalada libre";
+      return "verduras + ensalada";
     }
 
     if(tipoFisico==="sobrepeso"){
-      if(tipo==="alto") return "120g arroz / papa";
+      if(tipo==="alto") return "120g arroz o papa";
       if(tipo==="medio") return "80g arroz";
       return "40g arroz";
     }
@@ -147,49 +147,74 @@ function generarDietaPRO(datos){
     return "80g arroz";
   }
 
-  // 🥣 DESAYUNO (OPTIMIZADO)
+  // 🔥 ENSALADAS REALES
+  function ensalada(){
+    if(tipoFisico==="obesidad"){
+      return "1 taza lechuga + ½ pepino + 1 jitomate + limón + sal";
+    }
+    if(tipoFisico==="sobrepeso"){
+      return "1.5 tazas verduras mixtas (lechuga, pepino, jitomate, zanahoria)";
+    }
+    return "2 tazas verduras mixtas + limón o vinagre";
+  }
+
+  // 🔥 GRASAS REALES
+  function grasaReal(){
+    let opciones = [
+      "10 almendras",
+      "10 nueces",
+      "1 cucharada mantequilla de maní",
+      "1 cucharadita aceite de oliva (para cocinar)",
+      "¼ aguacate"
+    ];
+    return opciones[Math.floor(Math.random()*opciones.length)];
+  }
+
+  // 🥣 DESAYUNO
   comidas.push({
     nombre:"Desayuno",
     proteina:"6 claras + 2 huevos",
     carbos: tipoFisico==="obesidad" ? "40g avena" : "60g avena",
     grasa:"1 cucharada mantequilla de maní",
-    extra:"1 fruta"
+    extra:"1 fruta (manzana, papaya o plátano)"
   });
 
-  // 🍗 COMIDA 2
+  // 🍗 MEDIA MAÑANA
   comidas.push({
     nombre:"Media mañana",
     proteina: proteFuente(),
     carbos: carb("medio"),
-    grasa:"1 cucharadita aceite de oliva",
-    extra:"verduras"
+    grasa: grasaReal(),
+    extra: ensalada()
   });
 
-  // 🍚 PRE ENTRENO (CLAVE PRO)
+  // 🍚 PRE ENTRENO
   comidas.push({
     nombre:"Pre-entreno",
     proteina: proteFuente(),
     carbos: carb("alto"),
     grasa:"baja grasa",
-    extra:"🔥 Energía para entrenamiento"
+    extra:"🔥 Energía para entrenar fuerte"
   });
 
-  // 🥤 POST ENTRENO (OPTIMIZADO PRO)
+  // 🥤 POST ENTRENO
   comidas.push({
     nombre:"Post-entreno",
-    proteina: tomaWhey ? "1 scoop whey + " + protePorComida + "g proteína total" : proteFuente(),
-    carbos:"rápidos (plátano + arroz)",
+    proteina: tomaWhey 
+      ? "1 scoop whey + completar proteína del día" 
+      : proteFuente(),
+    carbos:"1 plátano + arroz",
     grasa:"0 grasa",
     extra:"⚡ Recuperación muscular"
   });
 
-  // 🥩 CENA (AJUSTADA)
+  // 🥩 CENA
   comidas.push({
     nombre:"Cena",
     proteina: proteFuente(),
-    carbos: tipoFisico==="obesidad" ? "sin carbos" : carb("bajo"),
-    grasa:"½ aguacate",
-    extra:"ensalada grande"
+    carbos: tipoFisico==="obesidad" ? "sin carbohidratos" : carb("bajo"),
+    grasa:"¼–½ aguacate",
+    extra: ensalada()
   });
 
   return {
@@ -201,6 +226,7 @@ function generarDietaPRO(datos){
     comidas
   };
 }
+
 
 /* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
