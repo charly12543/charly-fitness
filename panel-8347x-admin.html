@@ -97,36 +97,23 @@ function generarDietaPRO(datos){
 
   if(altura > 3) altura = altura / 100;
 
-  // 🔥 DETECTAR MODO JUVENIL
-  let esJuvenil = edad < 16;
-
-  // 🔥 IMC Y TIPO
+  // 🔥 IMC
   let imc = peso / (altura * altura);
   let tipoFisico = "fit";
 
   if(imc >= 30) tipoFisico = "obesidad";
   else if(imc >= 25) tipoFisico = "sobrepeso";
 
-  // 🔥 CALORÍAS BASE
+  // 🔥 CALORÍAS
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo==="mujer"?-161:5);
-  let calorias = Math.round(bmr * (esJuvenil ? 1.4 : 1.55));
+  let calorias = Math.round(bmr * 1.55);
 
-  // 🔥 AJUSTES
-  if(esJuvenil){
-    // ⚠️ SIN DÉFICIT AGRESIVO
-    if(tipoFisico==="obesidad") calorias -= 300;
-    else if(tipoFisico==="sobrepeso") calorias -= 200;
-  } else {
-    if(tipoFisico==="obesidad") calorias -= 800;
-    else if(tipoFisico==="sobrepeso") calorias -= 500;
-    else if(objetivo==="volumen") calorias += 300;
-  }
+  if(tipoFisico==="obesidad") calorias -= 800;
+  else if(tipoFisico==="sobrepeso") calorias -= 500;
+  else if(objetivo==="volumen") calorias += 300;
 
-  // 🔥 PROTEÍNA SEGURA
-  let proteina = esJuvenil 
-    ? Math.round(peso * 1.5)
-    : Math.round(peso * 2.2);
-
+  // 🔥 MACROS
+  let proteina = Math.round(peso * 2.2);
   let grasa = Math.round((calorias * 0.25)/9);
   let carbos = Math.round((calorias - (proteina*4 + grasa*9)) / 4);
 
@@ -135,49 +122,66 @@ function generarDietaPRO(datos){
   let protePorComida = Math.round(proteina / 5);
 
   function proteFuente(){
-    return protePorComida + "g pollo / carne / pescado (aprox palma de la mano)";
+    return protePorComida + "g pollo / carne / pescado (≈ tamaño de tu palma = 100–120g)";
   }
 
+  // 🔥 CARBOS CON EQUIVALENCIAS
   function carb(tipo){
     if(tipoFisico==="obesidad"){
-      if(tipo==="alto") return "½ taza arroz o 1 papa chica";
-      if(tipo==="medio") return "¼ taza arroz";
+      if(tipo==="alto") return "½ taza arroz (≈100g) o 1 papa chica";
+      if(tipo==="medio") return "¼ taza arroz (≈50g)";
       return "solo verduras";
     }
 
     if(tipoFisico==="sobrepeso"){
-      if(tipo==="alto") return "¾ taza arroz o 1 papa";
-      if(tipo==="medio") return "½ taza arroz";
-      return "¼ taza arroz";
+      if(tipo==="alto") return "¾ taza arroz (≈150g) o 1 papa mediana";
+      if(tipo==="medio") return "½ taza arroz (≈100g)";
+      return "¼ taza arroz (≈50g)";
     }
 
-    if(tipo==="alto") return "1 taza arroz";
-    if(tipo==="medio") return "¾ taza arroz";
-    return "½ taza arroz";
+    // FIT
+    if(tipo==="alto") return "1 taza arroz (≈200g)";
+    if(tipo==="medio") return "¾ taza arroz (≈150g)";
+    return "½ taza arroz (≈100g)";
   }
 
+  // 🔥 FRUTA
+  function fruta(){
+    if(tipoFisico==="obesidad" || tipoFisico==="sobrepeso"){
+      return "1 manzana verde o 1 toronja";
+    }
+    return "1 plátano o 1 manzana roja";
+  }
+
+  // 🔥 ENSALADA REAL
   function ensalada(){
-    return "lechuga + pepino + jitomate + limón";
+    if(tipoFisico==="obesidad"){
+      return "1 bowl mediano: lechuga + pepino + jitomate + limón";
+    }
+    if(tipoFisico==="sobrepeso"){
+      return "1 bowl grande: lechuga + pepino + jitomate + zanahoria";
+    }
+    return "2 tazas verduras mixtas + limón o vinagre";
   }
 
+  // 🔥 GRASAS
   function grasaReal(){
     let opciones = [
-    "10 almendras",
-    "10 nueces",
-    "1 cucharada mantequilla de maní",
-    "¼ aguacate",
-    "1 cucharada semillas (chía o linaza)"
-  ];
+      "10 almendras (≈10g grasa)",
+      "10 nueces (≈10g grasa)",
+      "1 cucharada mantequilla de maní (≈15g)",
+      "¼ aguacate (≈10g grasa)"
+    ];
     return opciones[Math.floor(Math.random()*opciones.length)];
   }
 
   // 🥣 DESAYUNO
   comidas.push({
     nombre:"Desayuno",
-    proteina: esJuvenil ? "2 huevos + 2 claras" : "6 claras + 2 huevos",
-    carbos: "½ taza avena",
-    grasa:"1 cucharada mantequilla de maní",
-    extra:"1 fruta"
+    proteina:"6 claras + 2 huevos",
+    carbos: tipoFisico==="obesidad" ? "½ taza avena (≈40g)" : "¾ taza avena (≈60g)",
+    grasa:"1 cucharada mantequilla de maní (≈15g)",
+    extra: fruta()
   });
 
   // 🍗 MEDIA MAÑANA
@@ -194,17 +198,19 @@ function generarDietaPRO(datos){
     nombre:"Comida",
     proteina: proteFuente(),
     carbos: carb("alto"),
-    grasa:"baja grasa",
+    grasa:"sin grasa añadida",
     extra:"verduras cocidas (calabaza, zanahoria)"
   });
 
-  // 🍎 MERIENDA
+  // 🥤 POST
   comidas.push({
-    nombre:"Merienda",
-    proteina: esJuvenil ? "yogurt natural" : proteFuente(),
-    carbos:"1 fruta",
-    grasa:"baja grasa",
-    extra:""
+    nombre:"Post-entreno",
+    proteina: tomaWhey 
+      ? "1 scoop whey + 1 fruta"
+      : proteFuente(),
+    carbos:"1 fruta + arroz",
+    grasa:"0 grasa",
+    extra:"recuperación muscular"
   });
 
   // 🥩 CENA
@@ -212,19 +218,16 @@ function generarDietaPRO(datos){
     nombre:"Cena",
     proteina: proteFuente(),
     carbos: tipoFisico==="obesidad" ? "sin carbohidratos" : carb("bajo"),
-    grasa:"¼ aguacate",
+    grasa:"¼ aguacate (≈10g grasa)",
     extra: ensalada()
   });
 
   return {
-    titulo:`🔥 Dieta ${esJuvenil ? "JUVENIL" : tipoFisico.toUpperCase()} de ${nombre}`,
+    titulo:`🔥 Dieta ${tipoFisico.toUpperCase()} de ${nombre}`,
     calorias:`${calorias} kcal`,
     proteina:`${proteina} g`,
     carbos:`${carbos} g`,
     grasa:`${grasa} g`,
-    nota: esJuvenil 
-      ? "⚠️ Plan adaptado para menor de edad. Prioridad: salud, crecimiento y hábitos."
-      : "",
     comidas
   };
 }
