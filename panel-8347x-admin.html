@@ -120,31 +120,34 @@ function generarDietaPRO(datos){
 
   let comidas = [];
 
+  // 🔥 PROTEINA REAL POR COMIDA (FASE 2 PRO)
+  let protePorComida = Math.round(proteina / 5);
+
   function proteFuente(){
-    return Math.round(peso * 1.5) + "g pollo / carne / pescado";
+    return protePorComida + "g pollo / carne / pescado";
   }
 
-  // 🔥 CARBOS SEGÚN TIPO
+  // 🔥 CARBOS SEGÚN TIPO (MEJORADOS)
   function carb(tipo){
     if(tipoFisico==="obesidad"){
-      if(tipo==="alto") return "100g arroz / papa";
-      if(tipo==="medio") return "50g arroz";
-      return "verduras + ensalada";
+      if(tipo==="alto") return "80g arroz / papa";
+      if(tipo==="medio") return "40g arroz";
+      return "verduras + ensalada libre";
     }
 
     if(tipoFisico==="sobrepeso"){
-      if(tipo==="alto") return "150g arroz / papa";
-      if(tipo==="medio") return "100g arroz";
-      return "50g arroz";
+      if(tipo==="alto") return "120g arroz / papa";
+      if(tipo==="medio") return "80g arroz";
+      return "40g arroz";
     }
 
     // FIT
-    if(tipo==="alto") return "200g arroz";
+    if(tipo==="alto") return "180g arroz";
     if(tipo==="medio") return "120g arroz";
     return "80g arroz";
   }
 
-  // 🥣 DESAYUNO
+  // 🥣 DESAYUNO (OPTIMIZADO)
   comidas.push({
     nombre:"Desayuno",
     proteina:"6 claras + 2 huevos",
@@ -155,32 +158,32 @@ function generarDietaPRO(datos){
 
   // 🍗 COMIDA 2
   comidas.push({
-    nombre:"Comida 2",
+    nombre:"Media mañana",
     proteina: proteFuente(),
     carbos: carb("medio"),
     grasa:"1 cucharadita aceite de oliva",
     extra:"verduras"
   });
 
-  // 🍚 PRE ENTRENO
+  // 🍚 PRE ENTRENO (CLAVE PRO)
   comidas.push({
     nombre:"Pre-entreno",
     proteina: proteFuente(),
     carbos: carb("alto"),
     grasa:"baja grasa",
-    extra:""
+    extra:"🔥 Energía para entrenamiento"
   });
 
-  // 🥤 POST ENTRENO
+  // 🥤 POST ENTRENO (OPTIMIZADO PRO)
   comidas.push({
     nombre:"Post-entreno",
-    proteina: tomaWhey ? "1 scoop whey" : proteFuente(),
+    proteina: tomaWhey ? "1 scoop whey + " + protePorComida + "g proteína total" : proteFuente(),
     carbos:"rápidos (plátano + arroz)",
     grasa:"0 grasa",
-    extra:""
+    extra:"⚡ Recuperación muscular"
   });
 
-  // 🥩 CENA
+  // 🥩 CENA (AJUSTADA)
   comidas.push({
     nombre:"Cena",
     proteina: proteFuente(),
