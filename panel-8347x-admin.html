@@ -258,55 +258,65 @@ function generarDietaPRO(datos){
 
 /* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
-  let nombre=document.getElementById("nombreCliente").value;
-  let fecha=new Date().toLocaleDateString();
+  let nombre = document.getElementById("nombreCliente").value;
+  let fecha = new Date().toLocaleDateString();
 
-  let html=`<div class="dieta-card" contenteditable="true">
-  <h2>${nombre||"Cliente"}</h2>
+  let html = `<div class="dieta-card" contenteditable="true">
+  <h2>${nombre || "Cliente"}</h2>
   <p>${fecha}</p>
   <p>🔥 ${dieta.calorias}</p>
   <p>🥩 ${dieta.proteina}</p>
   <p>🍚 ${dieta.carbos}</p>
   <p>🥑 ${dieta.grasa}</p>`;
 
+  // 🍽️ COMIDAS
   dieta.comidas.forEach(c=>{
-    html+=`<div class="card-meal">
+    html += `<div class="card-meal">
       <h4>🍽️ ${c.nombre}</h4>
       <ul>
         <li>🥩 ${c.proteina}</li>
         <li>🍚 ${c.carbos}</li>
         <li>🥑 ${c.grasa}</li>
-        ${c.extra?`<li>➕ ${c.extra}</li>`:""}
+        ${c.extra ? `<li>➕ ${c.extra}</li>` : ""}
       </ul>
     </div>`;
   });
 
-  html+=`<div class="card-meal">
+  // 📌 RECOMENDACIONES
+  html += `<div class="card-meal">
     <h4>📌 Recomendaciones</h4>
     ✔ Cocinar con aceite de aguacate o coco<br>
     ✔ Tomar 3-4L agua diarios<br>
-    ✔ Puedes tomar agua de Jamaica,limón, pepino con stevia<br>
-    ✔ Evitar ultraprocesados
-  </div>
-
-   <div class="card-meal">
-    <h4>🍽️ Hambre</h4>
-    ✔ Nada de refresco<br>
-    ✔ Nada de jugos<br>
-    ✔ Nada de comida rápida diaria
+    ✔ Agua de jamaica, limón o pepino con stevia<br>
+    ✔ Evitar ultraprocesados<br>
     ✔ Caminar diario (aunque sea 20 min)<br>
-    ✔ Reducir azúcar<br>
-  </div>
-
-  <div class="card-meal">
-    <h4>🍽️ Hambre</h4>
-    ✔ Pepino/jícama libre<br>
-    ✔ Verduras libres<br>
-    ✔ Gelatina light
-  </div>
   </div>`;
 
-  document.getElementById("resultadoPRO").innerHTML=html;
+  // ❌ EVITAR
+  html += `<div class="card-meal">
+    <h4>🚫 Evitar</h4>
+    ✔ Refrescos<br>
+    ✔ Jugos procesados<br>
+    ✔ Comida rápida (tacos, pizzas, etc.)<br>
+    ✔ Exceso de azúcar<br>
+  </div>`;
+
+  // 🍽️ HAMBRE
+  html += `<div class="card-meal">
+    <h4>🍽️ Si tienes hambre</h4>
+    ✔ Pepino / jícama libre<br>
+    ✔ Verduras libres<br>
+    ✔ Gelatina light<br>
+  </div>`;
+
+  // 🔥 FIRMA PRO (AQUÍ VA)
+  html += `<p style="text-align:center; font-weight:bold; margin-top:25px;">
+  💎 Plan personalizado por Charly Fitness
+  </p>`;
+
+  html += `</div>`;
+
+  document.getElementById("resultadoPRO").innerHTML = html;
 }
 
 /* ===================== DESCARGAR PDF ===================== */
@@ -319,29 +329,61 @@ async function descargarPDF(tipo){
     return;
   }
 
+  let nombre = document.getElementById("nombreCliente").value || "Cliente";
+
   // 🔒 quitar edición
   let editable = elemento.querySelector(".dieta-card");
   if(editable) editable.setAttribute("contenteditable", "false");
 
-  // 🔥 CLONAR contenido (para no romper el original)
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const pageWidth = 210;
+  const pageHeight = 297;
+
+  /* ==========================
+     🔥 PORTADA PREMIUM
+  ========================== */
+
+  // fondo negro
+  pdf.setFillColor(10,10,10);
+  pdf.rect(0,0,pageWidth,pageHeight,"F");
+
+  // logo
+  let img = new Image();
+  img.src = "imagenes/logoGitHub.png";
+
+  await new Promise(resolve => {
+    img.onload = resolve;
+  });
+
+  pdf.addImage(img, "PNG", 55, 40, 100, 60);
+
+  // título dorado
+  pdf.setTextColor(212,175,55);
+  pdf.setFont("helvetica","bold");
+  pdf.setFontSize(24);
+  pdf.text("PLAN PERSONALIZADO", 105, 120, null, null, "center");
+
+  pdf.setFontSize(20);
+  pdf.text(nombre.toUpperCase(), 105, 135, null, null, "center");
+
+  // frase
+  pdf.setFontSize(12);
+  pdf.setTextColor(255,255,255);
+  pdf.text("Disciplina > Motivación", 105, 160, null, null, "center");
+
+  pdf.setFontSize(10);
+  pdf.text("Charly Fitness", 105, 270, null, null, "center");
+
+  /* ==========================
+     🔥 CONTENIDO (PÁGINAS)
+  ========================== */
+
+  // clonar contenido
   let clon = elemento.cloneNode(true);
 
-  // 🔥 AGREGAR HEADER CON LOGO
-  let header = document.createElement("div");
-  header.style.textAlign = "center";
-  header.style.marginBottom = "20px";
-
-  header.innerHTML = `
-    <img src="imagenes/logoGitHub.png" style="width:120px; margin-bottom:10px;">
-    <h2 style="margin:0; color:#d4af37;">Charly Fitness</h2>
-    <p style="margin:0;">Plan personalizado PRO</p>
-  `;
-
-  clon.prepend(header);
-
-  // meter clon oculto al DOM
   clon.style.background = "white";
-  clon.style.padding = "20px";
+  clon.style.padding = "30px";
   clon.style.width = "800px";
   clon.style.position = "absolute";
   clon.style.left = "-9999px";
@@ -352,18 +394,10 @@ async function descargarPDF(tipo){
 
   document.body.removeChild(clon);
 
-  const pdf = new jsPDF("p", "mm", "a4");
-
-  const pageWidth = 210;
-  const pageHeight = 297;
-
-  // 🔥 MÁRGENES PRO
   const margin = 10;
   const usableWidth = pageWidth - margin * 2;
 
   const imgWidth = usableWidth;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
   const pageHeightPx = (canvas.width * (pageHeight - margin*2)) / usableWidth;
 
   let position = 0;
@@ -387,36 +421,33 @@ async function descargarPDF(tipo){
 
     let imgData = pageCanvas.toDataURL("image/jpeg", 1.0);
 
-    if(page > 0) pdf.addPage();
+    pdf.addPage();
+
+    // fondo claro
+    pdf.setFillColor(255,255,255);
+    pdf.rect(0,0,pageWidth,pageHeight,"F");
+
+    // header dorado
+    pdf.setFillColor(212,175,55);
+    pdf.rect(0,0,pageWidth,10,"F");
 
     pdf.addImage(
       imgData,
       "JPEG",
       margin,
-      margin,
+      15,
       imgWidth,
-      pageHeight - margin*2
+      pageHeight - 25
     );
 
     position += pageHeightPx;
     page++;
   }
 
-  let nombre = document.getElementById("nombreCliente").value || "cliente";
-  pdf.save(nombre + "_plan_PRO.pdf");
+  pdf.save(nombre + "_Plan_Premium.pdf");
 
-  // 🔓 reactivar edición
   if(editable) editable.setAttribute("contenteditable", "true");
 }
-/* ===================== WHATSAPP ===================== */
-function enviarWhats(){
-  let nombre=document.getElementById("nombreCliente").value;
-  let numero=prompt("Número cliente","52");
-  if(!numero)return;
-  let msg=`Hola ${nombre} 🔥 aquí tienes tu plan`;
-  window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`);
-}
-
 /* ===================== RUTINA ===================== */
 function generarRutina(){
   let sexo=document.getElementById("sexo").value;
