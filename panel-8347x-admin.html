@@ -172,8 +172,14 @@ function generarDietaPRO(datos){
   }
 
   function ensalada(){
-    return "1 bowl: lechuga + pepino + jitomate + zanahoria + limón";
+  if(tipoFisico==="obesidad"){
+    return "1 bowl mediano (1–1.5 tazas): lechuga + pepino + jitomate + limón";
   }
+  if(tipoFisico==="sobrepeso"){
+    return "1 bowl grande (2 tazas): lechuga + pepino + jitomate + zanahoria + limón o vinagre";
+  }
+  return "1 bowl grande (2 tazas): lechuga + pepino + jitomate + zanahoria + limón";
+}
 
   function grasaReal(){
     let opciones = [
@@ -209,7 +215,7 @@ function generarDietaPRO(datos){
     proteina: proteFuente(),
     carbos: carb("alto"),
     grasa:"sin grasa añadida",
-    extra:"verduras cocidas"
+    extra:"1 taza verduras cocidas (calabaza + zanahoria + brócoli)"
   });
 
   // 🥤 POST
