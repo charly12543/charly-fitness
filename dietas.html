@@ -139,16 +139,57 @@ function generarDieta(){
     return;
   }
 
+  // Calorías base
   let calorias = peso * 30 + (objetivo==="volumen"?300:-400);
 
-  document.getElementById("resultadoDieta").innerHTML = `
-    <div class="dieta-card">
-      <h3>🔥 Tu plan base</h3>
-      <p>${calorias} kcal / día</p>
-    </div>
-  `;
-}
+  // Macros básicos
+  let proteina = peso * 2;
+  let grasa = (calorias * 0.25) / 9;
+  let carbos = (calorias - (proteina*4 + grasa*9)) / 4;
 
+  // DIETA BASE (3 comidas)
+  let html = `
+  <div class="dieta-card">
+    <h3>🔥 Tu plan base</h3>
+
+    <p>🔥 ${calorias.toFixed(0)} kcal / día</p>
+    <p>🥩 ${proteina.toFixed(0)} g proteína</p>
+    <p>🍚 ${carbos.toFixed(0)} g carbos</p>
+    <p>🥑 ${grasa.toFixed(0)} g grasas</p>
+
+    <hr>
+
+    <h4>🥣 Desayuno</h4>
+    <ul>
+      <li>4 claras + 2 huevos</li>
+      <li>50g avena</li>
+      <li>1 fruta</li>
+    </ul>
+
+    <h4>🍗 Comida</h4>
+    <ul>
+      <li>150g pollo</li>
+      <li>100g arroz</li>
+      <li>verduras</li>
+    </ul>
+
+    <h4>🥩 Cena</h4>
+    <ul>
+      <li>150g carne o pescado</li>
+      <li>verduras libres</li>
+    </ul>
+
+    <p style="margin-top:15px; font-size:14px;">
+      ⚠️ Esta es una base general. Para tu versión PRO personalizada 👇
+    </p>
+    <a href="#pro" class="btn-main" style="display:block; margin-top:15px;">
+  🔥 Quiero mi dieta PRO personalizada
+   </a>
+  </div>
+  `;
+
+  document.getElementById("resultadoDieta").innerHTML = html;
+}
 /* FORMULARIO PRO */
 function enviarFormularioPro(){
 
