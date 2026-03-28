@@ -110,9 +110,9 @@ function generarDietaPRO(datos){
   else if(tipoFisico==="obesidad") calorias -= 700;
   else if(tipoFisico==="sobrepeso") calorias -= 400;
 
-  // 🍑🔥 MODO VOLUMEN FEMENINO PRO
+  // 🍑 MODO VOLUMEN FEMENINO
   if(esMujerVolumen){
-    calorias += 150; // ligero superávit limpio
+    calorias += 150;
   }
 
   // 🔥 PROTEÍNA
@@ -127,7 +127,6 @@ function generarDietaPRO(datos){
     if(fase===4) proteFactor = 3;
   }
 
-  // 🍑 Ajuste mujer volumen (más estético)
   if(esMujerVolumen){
     proteFactor = 1.7;
   }
@@ -140,13 +139,14 @@ function generarDietaPRO(datos){
   let protePorComida = Math.round(proteina / 5);
 
   function proteFuente(){
-  return `${protePorComida}g proteína (elige 1 opción):
+    return `${protePorComida}g proteína (elige 1 opción):
 • ${Math.round(protePorComida*4)}g pechuga pollo
 • ${Math.round(protePorComida*4)}g carne res magra
-• ${Math.round(protePorComida*4 + 20)}g pescado (atun,tilapia,salmon)
+• ${Math.round(protePorComida*4 + 20)}g pescado (atun, tilapia, salmon)
 • 1 lata de atún en agua
 • 5 claras + 1 huevo`;
-}
+  }
+
   function random(arr){
     return arr[Math.floor(Math.random()*arr.length)];
   }
@@ -174,7 +174,6 @@ function generarDietaPRO(datos){
       }
     ];
 
-    // 🍑 opción femenina estética
     if(esMujerVolumen){
       opciones.push({
         proteina:"4 claras + 1 huevo",
@@ -196,15 +195,19 @@ function generarDietaPRO(datos){
     return random(opciones);
   }
 
-  // 🔥 CARBOS
+  // 🔥 CARBOS (ARREGLADO)
   function carb(tipo){
-  let base="";
+    let base="";
 
-  if(tipo==="alto") base="1 taza arroz (≈200g)";
-  else if(tipo==="medio") base="¾ taza arroz (≈150g)";
-  else base="½ taza arroz (≈100g)";
+    if(tipo==="alto") base="1 taza arroz (≈200g)";
+    else if(tipo==="medio") base="¾ taza arroz (≈150g)";
+    else base="½ taza arroz (≈100g)";
 
-  return `${base} (elige 1 opción):
+    if(esMujerVolumen && tipo==="alto"){
+      base += " 🔥 (clave para glúteo)";
+    }
+
+    return `${base} (elige 1 opción):
 • arroz
 • 2 tortillas (maiz o harina)
 • 1 papa
@@ -212,14 +215,6 @@ function generarDietaPRO(datos){
 • 1 taza avena 
 • 1 taza pure de platano macho
 • 1 taza pasta`;
-}
-
-    // 🍑 más carbos para glúteo
-    if(esMujerVolumen && tipo==="alto"){
-      base += " 🔥 (clave para glúteo)";
-    }
-
-    return base + " 🔄 (2 tortillas o 1 papa)";
   }
 
   // 🔥 ENSALADA
@@ -235,7 +230,6 @@ function generarDietaPRO(datos){
       "¼ aguacate"
     ];
 
-    // 🍑 mejor perfil hormonal mujer
     if(esMujerVolumen){
       opciones.push("1 cucharada crema de cacahuate");
     }
@@ -259,7 +253,7 @@ function generarDietaPRO(datos){
   // 🍚 COMIDA
   comidas.push({
     nombre:"Comida",
-    proteina: `${protePorComida}g proteína = ${Math.round(protePorComida*4)}g pollo (o carne o pescado)`,
+    proteina: proteFuente(),
     carbos: carb("alto"),
     grasa:"sin grasa añadida",
     extra:"1 taza verduras cocidas (calabaza, brócoli, zanahoria)"
