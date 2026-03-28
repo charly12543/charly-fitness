@@ -13,9 +13,15 @@ html, body{ overflow-x:hidden; }
   outline: 2px dashed #d4af37;
   padding: 10px;
 }
-.card-meal {
+
+.card-meal{
   page-break-inside: avoid;
+  break-insside: avoid;
   margin-bottom: 15px;
+}
+
+ul{
+  margin-left: 15px;
 }
 
 /* VARIABLES */
