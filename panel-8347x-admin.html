@@ -73,9 +73,12 @@
 <script>
 /* ===================== DIETA PRO ===================== */
 function generarDietaPRO(datos){
-  let {nombre, peso, altura, edad, objetivo, sexo, nivel, tomaWhey} = datos;
+  let {nombre, peso, altura, edad, objetivo, sexo, nivel, tomaWhey, fase} = datos;
 
   if(altura > 3) altura = altura / 100;
+
+  // 🔥 FASE AUTOMÁTICA SI NO EXISTE
+  if(!fase) fase = Math.floor(Math.random()*4)+1;
 
   // 🔥 DETECCIÓN
   let esNino = edad < 14;
@@ -86,16 +89,22 @@ function generarDietaPRO(datos){
   else if(imc >= 30) tipoFisico = "obesidad";
   else if(imc >= 25) tipoFisico = "sobrepeso";
 
-  // 🔥 CALORÍAS
+  // 🔥 CALORÍAS BASE
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo==="mujer"?-161:5);
   let calorias = Math.round(bmr * 1.5);
 
+  // 🔥 AJUSTE POR FASE
+  if(fase===1) calorias -= 0;
+  if(fase===2) calorias -= 100;
+  if(fase===3) calorias -= 200;
+  if(fase===4) calorias += (objetivo==="volumen"?300:-100);
+
+  // 🔥 AJUSTE POR TIPO
   if(tipoFisico==="obesidad_severa") calorias -= 900;
   else if(tipoFisico==="obesidad") calorias -= 700;
   else if(tipoFisico==="sobrepeso") calorias -= 400;
-  else if(objetivo==="volumen") calorias += 300;
 
-  // 🔥 PROTEÍNA AJUSTADA
+  // 🔥 PROTEÍNA
   let proteFactor = 2.2;
   if(sexo==="mujer") proteFactor = 1.8;
   if(esNino) proteFactor = 1.2;
@@ -108,145 +117,107 @@ function generarDietaPRO(datos){
   let protePorComida = Math.round(proteina / 5);
 
   function proteFuente(){
-    return protePorComida + "g pollo / carne / pescado (≈ palma de la mano)";
+    return protePorComida + "g proteína (pollo, carne o pescado)";
   }
 
   function random(arr){
     return arr[Math.floor(Math.random()*arr.length)];
   }
 
-  // 🔥 DESAYUNOS OPCIONES
-  function desayunoOpciones(){
-    let opciones = [
-      {
-        proteina: esNino ? "2 huevos + 2 claras" : "6 claras + 2 huevos",
-        carbos: "½–¾ taza avena (≈40–60g)",
-        grasa:"1 cucharada mantequilla de maní",
-        extra: fruta()
-      },
-      {
-        proteina: "1 taza yogurt griego natural",
-        carbos: "½ taza granola o avena",
-        grasa:"10 almendras",
-        extra: fruta()
-      },
-      {
-        proteina: "2 huevos + jamón de pavo",
-        carbos: "2 tortillas",
-        grasa:"¼ aguacate",
-        extra:"verduras (jitomate + espinaca)"
-      }
+  // 🔥 ROTACIÓN DESAYUNO POR FASE
+  function desayuno(){
+    let base = [
+      {p:"huevos + avena", g:"maní"},
+      {p:"yogurt griego", g:"almendras"},
+      {p:"huevos + tortillas", g:"aguacate"}
     ];
-    return random(opciones);
+
+    if(fase===2) base.push({p:"licuado avena + fruta", g:"nueces"});
+    if(fase===3) base.push({p:"claras + pan integral", g:"almendras"});
+    if(fase===4) base.push({p:"hot cakes avena", g:"crema cacahuate"});
+
+    let sel = random(base);
+
+    return {
+      proteina: sel.p,
+      carbos: "½–1 taza carbohidrato",
+      grasa: sel.g,
+      extra: "1 fruta"
+    };
   }
 
-  // 🔥 CARBOS
+  // 🔥 CARBOS INTELIGENTES
   function carb(tipo){
     let base = "";
 
-    if(tipoFisico==="obesidad" || tipoFisico==="obesidad_severa"){
-      if(tipo==="alto") base = "½ taza arroz (≈100g)";
-      else if(tipo==="medio") base = "¼ taza arroz (≈50g)";
+    if(tipoFisico.includes("obesidad")){
+      if(tipo==="alto") base = fase===3 ? "½ taza arroz" : "¾ taza arroz";
+      else if(tipo==="medio") base = "¼–½ taza arroz";
       else base = "solo verduras";
-    }
-    else if(tipoFisico==="sobrepeso"){
-      if(tipo==="alto") base = "¾ taza arroz (≈150g)";
-      else if(tipo==="medio") base = "½ taza arroz (≈100g)";
-      else base = "¼ taza arroz (≈50g)";
-    }
-    else{
-      if(tipo==="alto") base = "1 taza arroz (≈200g)";
-      else if(tipo==="medio") base = "¾ taza arroz (≈150g)";
-      else base = "½ taza arroz (≈100g)";
+    } else {
+      if(tipo==="alto") base = fase===4 ? "1.5 tazas arroz" : "1 taza arroz";
+      else if(tipo==="medio") base = "¾ taza arroz";
+      else base = "½ taza arroz";
     }
 
-    return base + " 🔄 (2 tortillas o 1 papa)";
+    return base + " 🔄 (tortillas o papa)";
   }
 
-  // 🔥 FRUTA
-  function fruta(){
-    if(tipoFisico==="obesidad" || tipoFisico==="sobrepeso"){
-      return "1 manzana verde o 1 toronja";
-    }
-    return "1 plátano o 1 manzana";
-  }
-
-  // 🔥 ENSALADA
+  // 🔥 ENSALADA VARIABLE
   function ensalada(){
-    return "1 bowl grande (2 tazas): lechuga + pepino + jitomate + zanahoria + limón";
+    let tamaño = fase===1 ? "1 taza" : fase===2 ? "1.5 tazas" : "2 tazas";
+    return `${tamaño} verduras: lechuga + pepino + jitomate + zanahoria`;
   }
 
-  // 🔥 VERDURAS COCIDAS OPCIONES
-  function verdurasCocidas(){
-    let opciones = [
-      "1 taza calabaza + zanahoria",
-      "1 taza brócoli + zanahoria",
-      "1 taza ejotes + calabaza"
-    ];
-    return random(opciones);
-  }
-
-  // 🔥 GRASAS
-  function grasaReal(){
-    let opciones = [
-      "10 almendras",
-      "10 nueces",
-      "1 cucharada mantequilla de maní",
-      "¼ aguacate"
-    ];
-    return random(opciones);
+  // 🔥 GRASA VARIABLE
+  function grasa(){
+    let base = ["10 almendras","10 nueces","¼ aguacate"];
+    if(fase===4) base.push("1 cucharada mantequilla maní");
+    return random(base);
   }
 
   // 🥣 DESAYUNO
-  let desayuno = desayunoOpciones();
-  comidas.push({
-    nombre:"Desayuno",
-    proteina: desayuno.proteina,
-    carbos: desayuno.carbos,
-    grasa: desayuno.grasa,
-    extra: desayuno.extra
-  });
+  let d = desayuno();
+  comidas.push({nombre:"Desayuno", proteina:d.proteina, carbos:d.carbos, grasa:d.grasa, extra:d.extra});
 
   // 🍗 MEDIA MAÑANA
   comidas.push({
     nombre:"Media mañana",
     proteina: proteFuente(),
     carbos: carb("medio"),
-    grasa: grasaReal(),
+    grasa: grasa(),
     extra: ensalada()
   });
 
-  // 🍚 COMIDA (CON OPCIONES)
+  // 🍚 COMIDA
   comidas.push({
     nombre:"Comida",
     proteina: proteFuente(),
     carbos: carb("alto"),
     grasa:"sin grasa añadida",
-    extra: verdurasCocidas()
+    extra:"verduras cocidas (calabaza, brócoli, zanahoria)"
   });
 
   // 🥤 POST
   comidas.push({
     nombre:"Post-entreno",
-    proteina: (tomaWhey && !esNino) 
-      ? "1 scoop whey + 1 fruta" 
-      : proteFuente(),
-    carbos:"1 fruta + arroz",
-    grasa:"0 grasa",
-    extra:"⚡ recuperación muscular"
+    proteina: (tomaWhey && !esNino) ? "1 scoop whey" : proteFuente(),
+    carbos:"carbo rápido + fruta",
+    grasa:"0",
+    extra:"recuperación"
   });
 
   // 🥩 CENA
   comidas.push({
     nombre:"Cena",
     proteina: proteFuente(),
-    carbos: tipoFisico.includes("obesidad") ? "sin carbohidratos" : carb("bajo"),
+    carbos: tipoFisico.includes("obesidad") ? "sin carbos" : carb("bajo"),
     grasa:"¼ aguacate",
     extra: ensalada()
   });
 
   return {
-    titulo:`🔥 Dieta PRO de ${nombre}`,
+    titulo:`🔥 Dieta PRO (${nombre}) – Fase ${fase}`,
     calorias:`${calorias} kcal`,
     proteina:`${proteina} g`,
     carbos:`${carbos} g`,
@@ -254,23 +225,10 @@ function generarDietaPRO(datos){
     comidas,
 
     tips:[
-      "🥗 Cocina con aceite de aguacate",
-      "💧 2–3L agua diario",
-      "🔥 Hambre: pepino o jícama",
-      "🍳 No freír alimentos"
-    ],
-
-    ejemplos:[
-      "🍚 1 taza arroz = puño grande",
-      "🥩 carne = palma mano",
-      "🥑 ¼ aguacate = 2 cucharadas"
-    ],
-
-    intercambios:[
-      "🍚 arroz ↔ 2 tortillas",
-      "🥔 papa ↔ arroz",
-      "🥑 aguacate ↔ nueces",
-      "🥩 pollo ↔ atún"
+      "🔥 Fase " + fase + ": evita adaptación metabólica",
+      "💧 2–3L agua",
+      "🥗 verduras libres si hay hambre",
+      "🍳 cocinar sin freír"
     ]
   };
 }
