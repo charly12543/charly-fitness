@@ -139,13 +139,16 @@ function generarDietaPRO(datos){
   let protePorComida = Math.round(proteina / 5);
 
   function proteFuente(){
-    return `${protePorComida}g proteína (elige 1 opción):
-• ${Math.round(protePorComida*4)}g pechuga pollo
-• ${Math.round(protePorComida*4)}g carne res magra
-• ${Math.round(protePorComida*4 + 20)}g pescado (atun, tilapia, salmon)
-• 1 lata de atún en agua
-• 5 claras + 1 huevo`;
-  }
+  return `
+  <strong>🥩 ${protePorComida}g proteína (elige 1 opción):</strong>
+  <ul>
+    <li>${Math.round(protePorComida*4)}g pechuga de pollo</li>
+    <li>${Math.round(protePorComida*4)}g carne magra</li>
+    <li>${Math.round(protePorComida*4 + 20)}g pescado</li>
+    <li>1 lata de atún en agua</li>
+    <li>5 claras + 1 huevo</li>
+  </ul>`;
+}
 
   function random(arr){
     return arr[Math.floor(Math.random()*arr.length)];
@@ -197,25 +200,24 @@ function generarDietaPRO(datos){
 
   // 🔥 CARBOS (ARREGLADO)
   function carb(tipo){
-    let base="";
+  let base = tipo==="alto"
+    ? "1 taza arroz (≈200g)"
+    : tipo==="medio"
+    ? "¾ taza arroz (≈150g)"
+    : "½ taza arroz (≈100g)";
 
-    if(tipo==="alto") base="1 taza arroz (≈200g)";
-    else if(tipo==="medio") base="¾ taza arroz (≈150g)";
-    else base="½ taza arroz (≈100g)";
-
-    if(esMujerVolumen && tipo==="alto"){
-      base += " 🔥 (clave para glúteo)";
-    }
-
-    return `${base} (elige 1 opción):
-• arroz
-• 2 tortillas (maiz o harina)
-• 1 papa
-• 1 taza camote 
-• 1 taza avena 
-• 1 taza pure de platano macho
-• 1 taza pasta`;
-  }
+  return `
+  <strong>🍚 ${base} (elige 1 opción):</strong>
+  <ul>
+    <li>Arroz</li>
+    <li>2 tortillas</li>
+    <li>1 papa</li>
+    <li>1 taza camote</li>
+    <li>1 taza avena</li>
+    <li>1 taza puré plátano</li>
+    <li>1 taza pasta</li>
+  </ul>`;
+}
 
   // 🔥 ENSALADA
   function ensalada(){
@@ -359,7 +361,7 @@ function mostrarDieta(dieta){
     html += `<div class="card-meal">
       <h4>🍽️ ${c.nombre}</h4>
       <ul>
-        <li>🥩 ${c.proteina}</li>
+        <li>${c.proteina}</li>
         <li>🍚 ${c.carbos}</li>
         <li>🥑 ${c.grasa}</li>
         ${c.extra ? `<li>➕ ${c.extra}</li>` : ""}
@@ -430,7 +432,7 @@ async function descargarPDF(tipo){
   const headerHeight = 18;
 
   const usableWidth = pageWidth - margin * 2;
-  const usableHeight = pageHeight - margin * 2 - headerHeight;
+  const usableHeight = pageHeight - margin * 2 - headerHeight - 10;
 
   // 🔥 CLON LIMPIO
   let clon = elemento.cloneNode(true);
