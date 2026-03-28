@@ -83,8 +83,10 @@ function generarDietaPRO(datos){
 
   if(altura > 3) altura = altura / 100;
 
+  // 🔥 FASE AUTOMÁTICA
   if(!fase) fase = Math.floor(Math.random()*4)+1;
 
+  // 🔥 DETECCIÓN
   let esNino = edad < 14;
   let imc = peso / (altura * altura);
   let tipoFisico = "fit";
@@ -93,6 +95,7 @@ function generarDietaPRO(datos){
   else if(imc >= 30) tipoFisico = "obesidad";
   else if(imc >= 25) tipoFisico = "sobrepeso";
 
+  // 🔥 CALORÍAS
   let bmr = 10*peso + 6.25*(altura*100) - 5*edad + (sexo==="mujer"?-161:5);
   let calorias = Math.round(bmr * 1.5);
 
@@ -104,11 +107,18 @@ function generarDietaPRO(datos){
   else if(tipoFisico==="obesidad") calorias -= 700;
   else if(tipoFisico==="sobrepeso") calorias -= 400;
 
-  // 🔥 PROTEÍNA COMPETIDOR
+  // 🔥 PROTEÍNA INTELIGENTE
   let proteFactor = 2.2;
-  if(nivel==="competidor") proteFactor = 2.6 + (Math.random()*0.4);
-  if(sexo==="mujer") proteFactor -= 0.2;
+
+  if(sexo==="mujer") proteFactor = 1.8;
   if(esNino) proteFactor = 1.2;
+
+  // 🏆 COMPETIDOR PRO
+  if(nivel==="competidor"){
+    proteFactor = 2.5;
+    if(fase>=3) proteFactor = 2.8;
+    if(fase===4) proteFactor = 3;
+  }
 
   let proteina = Math.round(peso * proteFactor);
   let grasa = Math.round((calorias * 0.25)/9);
@@ -117,152 +127,160 @@ function generarDietaPRO(datos){
   let comidas = [];
   let protePorComida = Math.round(proteina / 5);
 
-  // 🔥 CONVERSIÓN REAL (AQUÍ ESTÁ LA MAGIA)
   function proteFuente(){
-    let gramosAlimento = Math.round(protePorComida / 0.22); // proteína promedio carne
-    return `${protePorComida}g proteína (≈ ${gramosAlimento}g pollo / carne / pescado)`;
+    return `${protePorComida}g proteína = ${Math.round(protePorComida*4)}g pollo/crudo aprox`;
   }
 
   function random(arr){
     return arr[Math.floor(Math.random()*arr.length)];
   }
 
+  // 🔥 DESAYUNOS REALES
   function desayuno(){
     let opciones = [
       {
-        proteina: "5 claras + 1 huevo entero",
-        carbos: "2 rebanadas pan integral (≈60g)",
-        grasa: "10 almendras",
-        extra: "1 manzana o plátano"
+        proteina:`${esNino?"2 huevos + 2 claras":"5 claras + 2 huevos"}`,
+        carbos:"2 rebanadas pan integral (≈60g)",
+        grasa:"10 almendras",
+        extra:"1 fruta (manzana o plátano)"
       },
       {
-        proteina: "6 claras",
-        carbos: "¾ taza avena (≈60g)",
-        grasa: "1 cucharada mantequilla de maní",
-        extra: "1 plátano"
+        proteina:"200g yogurt griego natural",
+        carbos:"½ taza avena (≈40g)",
+        grasa:"10 nueces",
+        extra:"frutos rojos"
       },
       {
-        proteina: "200g yogurt griego",
-        carbos: "½ taza avena o granola",
-        grasa: "10 nueces",
-        extra: "frutos rojos"
+        proteina:"4 claras + 1 huevo",
+        carbos:"2 tortillas de maíz",
+        grasa:"¼ aguacate",
+        extra:"salsa + verduras"
       }
     ];
 
-    if(fase>=3){
+    if(nivel==="competidor" && fase>=3){
       opciones.push({
-        proteina: "7 claras",
-        carbos: "2 tostadas integrales",
-        grasa: "¼ aguacate",
-        extra: "1 fruta"
+        proteina:"6 claras + 1 huevo",
+        carbos:"1 rebanada pan integral",
+        grasa:"5 almendras",
+        extra:"espinaca + café solo"
       });
     }
 
     return random(opciones);
   }
 
+  // 🔥 CARBOS
   function carb(tipo){
-    let base = "";
+    let base="";
 
     if(tipoFisico.includes("obesidad")){
-      if(tipo==="alto") base = "½ taza arroz (≈100g)";
-      else if(tipo==="medio") base = "¼ taza arroz (≈50g)";
-      else base = "solo verduras";
-    } else {
-      if(tipo==="alto") base = fase===4 ? "1.5 tazas arroz (≈300g)" : "1 taza arroz (≈200g)";
-      else if(tipo==="medio") base = "¾ taza arroz (≈150g)";
-      else base = "½ taza arroz (≈100g)";
+      if(tipo==="alto") base="½ taza arroz (≈100g)";
+      else if(tipo==="medio") base="¼ taza arroz (≈50g)";
+      else base="solo verduras";
+    }else{
+      if(tipo==="alto") base="1 taza arroz (≈200g)";
+      else if(tipo==="medio") base="¾ taza arroz (≈150g)";
+      else base="½ taza arroz (≈100g)";
     }
 
     return base + " 🔄 (2 tortillas o 1 papa)";
   }
 
+  // 🔥 ENSALADA REAL
   function ensalada(){
-    return "2 tazas (bowl grande): lechuga + pepino + jitomate + zanahoria + limón";
+    return "2 tazas verduras: lechuga + pepino + jitomate + zanahoria + limón";
   }
 
-  function grasa(){
-    let base = [
-      "10 almendras (≈10g grasa)",
+  // 🔥 GRASAS
+  function grasaReal(){
+    return random([
+      "10 almendras",
       "10 nueces",
       "¼ aguacate"
-    ];
-
-    if(nivel==="competidor" && fase===4){
-      base.push("1 cucharada mantequilla maní");
-    }
-
-    return random(base);
+    ]);
   }
 
   // 🥣 DESAYUNO
   let d = desayuno();
-  comidas.push({
-    nombre:"Desayuno",
-    proteina:d.proteina,
-    carbos:d.carbos,
-    grasa:d.grasa,
-    extra:d.extra
-  });
+  comidas.push({nombre:"Desayuno", ...d});
 
   // 🍗 MEDIA MAÑANA
   comidas.push({
     nombre:"Media mañana",
     proteina: proteFuente(),
     carbos: carb("medio"),
-    grasa: grasa(),
+    grasa: grasaReal(),
     extra: ensalada()
   });
 
-  // 🍚 COMIDA (CORREGIDA 🔥)
+  // 🍚 COMIDA (FIX PROTE REAL)
   comidas.push({
     nombre:"Comida",
-    proteina: proteFuente(),
+    proteina: `${protePorComida}g proteína = ${Math.round(protePorComida*4)}g pollo (o carne magra o pescado)`,
     carbos: carb("alto"),
-    grasa:"sin grasa añadida (usa aceite de aguacate para cocinar)",
-    extra:"1 taza verduras cocidas (calabaza + brócoli + zanahoria)"
+    grasa:"sin grasa añadida",
+    extra:"1 taza verduras cocidas (calabaza, brócoli, zanahoria)"
   });
 
   // 🥤 POST
   comidas.push({
     nombre:"Post-entreno",
-    proteina: (tomaWhey && !esNino) ? "1 scoop whey (≈25g proteína)" : proteFuente(),
-    carbos:"1 plátano + ½–1 taza arroz",
+    proteina: (tomaWhey && !esNino) 
+      ? "1 scoop whey (≈25g proteína)"
+      : proteFuente(),
+    carbos:"1 fruta + arroz o 2 tortillas",
     grasa:"0 grasa",
-    extra:"⚡ recuperación muscular"
+    extra:"recuperación muscular"
   });
 
   // 🥩 CENA
   comidas.push({
     nombre:"Cena",
     proteina: proteFuente(),
-    carbos: tipoFisico.includes("obesidad") ? "sin carbohidratos" : carb("bajo"),
+    carbos: tipoFisico.includes("obesidad") ? "sin carbos" : carb("bajo"),
     grasa:"¼ aguacate",
     extra: ensalada()
   });
 
   return {
     titulo:`🔥 Dieta PRO (${nombre}) – Fase ${fase}`,
+
+    // 🔥 HEADER PRO (PARA PDF)
+    clienteInfo:{
+      nombre,
+      edad,
+      peso,
+      altura,
+      sexo,
+      nivel,
+      objetivo,
+      fase
+    },
+
     calorias:`${calorias} kcal`,
     proteina:`${proteina} g`,
     carbos:`${carbos} g`,
     grasa:`${grasa} g`,
     comidas,
 
+    // 🔥 INTERCAMBIOS CLÍNICOS
+    intercambios:[
+      "🍚 1 taza arroz ↔ 2 tortillas ↔ 1 papa",
+      "🥩 Pollo ↔ atún ↔ carne magra",
+      "🥑 Aguacate ↔ nueces ↔ almendras",
+      "🥣 Avena ↔ pan integral"
+    ],
+
     tips:[
-      "🔥 Nivel competidor: proteína alta para proteger músculo",
-      "💧 3–4L agua diarios",
+      "🔥 Fase "+fase+" activa (evita estancamiento)",
+      "💧 2–3L agua",
       "🥗 verduras libres si hay hambre",
       "🍳 cocinar con aceite de aguacate",
-      "⚡ duerme 7–8h"
+      "🧂 usar sal moderada (más si entrenas fuerte)"
     ]
   };
 }
-
-
-
-
-
 
 
 
