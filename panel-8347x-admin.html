@@ -68,29 +68,9 @@
   <span class="urgencia-whats">⚠️ Cupos limitados esta semana</span>
 </div>
 
+  
+
 <script>
-/* ===================== USAR PRO ===================== */
-function usarPro(){
-  let datos = {
-    nombre: document.getElementById("nombreCliente").value,
-    peso: parseFloat(document.getElementById("peso").value),
-    altura: parseFloat(document.getElementById("altura").value),
-    edad: parseFloat(document.getElementById("edad").value),
-    sexo: document.getElementById("sexo").value,
-    objetivo: document.getElementById("objetivo").value,
-    nivel: document.getElementById("nivel").value,
-    tomaWhey: document.getElementById("tomaWhey").value==="true"
-  };
-
-  if(!datos.peso || !datos.altura || !datos.edad){
-    alert("Completa todos los datos bro 🔥");
-    return;
-  }
-
-  let dieta = generarDietaPRO(datos);
-  mostrarDieta(dieta);
-}
-
 /* ===================== DIETA PRO ===================== */
 function generarDietaPRO(datos){
   let {nombre, peso, altura, edad, objetivo, sexo, nivel, tomaWhey} = datos;
@@ -128,10 +108,39 @@ function generarDietaPRO(datos){
   let protePorComida = Math.round(proteina / 5);
 
   function proteFuente(){
-    return protePorComida + "g pollo / carne / pescado (≈ tamaño palma = 100–120g)";
+    return protePorComida + "g pollo / carne / pescado (≈ palma de la mano)";
   }
 
-  // 🔥 CARBOS CON INTERCAMBIOS
+  function random(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
+  }
+
+  // 🔥 DESAYUNOS OPCIONES
+  function desayunoOpciones(){
+    let opciones = [
+      {
+        proteina: esNino ? "2 huevos + 2 claras" : "6 claras + 2 huevos",
+        carbos: "½–¾ taza avena (≈40–60g)",
+        grasa:"1 cucharada mantequilla de maní",
+        extra: fruta()
+      },
+      {
+        proteina: "1 taza yogurt griego natural",
+        carbos: "½ taza granola o avena",
+        grasa:"10 almendras",
+        extra: fruta()
+      },
+      {
+        proteina: "2 huevos + jamón de pavo",
+        carbos: "2 tortillas",
+        grasa:"¼ aguacate",
+        extra:"verduras (jitomate + espinaca)"
+      }
+    ];
+    return random(opciones);
+  }
+
+  // 🔥 CARBOS
   function carb(tipo){
     let base = "";
 
@@ -151,7 +160,7 @@ function generarDietaPRO(datos){
       else base = "½ taza arroz (≈100g)";
     }
 
-    return base + " 🔄 (puedes cambiar por 2 tortillas o 1 papa)";
+    return base + " 🔄 (2 tortillas o 1 papa)";
   }
 
   // 🔥 FRUTA
@@ -159,32 +168,43 @@ function generarDietaPRO(datos){
     if(tipoFisico==="obesidad" || tipoFisico==="sobrepeso"){
       return "1 manzana verde o 1 toronja";
     }
-    return "1 plátano o 1 manzana roja";
+    return "1 plátano o 1 manzana";
   }
 
-  // 🔥 ENSALADA PRO
+  // 🔥 ENSALADA
   function ensalada(){
     return "1 bowl grande (2 tazas): lechuga + pepino + jitomate + zanahoria + limón";
   }
 
-  // 🔥 GRASAS REALES
+  // 🔥 VERDURAS COCIDAS OPCIONES
+  function verdurasCocidas(){
+    let opciones = [
+      "1 taza calabaza + zanahoria",
+      "1 taza brócoli + zanahoria",
+      "1 taza ejotes + calabaza"
+    ];
+    return random(opciones);
+  }
+
+  // 🔥 GRASAS
   function grasaReal(){
     let opciones = [
-      "10 almendras (≈10g grasa)",
-      "10 nueces (≈10g grasa)",
-      "1 cucharada mantequilla de maní (≈15g)",
-      "¼ aguacate (≈10g grasa)"
+      "10 almendras",
+      "10 nueces",
+      "1 cucharada mantequilla de maní",
+      "¼ aguacate"
     ];
-    return opciones[Math.floor(Math.random()*opciones.length)];
+    return random(opciones);
   }
 
   // 🥣 DESAYUNO
+  let desayuno = desayunoOpciones();
   comidas.push({
     nombre:"Desayuno",
-    proteina: esNino ? "2 huevos + 2 claras" : "6 claras + 2 huevos",
-    carbos: "½–¾ taza avena (≈40–60g)",
-    grasa:"1 cucharada mantequilla de maní",
-    extra: fruta()
+    proteina: desayuno.proteina,
+    carbos: desayuno.carbos,
+    grasa: desayuno.grasa,
+    extra: desayuno.extra
   });
 
   // 🍗 MEDIA MAÑANA
@@ -196,13 +216,13 @@ function generarDietaPRO(datos){
     extra: ensalada()
   });
 
-  // 🍚 COMIDA
+  // 🍚 COMIDA (CON OPCIONES)
   comidas.push({
     nombre:"Comida",
     proteina: proteFuente(),
     carbos: carb("alto"),
     grasa:"sin grasa añadida",
-    extra:"1 taza verduras cocidas (calabaza + zanahoria + brócoli)"
+    extra: verdurasCocidas()
   });
 
   // 🥤 POST
@@ -233,30 +253,61 @@ function generarDietaPRO(datos){
     grasa:`${grasa} g`,
     comidas,
 
-    // 🔥 🔥 🔥 NIVEL DIOS EXTRA 🔥 🔥 🔥
     tips:[
-      "🥗 Cocina con aceite de aguacate (no necesitas más grasa extra)",
-      "💧 Toma 2–3 litros de agua al día",
-      "🔥 Si tienes hambre: pepino, jícama o gelatina light",
-      "🍳 Puedes cocinar en sartén, vapor o asado (no freír)"
+      "🥗 Cocina con aceite de aguacate",
+      "💧 2–3L agua diario",
+      "🔥 Hambre: pepino o jícama",
+      "🍳 No freír alimentos"
     ],
 
     ejemplos:[
-      "🍚 1 taza arroz = un puño grande",
-      "🥩 100g carne = tamaño de tu palma",
+      "🍚 1 taza arroz = puño grande",
+      "🥩 carne = palma mano",
       "🥑 ¼ aguacate = 2 cucharadas"
     ],
 
     intercambios:[
-      "🍚 Arroz ↔ 2 tortillas",
-      "🥔 Papa ↔ arroz",
-      "🥑 Aguacate ↔ nueces o almendras",
-      "🥩 Pollo ↔ atún o carne magra"
+      "🍚 arroz ↔ 2 tortillas",
+      "🥔 papa ↔ arroz",
+      "🥑 aguacate ↔ nueces",
+      "🥩 pollo ↔ atún"
     ]
   };
 }
 
-/* ===================== MOSTRAR DIETA ===================== */
+
+
+
+
+
+
+
+
+
+  
+/* ===================== USAR PRO ===================== */
+function usarPro(){
+  let datos = {
+    nombre: document.getElementById("nombreCliente").value,
+    peso: parseFloat(document.getElementById("peso").value),
+    altura: parseFloat(document.getElementById("altura").value),
+    edad: parseFloat(document.getElementById("edad").value),
+    sexo: document.getElementById("sexo").value,
+    objetivo: document.getElementById("objetivo").value,
+    nivel: document.getElementById("nivel").value,
+    tomaWhey: document.getElementById("tomaWhey").value==="true"
+  };
+
+  if(!datos.peso || !datos.altura || !datos.edad){
+    alert("Completa todos los datos bro 🔥");
+    return;
+  }
+
+  let dieta = generarDietaPRO(datos);
+  mostrarDieta(dieta);
+}
+
+  /* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
   let nombre = document.getElementById("nombreCliente").value;
   let fecha = new Date().toLocaleDateString();
