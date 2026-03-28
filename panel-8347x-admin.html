@@ -424,7 +424,6 @@ async function descargarPDF(tipo){
 
   let nombre = document.getElementById("nombreCliente").value || "Cliente";
 
-  // 🔒 quitar edición
   let editable = elemento.querySelector(".dieta-card");
   if(editable) editable.setAttribute("contenteditable", "false");
 
@@ -433,50 +432,57 @@ async function descargarPDF(tipo){
   const pageWidth = 210;
   const pageHeight = 297;
 
-  // 🔥 CLONAR CONTENIDO
+  const margin = 10;
+  const headerHeight = 18;
+
+  const usableWidth = pageWidth - margin * 2;
+  const usableHeight = pageHeight - margin * 2 - headerHeight;
+
+  // 🔥 CLON LIMPIO
   let clon = elemento.cloneNode(true);
 
   clon.style.background = "white";
   clon.style.padding = "20px";
-  clon.style.width = "800px";
+  clon.style.width = "794px"; // 🔥 EXACTO A4 WIDTH PX
+  clon.style.boxSizing = "border-box";
   clon.style.position = "absolute";
   clon.style.left = "-9999px";
 
   document.body.appendChild(clon);
 
-  const canvas = await html2canvas(clon, { scale: 2 });
+  // 🔥 MEJOR RENDER
+  const canvas = await html2canvas(clon, {
+    scale: 2,
+    useCORS: true,
+    scrollY: -window.scrollY
+  });
 
   document.body.removeChild(clon);
 
-  const margin = 10;
-  const headerHeight = 20;
-
-  const usableWidth = pageWidth - margin * 2;
-  const usableHeight = pageHeight - margin * 2 - headerHeight;
-
   const imgWidth = usableWidth;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
   const pageHeightPx = (canvas.width * usableHeight) / usableWidth;
 
   let position = 0;
   let page = 0;
 
-  // 🔥 cargar logo
+  // 🔥 LOGO
   let logo = new Image();
   logo.src = "imagenes/logoGitHub.png";
 
-  await new Promise(resolve => {
-    logo.onload = resolve;
-  });
+  await new Promise(resolve => logo.onload = resolve);
 
   while(position < canvas.height){
 
     let pageCanvas = document.createElement("canvas");
-    let pageCtx = pageCanvas.getContext("2d");
+    let ctx = pageCanvas.getContext("2d");
 
     pageCanvas.width = canvas.width;
     pageCanvas.height = pageHeightPx;
 
-    pageCtx.drawImage(
+    // 🔥 CORTE MÁS LIMPIO
+    ctx.drawImage(
       canvas,
       0, position,
       canvas.width, pageHeightPx,
@@ -484,7 +490,7 @@ async function descargarPDF(tipo){
       canvas.width, pageHeightPx
     );
 
-    let imgData = pageCanvas.toDataURL("image/jpeg", 1.0);
+    let imgData = pageCanvas.toDataURL("image/jpeg", 0.95);
 
     if(page > 0) pdf.addPage();
 
@@ -492,25 +498,25 @@ async function descargarPDF(tipo){
     pdf.setFillColor(255,255,255);
     pdf.rect(0,0,pageWidth,pageHeight,"F");
 
-    // 🔥 HEADER TIPO NAVBAR
-    pdf.setFillColor(15,15,15);
+    // 🔥 HEADER PREMIUM
+    pdf.setFillColor(10,10,10);
     pdf.rect(0,0,pageWidth,headerHeight,"F");
 
-    // LOGO IZQUIERDA
-    pdf.addImage(logo, "PNG", 10, 3, 30, 12);
+    // LOGO
+    pdf.addImage(logo, "PNG", 10, 3, 28, 12);
 
-    // TEXTO DERECHA
+    // TEXTO
     pdf.setTextColor(212,175,55);
     pdf.setFont("helvetica","bold");
     pdf.setFontSize(10);
-    pdf.text("💎 Plan personalizado por Charly Fitness", pageWidth - 10, 12, null, null, "right");
+    pdf.text("💎 Plan personalizado por Charly Fitness", pageWidth - 10, 11, null, null, "right");
 
     // 🔥 CONTENIDO
     pdf.addImage(
       imgData,
       "JPEG",
       margin,
-      headerHeight + 5,
+      headerHeight + 4,
       imgWidth,
       usableHeight
     );
@@ -523,7 +529,6 @@ async function descargarPDF(tipo){
 
   if(editable) editable.setAttribute("contenteditable", "true");
 }
-
 
   
 /* ===================== RUTINA ===================== */
