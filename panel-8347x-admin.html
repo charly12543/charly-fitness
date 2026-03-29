@@ -434,21 +434,23 @@ async function descargarPDF(tipo){
   const usableWidth = pageWidth - margin * 2;
   const usableHeight = pageHeight - margin * 2 - headerHeight - 10;
 
-  // 🔥 CLON LIMPIO
+  // 🔥 CLON
   let clon = elemento.cloneNode(true);
 
   clon.style.background = "white";
   clon.style.padding = "20px";
-  clon.style.width = "794px"; // 🔥 EXACTO A4 WIDTH PX
+  clon.style.width = "794px";
   clon.style.boxSizing = "border-box";
   clon.style.position = "absolute";
   clon.style.left = "-9999px";
 
+  // 🔥 LIMPIAR EMOJIS (NO ROMPE NADA)
+  clon.innerHTML = clon.innerHTML.replace(/🍽️|🥩|🍚|🥑|💎|🔥|📌|🚫|✔|➕|🏋️|😴|💧/g, '');
+
   document.body.appendChild(clon);
 
-  // 🔥 MEJOR RENDER
   const canvas = await html2canvas(clon, {
-    scale: 2,
+    scale: 3, // 🔥 mejor calidad
     useCORS: true,
     scrollY: -window.scrollY
   });
@@ -459,6 +461,12 @@ async function descargarPDF(tipo){
   const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
   const pageHeightPx = (canvas.width * usableHeight) / usableWidth;
+  const pageHeightPxInt = Math.floor(pageHeightPx || 0);
+
+  if(pageHeightPxInt <= 0){
+    alert("Error generando PDF bro");
+    return;
+  }
 
   let position = 0;
   let page = 0;
@@ -466,7 +474,6 @@ async function descargarPDF(tipo){
   // 🔥 LOGO
   let logo = new Image();
   logo.src = "imagenes/logoGitHub.png";
-
   await new Promise(resolve => logo.onload = resolve);
 
   while(position < canvas.height){
@@ -475,39 +482,35 @@ async function descargarPDF(tipo){
     let ctx = pageCanvas.getContext("2d");
 
     pageCanvas.width = canvas.width;
-    pageCanvas.height = pageHeightPx;
+    pageCanvas.height = pageHeightPxInt;
 
-    // 🔥 CORTE MÁS LIMPIO
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+
     ctx.drawImage(
       canvas,
       0, position,
-      canvas.width, pageHeightPx,
+      canvas.width, pageHeightPxInt,
       0, 0,
-      canvas.width, pageHeightPx
+      canvas.width, pageHeightPxInt
     );
 
     let imgData = pageCanvas.toDataURL("image/jpeg", 0.95);
 
     if(page > 0) pdf.addPage();
 
-    // 🔥 FONDO
-    pdf.setFillColor(255,255,255);
-    pdf.rect(0,0,pageWidth,pageHeight,"F");
-
-    // 🔥 HEADER PREMIUM
+    // HEADER
     pdf.setFillColor(10,10,10);
     pdf.rect(0,0,pageWidth,headerHeight,"F");
 
-    // LOGO
     pdf.addImage(logo, "PNG", 10, 3, 28, 12);
 
-    // TEXTO
     pdf.setTextColor(212,175,55);
     pdf.setFont("helvetica","bold");
     pdf.setFontSize(10);
-    pdf.text("💎 Plan personalizado por Charly Fitness", pageWidth - 10, 11, null, null, "right");
+    pdf.text("Plan personalizado por Charly Fitness", pageWidth - 10, 11, null, null, "right");
 
-    // 🔥 CONTENIDO
+    // CONTENIDO
     pdf.addImage(
       imgData,
       "JPEG",
@@ -517,7 +520,7 @@ async function descargarPDF(tipo){
       usableHeight
     );
 
-    position += pageHeightPx;
+    position += pageHeightPxInt;
     page++;
   }
 
