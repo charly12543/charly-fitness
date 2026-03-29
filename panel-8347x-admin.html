@@ -343,29 +343,94 @@ function usarPro(){
   mostrarDieta(dieta);
 }
 
+  /* ===================== FUNCION INTELIGENTE ===================== */  
+function generarMensajeCoach(dieta, datos){
+  let objetivo = datos.objetivo;
+  let sexo = datos.sexo;
+  let nivel = datos.nivel;
+
+  let mensaje = "";
+
+  if(objetivo === "definicion"){
+    mensaje = "Este plan está diseñado para ayudarte a reducir grasa corporal mientras mantienes la mayor cantidad de masa muscular posible.";
+  }
+
+  if(objetivo === "volumen"){
+    mensaje = "Este plan está enfocado en ayudarte a aumentar masa muscular de forma limpia, manteniendo el control del porcentaje de grasa.";
+  }
+
+  if(sexo === "mujer" && objetivo === "volumen"){
+    mensaje = "Este plan está optimizado para mejorar tu composición corporal, enfocándose en el desarrollo de glúteo y piernas sin aumentar grasa innecesaria.";
+  }
+
+  if(nivel === "competidor"){
+    mensaje += " Está ajustado con precisión para un nivel avanzado, priorizando rendimiento, estética y detalle muscular.";
+  }
+
+  return mensaje;
+}
   /* ===================== MOSTRAR DIETA ===================== */
 function mostrarDieta(dieta){
   let nombre = document.getElementById("nombreCliente").value;
   let fecha = new Date().toLocaleDateString();
+  let datos = {
+  objetivo: document.getElementById("objetivo").value,
+  sexo: document.getElementById("sexo").value,
+  nivel: document.getElementById("nivel").value
+};
+
+let mensajeCoach = generarMensajeCoach(dieta, datos);
 
   let html = `<div class="dieta-card" contenteditable="true">
   <h2>${nombre || "Cliente"}</h2>
   <p>${fecha}</p>
-  <p>🔥 ${dieta.calorias}</p>
-  <p>🥩 ${dieta.proteina}</p>
-  <p>🍚 ${dieta.carbos}</p>
-  <p>🥑 ${dieta.grasa}</p>`;
+
+  <!-- 🔥 RESUMEN PRO -->
+  <div style="
+    background:#111;
+    color:#fff;
+    padding:20px;
+    border-radius:12px;
+    margin-top:10px;
+    border:1px solid #d4af37;
+    box-shadow:0 0 10px rgba(212,175,55,0.3);
+  ">
+
+    <h3 style="color:#d4af37; margin-bottom:10px;">
+      💎 Plan nutricional diario
+    </h3>
+
+    <p style="margin-bottom:12px;">
+    ${mensajeCoach}
+    </p>
+
+    <ul style="list-style:none; padding-left:0; line-height:1.9;">
+      <li>🔥 <strong>${dieta.calorias}</strong> calorías totales</li>
+      <li>🥩 <strong>${dieta.proteina}</strong> proteína</li>
+      <li>🍚 <strong>${dieta.carbos}</strong> carbohidratos</li>
+      <li>🥑 <strong>${dieta.grasa}</strong> grasa</li>
+    </ul>
+
+    <p style="margin-top:12px; font-size:13px; opacity:0.85;">
+      ⚠️ Sigue este plan con constancia para ver resultados en pocas semanas.
+    </p>
+
+  </div>`;
 
   // 🍽️ COMIDAS
   dieta.comidas.forEach(c=>{
     html += `<div class="card-meal">
       <h4>🍽️ ${c.nombre}</h4>
       <ul>
-        <li>${c.proteina}</li>
         <li>🍚 ${c.carbos}</li>
         <li>🥑 ${c.grasa}</li>
         ${c.extra ? `<li>➕ ${c.extra}</li>` : ""}
       </ul>
+
+      <!-- 🔥 PROTEÍNA CORRECTA -->
+      <div style="margin-top:5px;">
+        ${c.proteina}
+      </div>
     </div>`;
   });
 
@@ -398,7 +463,7 @@ function mostrarDieta(dieta){
     ✔ Gelatina light<br>
   </div>`;
 
-  // 🔥 FIRMA PRO (AQUÍ VA)
+  // 🔥 FIRMA
   html += `<p style="text-align:center; font-weight:bold; margin-top:25px;">
   💎 Plan personalizado por Charly Fitness
   </p>`;
@@ -564,10 +629,14 @@ function generarRutina(){
   };
   let split=getSplit();
   let html=`<div class="dieta-card">
+  
     <div style="text-align:center; border-bottom:2px solid #d4af37; padding-bottom:15px; margin-bottom:20px;">
       <h1 style="color:#d4af37;">🔥 Charly Fitness</h1>
       <p>Rutina PRO Personalizada</p>
     </div>`;
+
+
+  
   split.forEach((dia,i)=>{
     html+=`<div class="card-meal">
       <h4>🏋️ Día ${i+1} - ${dia}</h4>`;
