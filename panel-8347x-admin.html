@@ -340,10 +340,12 @@ function usarPro(){
   }
 
   let dieta = generarDietaPRO(datos);
-  mostrarDieta(dieta);
-}
+mostrarDieta(dieta);
+  // 🔥 NUEVO (NO ROMPE NADA)
+  guardarPlanBackend(datos, dieta);
+ }
 
-  /* ===================== FUNCION INTELIGENTE ===================== */  
+/* ===================== FUNCION INTELIGENTE ===================== */  
 function generarMensajeCoach(dieta, datos){
   let objetivo = datos.objetivo;
   let sexo = datos.sexo;
@@ -653,7 +655,69 @@ function generarRutina(){
   });
   html+=`</div>`;
   document.getElementById("resultadoPRO").innerHTML=html;
+  guardarRutinaBackend(); // ✅ SOLO rutina
 }
+
+/* ===================== guardarPlanBackend ===================== */  
+async function guardarPlanBackend(datos, dieta){
+  try {
+
+    let html = document.getElementById("resultadoPRO").innerHTML;
+
+    let payload = {
+      cliente: datos,
+      dieta: dieta,
+      html: html
+    };
+
+    let res = await fetch("http://localhost:8080/api/guardar-plan", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if(!res.ok){
+      console.error("❌ Error backend");
+      return;
+    }
+
+    let data = await res.json();
+
+    console.log("✅ Plan guardado:", data);
+
+  } catch(error){
+    console.error("❌ Error conexión:", error);
+  }
+}
+
+/* ===================== guardarRutinaBackend ===================== */  
+async function guardarRutinaBackend(){  
+  try {  
+
+    let html = document.getElementById("resultadoPRO").innerHTML;  
+    let nombre = document.getElementById("nombreCliente").value;  
+
+    let res = await fetch("http://localhost:8080/api/guardar-rutina", {  
+      method: "POST",  
+      headers: {  
+        "Content-Type": "application/json"  
+      },  
+      body: JSON.stringify({  
+        nombre: nombre,  
+        rutinaHtml: html  
+      })  
+    });  
+
+    let data = await res.json();  
+
+    console.log("🏋️ Rutina guardada:", data);  
+
+  } catch(err){  
+    console.error("❌ Error rutina:", err);  
+  }  
+}  
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
