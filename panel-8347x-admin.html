@@ -332,6 +332,7 @@ function usarPro(){
     objetivo: document.getElementById("objetivo").value,
     nivel: document.getElementById("nivel").value,
     tomaWhey: document.getElementById("tomaWhey").value==="true"
+    diasGym: parseInt(document.getElementById("diasGym").value) || 0
   };
 
   if(!datos.peso || !datos.altura || !datos.edad){
